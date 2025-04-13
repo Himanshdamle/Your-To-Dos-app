@@ -1,0 +1,27 @@
+.time-input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+/* Target the container with scroll (replace with your actual classes/IDs if needed) */
+#right-main,
+#left-main {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #666 transparent; /* Firefox */
+}
+
+#right-main::-webkit-scrollbar,
+#left-main::-webkit-scrollbar {
+  width: 4px; /* super thin */
+  height: 4px; /* for horizontal scroll */
+}
+
+#right-main::-webkit-scrollbar-thumb,
+#left-main::-webkit-scrollbar-thumb {
+  background: #666; /* or any color you want */
+  border-radius: 10px;
+}
+
+#right-main::-webkit-scrollbar-track,
+#left-main::-webkit-scrollbar-track {
+  background: transparent;
+}

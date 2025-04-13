@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+      .drag-ghost {
+        opacity: 0.4;
+        background-color: #ffffff55;
+        transform: scale(1.05);
+        transition: all 0.2s ease;
+      }
+    </style>
+    <script src="colors.js" defer></script>
+  </head>
+  <body class="bg-black">
+    <div
+      id="completed-todo"
+      class="text-3xl bg-amber-400 max-w-max min-w-[250px] p-2 min-h-36 h-fit"
+    >
+      <div
+        class="todo-item active:cursor-grabbing sortable-chosen:cursor-grabbing bg-white text-black p-2 rounded mb-2"
+      >
+        doing science hw
+      </div>
+    </div>
+
+    <div
+      id="yours-todo"
+      class="text-3xl bg-amber-700 max-w-max min-w-[250px] p-2 min-h-36 h-fit"
+    >
+      <div
+        class="todo-item active:cursor-grabbing bg-white text-black p-2 rounded mb-2"
+      >
+        doing math hw
+      </div>
+      <div
+        class="todo-item active:cursor-grabbing bg-white text-black p-2 rounded mb-2"
+      >
+        doing sst hw
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script>
+      // "Yours todo" - can drag from here
+      Sortable.create(document.getElementById("yours-todo"), {
+        group: {
+          name: "shared",
+          pull: true, // or true if you want to *move* instead of clone
+          put: true, // can't drop things *into* yours-todo
+        },
+        animation: 150,
+        ghostClass: "drag-ghost",
+      });
+
+      // "Completed todo" - can receive todos
+      Sortable.create(document.getElementById("completed-todo"), {
+        group: {
+          name: "shared",
+          pull: true, // can't drag from here
+          put: true, // can receive from others
+        },
+        animation: 150,
+        ghostClass: "drag-ghost",
+        onAdd: function (evt) {
+          // Optional: Do something when todo is marked completed
+          console.log("Moved to completed:", evt.item.textContent);
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Yours To Do-App</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap"
+      rel="stylesheet"
+    />
+    <link href="./output.css" rel="stylesheet" />
+    <link rel="stylesheet" href="complex.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="script.js" defer></script>
+    <script src="api.js" defer></script>
+  </head>
+  <body
+    style="font-family: 'Karla', sans-serif"
+    class="bg-[#0F0F0F] text-white font-medium h-screen"
+  >
+    <div class="h-full">
+      <div class="flex justify-between items-start relative h-full mx-3.5">
+        <!-- SHOW-PENDING-TO-DOS -->
+        <section class="flex-[1] flex flex-col h-full">
+          <header
+            class="text-4xl pt-5 pb-2 w-full text-center font-bold grid place-items-center"
+          >
+            YOUR'S TO DO
+          </header>
+
+          <main
+            id="right-main"
+            class="h-full w-full max-w-[750px] mt-8 resize-x flex flex-col gap-3.5 overflow-y-scroll overflow-x-hidden"
+          ></main>
+        </section>
+
+        <img
+          src="assets/Line 1.svg"
+          alt="Line"
+          class="absolute w-full top-[80px]"
+        />
+
+        <section
+          class="flex-[3] flex flex-col h-full after:content-[''] after:absolute relative after:w-[1px] after:h-[110%] after:right-0 after:top-[-10%] after:bg-white before:absolute before:w-[1px] before:h-[110%] before:left-0 before:top-[-10%] before:bg-white after:opacity-[0.3] before:opacity-[0.3]"
+        >
+          <!-- CURD OPTIONS -->
+          <header
+            class="flex flex-row gap-6 justify-between items-center px-7 pb-2"
+          >
+            <!-- CREATE -->
+            <button
+              title="Click to add a new task"
+              class="flex flex-col items-center hover:cursor-pointer"
+              id="create-new-todo-page"
+            >
+              <div class="flex items-center">
+                <h1 class="text-2xl font-bold text-[#2CB67D]">C</h1>
+                <p class="text-base text-gray-300 tracking-wide">REATE</p>
+              </div>
+              <div
+                class="bg-[#2CB67D] text-black font-semibold text-center rounded-xl py-2 px-6"
+              >
+                TO DO
+              </div>
+            </button>
+
+            <!-- UPDATE -->
+            <button
+              id="update"
+              title="Drag and drop task to update"
+              class="flex flex-col items-center"
+            >
+              <div class="flex items-center">
+                <h1 class="text-2xl font-bold text-[#5C82FF]">U</h1>
+                <p class="text-base text-gray-300 tracking-wide">PDATE</p>
+              </div>
+              <div
+                class="bg-[#5C82FF] text-white font-semibold text-center rounded-xl py-2 px-6"
+              >
+                MODIFY TASK
+              </div>
+            </button>
+
+            <!-- READ -->
+            <button
+              id="read"
+              title="Drag and drop task to read"
+              class="flex flex-col items-center"
+            >
+              <div class="flex items-center no-drag">
+                <h1 class="text-2xl font-bold text-[#F4D35E]">R</h1>
+                <p class="text-base text-gray-300 tracking-wide">EAD</p>
+              </div>
+              <div
+                class="bg-[#F4D35E] text-black font-semibold text-center rounded-xl py-2 px-6 no-drag"
+              >
+                VIEW TASKS
+              </div>
+            </button>
+
+            <!-- DELETE -->
+            <button
+              id="delete"
+              title="Drag and drop task to delete"
+              class="flex flex-col items-center"
+            >
+              <div class="flex items-center">
+                <h1 class="text-2xl font-bold text-[#FF6B6B]">D</h1>
+                <p class="text-base text-gray-300 tracking-wide">ELETE</p>
+              </div>
+              <div
+                class="bg-[#FF6B6B] text-white font-semibold text-center rounded-xl py-2 px-6"
+              >
+                REMOVE TASK
+              </div>
+            </button>
+          </header>
+
+          <main id="mid-main" class="h-full flex items-center justify-center">
+            <!-- CREATE TODO PAGE -->
+            <div
+              class="bg-[#1A1A1A] hidden relative border rounded-2xl p-4 flex-1 max-w-[80%]"
+              id="todo-page"
+            >
+              <div class="absolute top-2 left-2.5 z-10 flex gap-3.5">
+                <button
+                  class="cursor-pointer rounded-full h-[20px] w-[20px] bg-[#2CB67D]"
+                  title="add todo?"
+                  id="add-todo"
+                ></button>
+
+                <button
+                  class="close-todo-page cursor-pointer rounded-full h-[20px] w-[20px] bg-[#FF6B6B]"
+                  title="close this page?"
+                ></button>
+
+                <button
+                  class="cursor-pointer rounded-full h-[20px] w-[20px] bg-gray-400"
+                  title="reset form?"
+                  id="reset-todo"
+                ></button>
+              </div>
+
+              <section
+                class="flex flex-col pb-4 relative justify-center items-center border-b"
+              >
+                <p>Header [must]</p>
+                <textarea
+                  name="heading"
+                  placeholder="e.g Buy grociers"
+                  id="heading-input"
+                  wrap="soft"
+                  class="resize-none text-center p-1.5 w-96 font-bold outline-none focus:placeholder-opacity-0 placeholder-transition-opacity placeholder-duration-500 text-2xl italic border h-min rounded-lg border-white/30"
+                  maxlength="50"
+                  required
+                ></textarea>
+
+                <span class="absolute top-2 right-0 flex text-gray-400"
+                  >Characters:&nbsp;
+                  <p maxDigit="2" id="current-len-heading-input">00</p>
+                  /50</span
+                >
+              </section>
+
+              <section
+                class="flex flex-col relative py-4 justify-center items-center border-b"
+              >
+                <p>Description</p>
+
+                <textarea
+                  name="description"
+                  id="description-input"
+                  class="mx-7 w-full h-36 p-1.5 text-xl border resize-none outline-none rounded-lg border-white/30"
+                  maxlength="200"
+                  placeholder="Need to restock essentials like milk, eggs, bread, and some veggies. Also check for any offers on snacks or cleaning supplies."
+                ></textarea>
+
+                <span class="absolute top-2 right-0 flex text-gray-400"
+                  >Characters:&nbsp;
+                  <p maxDigit="3" id="current-len-description-input">000</p>
+                  /200</span
+                >
+              </section>
+
+              <section
+                class="flex flex-col py-4 justify-center items-center border-b"
+              >
+                <p>Due Date [time format: 24hours]</p>
+                <section class="flex justify-center ml-11 w-full gap-6">
+                  <div class="rounded-lg border border-white/30 px-4 flex">
+                    <div
+                      class="before:content-[''] before:absolute before:right-2 before:top-0 before:bg-white before:w-[1px] before:h-full relative"
+                    >
+                      <input
+                        type="date"
+                        name="date"
+                        id="date-input"
+                        class="outline-none time-input cursor-text"
+                      />
+                    </div>
+
+                    <input
+                      type="time"
+                      name="time"
+                      id="time-input"
+                      class="outline-none time-input cursor-text"
+                    />
+                  </div>
+                  <button
+                    class="rounded-lg border border-white/30 px-4 cursor-pointer"
+                    id="quick-fill"
+                  >
+                    Quick fill current date & time
+                  </button>
+                </section>
+              </section>
+
+              <section
+                class="flex flex-col py-4 justify-center items-center border-b"
+              >
+                <select
+                  name="priority"
+                  id="priority-input"
+                  class="bg-[#1a1a1a] cursor-pointer pl-4 text-white border rounded-lg outline-none border-white/30 appearance-none"
+                  required
+                >
+                  <option hidden>Priority [must]</option>
+                  <option value="low" title="No rush, complete when convenient">
+                    🟦 Low - Do whenever
+                  </option>
+                  <option value="medium" title="Important but not urgent">
+                    🟨 Medium - Should do soon
+                  </option>
+                  <option value="high" title="Needs immediate attention">
+                    🟥 High - Do ASAP
+                  </option>
+                  <option
+                    value="urgent"
+                    title="Critical! Immediate action required"
+                  >
+                    🔴 Urgent - Emergency
+                  </option>
+                </select>
+              </section>
+
+              <section class="flex flex-col py-4 justify-center items-center">
+                <p>Status</p>
+                <p>Pending...</p>
+              </section>
+            </div>
+
+            <!-- SHOW TODO CREATED SUCESSFULLY -->
+            <span
+              class="bg-[#1A1A1A] hidden relative border rounded-2xl p-4 text-3xl flex-col gap-2.5 justify-center items-center"
+              id="show-todo-created"
+            >
+              <button
+                class="close-todo-page cursor-pointer absolute top-2 left-2.5 z-10 rounded-full h-[20px] w-[20px] bg-[#FF6B6B]"
+                title="close this page?"
+              ></button>
+              <p
+                id="todo-name"
+                class="font-black text-4xl italic text-center p-1.5 w-96 break-words"
+              >
+                code
+              </p>
+              to do created succesfully
+              <p class="rotate-90 text-7xl font-medium">:)</p></span
+            >
+
+            <!-- SHOW AFFIRMATIONS AND QUOTES -->
+            <div
+              id="quote-box"
+              class="w-fit flex flex-col gap-3 text-3xl items-center justify-center"
+            >
+              <h1 id="quotes" class="font-extralight italic max-w-[70%]">
+                Withstand the setbacks and failures, the days of d…rk that are
+                always a part of any creative action.
+              </h1>
+              <h2
+                id="author"
+                class="before:content-[''] font-bold hidden before:bg-white before:absolute relative before:left-[-30%] before:top-[50%] before:w-[25%] before:h-[1px]"
+              >
+                Robert Greene
+              </h2>
+            </div>
+          </main>
+        </section>
+
+        <!-- SHOW-COMPLETED-TO-DOS -->
+        <section class="flex-shrink-0 flex flex-col flex-[1] h-full">
+          <header
+            class="text-[1.9rem] w-full pt-5 pb-2 grid place-items-center text-center font-bold"
+          >
+            COMPLETED TO DO
+          </header>
+
+          <main
+            id="left-main"
+            class="h-full w-full mt-8 flex flex-col items-center gap-3.5 overflow-y-scroll overflow-x-hidden"
+          ></main>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>
