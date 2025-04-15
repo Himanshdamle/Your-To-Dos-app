@@ -8,14 +8,15 @@ const readR = document.querySelector("#read");
 const deleteD = document.querySelector("#delete");
 
 const midMain = document.querySelector("#mid-main");
-const rightMain = document.querySelector("#right-main");
 const leftMain = document.querySelector("#left-main");
+const rightMain = document.querySelector("#right-main");
 const todoPage = document.querySelector("#todo-page");
 const todoName = document.querySelector("#todo-name");
 const showTodoCreated = document.querySelector("#show-todo-created");
 
 let getTodoData;
 let JSONData;
+let articleWrapper;
 let updated = false;
 
 const priorityColors = {
@@ -26,7 +27,7 @@ const priorityColors = {
 };
 
 function getDateRange(date) {
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("en-CA").split("T")[0];
   const [year, month, day] = date.split("-").map((number) => number);
   const [currYear, currMonth, currDay] = today
     .split("-")
@@ -44,7 +45,7 @@ function getDateRange(date) {
   const isOverMonth = diffMonth >= 1 && diffMonth <= 12;
 
   if (diffDay <= 28 && !isOverMonth) {
-    if (diffDay === 0) return "Due this day.";
+    if (diffDay === 0) return "Due this day";
 
     for (let i = 1; i <= 4; i++) {
       if (i == 1) {
@@ -62,8 +63,6 @@ function getDateRange(date) {
 
   return `over a year`; // lastly if its over a year
 }
-
-// console.log(getDateRange("2025-05-15"));
 
 function groupTodosWithDate(todoList) {
   const result = todoList.reduce((acc, curr) => {
@@ -117,42 +116,55 @@ function getLocaleDateString(date) {
   return `${day}${suffix} ${months[month - 1]}, ${year}`;
 }
 
-function addInHTML(localTodoVarName, main) {
+function addInHTML(localTodoVarName, main, addNewTodo) {
   const data = localStorage.getItem(localTodoVarName);
-  if (data) {
+  if (data || addNewTodo) {
     JSONData = JSON.parse(data);
+    // if (!JSONData[0]) return;
+
     const groupedData = groupTodosWithDate(JSONData);
 
     Object.keys(groupedData).forEach((todoDate) => {
-      main.innerHTML += `
-       <div id="${todoDate}" class="grid place-items-center gap-2.5 w-full">
-          <h1
-                class="relative z-10 text-xl px-3 tracking-wide bg-[#0f0f0f] before:content-[''] before:absolute before:w-full before:h-[1px] before:bg-gradient-to-l before:from-white before:to-transparent before:-left-full before:top-1/2 before:-translate-y-1/2 after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-gradient-to-r after:from-white after:to-transparent after:left-full after:top-1/2 after:-translate-y-1/2 font-bold"
-              >
-                ${todoDate.toUpperCase()}
-          </h1>
-          <!--  -->
-       </div>
-      `;
+      if (!addNewTodo) {
+        main.innerHTML += `
+        <div id="${todoDate}" class="grid place-items-center gap-2.5 w-full">
+           <h1
+                 class="relative z-10 text-xl px-3 tracking-wide bg-[#0f0f0f] before:content-[''] before:absolute before:w-full before:h-[1px] before:bg-gradient-to-l before:from-white before:to-transparent before:-left-full before:top-1/2 before:-translate-y-1/2 after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-gradient-to-r after:from-white after:to-transparent after:left-full after:top-1/2 after:-translate-y-1/2 font-bold"
+               >
+                 ${todoDate.toUpperCase()}
+           </h1>
+           <!--  -->
+        </div>
+       `;
+        articleWrapper = document.createElement("div");
+        articleWrapper.classList.add(
+          "article-wrappers",
+          "grid",
+          "grid-cols-[repeat(auto-fit,minmax(250px,1fr))]",
+          "w-full",
+          "place-items-center",
+          "gap-2.5"
+        );
+        document.getElementById(todoDate).append(articleWrapper);
+      }
 
-      const articaleWrapper = document.createElement("div");
-      articaleWrapper.classList.add(
-        "grid",
-        "grid-cols-[repeat(auto-fit,minmax(230px,1fr))]",
-        "w-full",
-        "place-items-center",
-        "gap-2.5"
-      );
-      document.getElementById(todoDate).append(articaleWrapper);
       groupedData[todoDate].forEach((json) => {
-        addInYoursTodo(json, articaleWrapper);
+        // console.log(json);
+        addInYoursTodo(json, articleWrapper);
       });
     });
   }
 }
 
-addInHTML("todos", rightMain);
-addInHTML("completedTodos", leftMain);
+addInHTML("todos", leftMain);
+addInHTML("completedTodos", rightMain);
+
+function showToDoPage() {
+  todoPage.style.display = "block";
+  [...midMain.children].forEach((el) => {
+    if (el !== todoPage) el.style.display = "none";
+  });
+}
 
 const resetTodoPageFunc = () => {
   currTodoDetails = {
@@ -177,6 +189,50 @@ const resetTodoPageFunc = () => {
   });
 };
 
+function resetTodoPageUI(shouldReset) {
+  const elTwPropertiesPairArray = [
+    [["textarea", ".borderd-div", "select"], shouldReset, "border"],
+    [
+      ["textarea", "#priority-section", "#priority-input"],
+      !shouldReset,
+      "text-center",
+    ],
+    [["#quick-fill", ".count-limit"], !shouldReset, "hidden"],
+    [["#priority-pTag"], !shouldReset, "!block"],
+  ];
+
+  elTwPropertiesPairArray.forEach(([selectorArray, shouldAdd, ...classes]) => {
+    selectorArray.forEach((selector) => {
+      document.querySelectorAll(selector).forEach((el) => {
+        shouldAdd
+          ? el.classList.add(...classes)
+          : el.classList.remove(...classes);
+      });
+    });
+  });
+
+  const changeHeader = document.querySelectorAll(".must-section");
+  if (!shouldReset) {
+    changeHeader.forEach((header) => {
+      const arr = header.innerHTML.trim().split(/\s+/);
+      const heading = arr.slice(0, -1);
+      header.innerHTML = heading.join(" ");
+    });
+  } else {
+    changeHeader.forEach((header) => {
+      header.innerHTML = header.getAttribute("data-heading");
+    });
+  }
+
+  document.querySelectorAll("textarea, input, select").forEach((el) => {
+    if (!shouldReset) {
+      el.setAttribute("readonly", true); // Make readonly
+    } else {
+      el.removeAttribute("readonly"); // Make editable
+    }
+  });
+}
+
 closeTodoBtn.forEach((btn) => {
   btn.addEventListener("click", () => {
     todoPage.style.display = "none";
@@ -185,12 +241,11 @@ closeTodoBtn.forEach((btn) => {
     resetTodoPageFunc();
   });
 });
+
 createTodo.addEventListener("click", () => {
   resetTodoPageFunc();
-  todoPage.style.display = "block";
-  [...midMain.children].forEach((el) => {
-    if (el !== todoPage) el.style.display = "none";
-  });
+  resetTodoPageUI(true);
+  showToDoPage();
 });
 
 const addTodoBtn = document.querySelector("#add-todo");
@@ -262,7 +317,7 @@ addTodoBtn.addEventListener("click", () => {
     JSONData = JSON.parse(localStorage.getItem("todos"));
     addInYoursTodo(
       JSONData[getTodoData.localStorageIndex],
-      rightMain,
+      leftMain,
       getTodoData.actualID
     );
   } else {
@@ -270,9 +325,7 @@ addTodoBtn.addEventListener("click", () => {
 
     backend(newTodo, "todos");
 
-    JSONData = JSON.parse(localStorage.todos);
-    const lastestData = JSONData[JSONData.length - 1];
-    addInYoursTodo(lastestData, rightMain);
+    addInHTML("todos", leftMain, true);
   }
 });
 
@@ -289,10 +342,13 @@ function backend(todoObject, localTodoVarName, shouldUpdate, updateIndex) {
 }
 
 function addInYoursTodo(userLatestTodo, mainDirection, id) {
-  if (!userLatestTodo) return;
+  if (!userLatestTodo) {
+    console.log("return addInYoursTodo()");
+    return;
+  }
 
   const todoHTML = `
-    <span class="drag-handle absolute left-0 top-0 block z-10 rounded-t-2xl overflow-hidden">
+    <span class="absolute left-0 top-0 block z-10 rounded-t-2xl overflow-hidden">
       <span class="h-[40px] w-[40px] bg-[${
         priorityColors[userLatestTodo.priority]
       }] relative -top-2.5 -left-2.5 block rounded-full"></span>
@@ -318,10 +374,10 @@ function addInYoursTodo(userLatestTodo, mainDirection, id) {
     document.getElementById(id).innerHTML = todoHTML;
   } else {
     mainDirection.innerHTML += `
-      <article class="grid gap-3 max-w-[300px] w-full overflow-hidden">
-        <div class="draggable-wrapper grid place-items-end">
+      <article class="grid gap-3 relative z-50 max-w-[300px] w-full overflow-hidden">
+        <div class="grid place-items-end">
                   <header class="relative z-10 w-full text-sm font-medium pl-8 before:pl-3 mb-1.5 bg-[#0f0f0f] before:content-[''] before:absolute before:w-full before:h-[1px] before:left-4 before:bottom-0 before:bg-white">
-                    ${userLatestTodo.date}
+                    ${getLocaleDateString(userLatestTodo.date)}
                   </header>
               
                   <section
@@ -336,16 +392,13 @@ function addInYoursTodo(userLatestTodo, mainDirection, id) {
   }
 }
 
+// CURD OPERATION FUNCTION
 function update(todoData) {
   updated = true;
-
-  todoPage.style.display = "block";
-  [...midMain.children].forEach((el) => {
-    if (el !== todoPage) el.style.display = "none";
-  });
-
   const dataArray = Object.values(todoData);
   const todoKeys = Object.keys(todoData);
+
+  showToDoPage();
 
   currTodoDetails.id = dataArray[dataArray.length - 1];
 
@@ -364,6 +417,21 @@ function update(todoData) {
         dataLen >= 1 ? dataLen : "0".repeat(pTag.getAttribute("maxDigit"));
   });
 }
+function deleteTodo(localTodoVarName, todoIndex, getHtmlID) {
+  document.getElementById(getHtmlID).remove();
+
+  JSONData = JSON.parse(localStorage.getItem(localTodoVarName));
+  JSONData.splice(todoIndex, 1);
+  localStorage.setItem(localTodoVarName, JSON.stringify(JSONData));
+}
+function readTodo(getTodoData) {
+  resetTodoPageUI(false);
+
+  update(getTodoData);
+  updated = false;
+
+  showToDoPage();
+}
 
 function pickedTodoData(localTodoVarName, pickedItemHTML) {
   JSONData = JSON.parse(localStorage.getItem(localTodoVarName));
@@ -378,61 +446,82 @@ function pickedTodoData(localTodoVarName, pickedItemHTML) {
   };
 }
 
+articleWrapper = document.querySelectorAll(".article-wrappers");
+
+articleWrapper.forEach((wrapper) => {
+  Sortable.create(wrapper, {
+    group: {
+      name: "shared",
+      pull: true,
+      put: true,
+    },
+
+    animation: 300,
+    ghostClass: "drag-ghost",
+
+    onAdd: function (evt) {
+      getTodoData = pickedTodoData("completedTodos", evt.item);
+      JSONData.splice(getTodoData.localStorageIndex, 1);
+      localStorage.setItem("completedTodos", JSON.stringify(JSONData));
+      backend(getTodoData.matchedId, "todos");
+    },
+
+    onEnd: function (evt) {
+      const { clientX, clientY } = evt.originalEvent;
+      const dropTarget = document.elementFromPoint(clientX, clientY);
+      if (dropTarget) {
+        ["#update", "#read", "#delete"].forEach((elID) => {
+          const ancestor = dropTarget.closest(elID);
+          if (ancestor) {
+            getTodoData = pickedTodoData(
+              "todos",
+              evt.item.querySelector("section")
+            );
+            if (elID === "#update") update(getTodoData.matchedId);
+            else if (elID === "#read") readTodo(getTodoData.matchedId);
+            else if (elID === "#delete")
+              deleteTodo(
+                "todos",
+                getTodoData.localStorageIndex,
+                getTodoData.actualID
+              );
+          }
+        });
+      }
+    },
+  });
+});
+
+["#update", "#read", "#delete"].forEach((elID) => {
+  const target = document.querySelector(elID);
+
+  target.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    target.style.cursor = "copy";
+  });
+
+  target.addEventListener("dragleave", () => {
+    target.style.cursor = "default";
+  });
+
+  target.addEventListener("drop", (e) => {
+    e.preventDefault();
+    target.style.cursor = "default";
+  });
+});
+
 Sortable.create(rightMain, {
   group: {
     name: "shared",
     pull: true,
     put: true,
   },
-
   animation: 300,
   ghostClass: "drag-ghost",
-  draggable: ".draggable-wrapper", // make the div around section draggable
-  handle: ".drag-handle",
-
-  onAdd: function (evt) {
-    // console.log("Moved to completed:", evt.item.getAttribute("actualID"));
-
-    getTodoData = pickedTodoData("completedTodos", evt.item);
-
-    JSONData.splice(getTodoData.localStorageIndex, 1);
-
-    localStorage.setItem("completedTodos", JSON.stringify(JSONData));
-    backend(getTodoData.matchedId, "todos");
-  },
-
-  onEnd: function (evt) {
-    const { clientX, clientY } = evt.originalEvent;
-
-    const dropTarget = document.elementFromPoint(clientX, clientY);
-    if (dropTarget) {
-      ["#update", "#read", "#delete"].forEach((ElID) => {
-        const ancestor = dropTarget.closest(ElID);
-        if (ancestor) {
-          getTodoData = pickedTodoData("todos", evt.item);
-          update(getTodoData.matchedId);
-        }
-      });
-    }
-  },
-});
-
-Sortable.create(leftMain, {
-  group: {
-    name: "shared",
-    pull: true, // can drag from here
-    put: true, // can receive from others
-  },
-
-  animation: 300,
-  ghostClass: "drag-ghost",
-  draggable: ".draggable-wrapper", // make the div around section draggable
-  handle: ".drag-handle",
 
   onAdd: function (evt) {
     getTodoData = pickedTodoData("todos", evt.item);
     JSONData.splice(getTodoData.localStorageIndex, 1);
-
     localStorage.setItem("todos", JSON.stringify(JSONData));
     backend(getTodoData.matchedId, "completedTodos");
   },

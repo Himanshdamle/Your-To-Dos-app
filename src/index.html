@@ -34,7 +34,7 @@
           </header>
 
           <main
-            id="right-main"
+            id="left-main"
             class="h-full w-full max-w-[750px] mt-8 resize-x flex flex-col gap-3.5 overflow-y-scroll overflow-x-hidden"
           ></main>
         </section>
@@ -149,7 +149,9 @@
               <section
                 class="flex flex-col pb-4 relative justify-center items-center border-b"
               >
-                <p>Header [must]</p>
+                <p data-heading="Header [must]" class="must-section">
+                  Header [must]
+                </p>
                 <textarea
                   name="heading"
                   placeholder="e.g Buy grociers"
@@ -160,7 +162,8 @@
                   required
                 ></textarea>
 
-                <span class="absolute top-2 right-0 flex text-gray-400"
+                <span
+                  class="count-limit absolute top-2 right-0 flex text-gray-400"
                   >Characters:&nbsp;
                   <p maxDigit="2" id="current-len-heading-input">00</p>
                   /50</span
@@ -180,7 +183,8 @@
                   placeholder="Need to restock essentials like milk, eggs, bread, and some veggies. Also check for any offers on snacks or cleaning supplies."
                 ></textarea>
 
-                <span class="absolute top-2 right-0 flex text-gray-400"
+                <span
+                  class="count-limit absolute top-2 right-0 flex text-gray-400"
                   >Characters:&nbsp;
                   <p maxDigit="3" id="current-len-description-input">000</p>
                   /200</span
@@ -190,9 +194,13 @@
               <section
                 class="flex flex-col py-4 justify-center items-center border-b"
               >
-                <p>Due Date [time format: 24hours]</p>
+                <p data-heading="Due Date [must]" class="must-section">
+                  Due Date [must]
+                </p>
                 <section class="flex justify-center ml-11 w-full gap-6">
-                  <div class="rounded-lg border border-white/30 px-4 flex">
+                  <div
+                    class="borderd-div rounded-lg border border-white/30 px-4 flex"
+                  >
                     <div
                       class="before:content-[''] before:absolute before:right-2 before:top-0 before:bg-white before:w-[1px] before:h-full relative"
                     >
@@ -221,8 +229,12 @@
               </section>
 
               <section
+                id="priority-section"
                 class="flex flex-col py-4 justify-center items-center border-b"
               >
+                <p id="priority-pTag" class="text-xl hidden font-bold">
+                  Priority
+                </p>
                 <select
                   name="priority"
                   id="priority-input"
@@ -301,7 +313,7 @@
           </header>
 
           <main
-            id="left-main"
+            id="right-main"
             class="h-full w-full mt-8 flex flex-col items-center gap-3.5 overflow-y-scroll overflow-x-hidden"
           ></main>
         </section>
