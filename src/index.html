@@ -16,8 +16,15 @@
     <link rel="stylesheet" href="complex.css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/gsap.min.js"
+      integrity="sha512-f6bQMg6nkSRw/xfHw5BCbISe/dJjXrVGfz9BSDwhZtiErHwk7ifbmBEtF9vFW8UNIQPhV2uEFVyI/UHob9r7Cw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <script src="script.js" defer></script>
     <script src="api.js" defer></script>
+    <script src="ui.js" defer></script>
   </head>
   <body
     style="font-family: 'Karla', sans-serif"
@@ -35,8 +42,86 @@
 
           <main
             id="left-main"
-            class="h-full w-full max-w-[110%] mt-8 resize-x flex min-w-[100%] flex-col gap-3.5 overflow-y-scroll overflow-x-hidden"
-          ></main>
+            class="h-full w-full max-w-[110%] mt-8 resize-x flex min-w-[100%] flex-col gap-3.5 overflow-y-scroll overflow-x-hidden items-center"
+          >
+            <section
+              class="text-center text-xl italic p-2.5 border h-min max-w-[400px] rounded-lg border-white/30 bg-[#1A1A1A] flex flex-col gap-2"
+            >
+              <!-- SEARCH -->
+              <div
+                class="flex bg-[#0F0F0F] px-3 border rounded-lg border-white/30 relative"
+              >
+                <button class="cursor-pointer border-r pr-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill="#FFFFFF"
+                  >
+                    <path
+                      d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"
+                    />
+                  </svg>
+                </button>
+                <div class="relative">
+                  <input
+                    type="text"
+                    name="search"
+                    id="search-input"
+                    class="p-1.5 font-bold w-full outline-none text-xl italic h-min input"
+                  />
+                  <p
+                    class="absolute bottom-[50%] translate-y-[50%] left-1.5 opacity-50 pointer-events-none psuedo-placeholder"
+                  >
+                    <b>Search by - </b>
+                    <i class="font-light">TAG NAME</i>
+                  </p>
+                </div>
+              </div>
+
+              <!-- FILTER -->
+              <div
+                class="flex justify-around items-center bg-[#0F0F0F] px-3 border rounded-lg border-white/30"
+              >
+                <div class="pr-3 border-r py-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill="#FFFFFF"
+                  >
+                    <path
+                      d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z"
+                    />
+                  </svg>
+                </div>
+
+                <select
+                  class="outline-none cursor-pointer border-r border-white/30 pr-2"
+                  name=""
+                  id="date-filter"
+                >
+                  <option hidden>Date</option>
+                </select>
+                <select
+                  class="outline-none cursor-pointer border-r border-white/30 pr-2"
+                  name=""
+                  id="priority-filter"
+                >
+                  <option hidden>Priority</option>
+                </select>
+                <select
+                  class="outline-none cursor-pointer"
+                  name=""
+                  id="status-filter"
+                >
+                  <option hidden>status</option>
+                </select>
+              </div>
+            </section>
+          </main>
         </section>
 
         <img
@@ -152,15 +237,20 @@
                 <p data-heading="Header [must]" class="must-section">
                   Header [must]
                 </p>
-                <textarea
-                  name="heading"
-                  placeholder="e.g Buy grociers"
-                  id="heading-input"
-                  wrap="soft"
-                  class="resize-none text-center p-1.5 w-96 font-bold outline-none focus:placeholder-opacity-0 placeholder-transition-opacity placeholder-duration-500 text-2xl italic border h-min rounded-lg border-white/30"
-                  maxlength="50"
-                  required
-                ></textarea>
+                <div class="relative">
+                  <textarea
+                    name="heading"
+                    id="heading-input"
+                    wrap="soft"
+                    class="resize-none text-center p-1.5 w-96 font-bold outline-none text-2xl italic border h-min rounded-lg border-white/30 input"
+                    maxlength="50"
+                  ></textarea>
+                  <p
+                    class="absolute top-1.5 left-1.5 opacity-50 pointer-events-none text-2xl italic psuedo-placeholder"
+                  >
+                    e.g Buy grociers
+                  </p>
+                </div>
 
                 <span
                   class="count-limit absolute top-2 right-0 flex text-gray-400"
@@ -175,13 +265,22 @@
               >
                 <p>Description</p>
 
-                <textarea
-                  name="description"
-                  id="description-input"
-                  class="mx-7 w-full h-36 p-1.5 text-xl border resize-none outline-none rounded-lg border-white/30"
-                  maxlength="200"
-                  placeholder="Need to restock essentials like milk, eggs, bread, and some veggies. Also check for any offers on snacks or cleaning supplies."
-                ></textarea>
+                <div class="relative w-full h-36 grid place-items-center">
+                  <textarea
+                    name="description"
+                    id="description-input"
+                    class="mx-7 p-1.5 text-xl border w-full h-full resize-none outline-none rounded-lg border-white/30 input"
+                    maxlength="200"
+                  ></textarea>
+                  <p
+                    class="absolute top-1.5 left-1.5 opacity-50 pointer-events-none text-2xl italic psuedo-placeholder"
+                    id="description-psuedo-placeholder input"
+                  >
+                    Need to restock essentials like milk, eggs, bread, and some
+                    veggies. Also check for any offers on snacks or cleaning
+                    supplies.
+                  </p>
+                </div>
 
                 <span
                   class="count-limit absolute top-2 right-0 flex text-gray-400"

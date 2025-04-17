@@ -25,3 +25,10 @@
 #left-main::-webkit-scrollbar-track {
   background: transparent;
 }
+
+select {
+  appearance: none; /* modern way */
+  -webkit-appearance: none; /* Safari, older Chrome */
+  -moz-appearance: none; /* Firefox */
+  background: none; /* optional: clear the background */
+}

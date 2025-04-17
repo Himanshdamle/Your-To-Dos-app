@@ -26,6 +26,50 @@ const priorityColors = {
   urgent: "#e74c3c",
 };
 
+function smoothInnOutTransition(gsapSettings, play, currentDisplay) {
+  const body = document.body;
+
+  if (play) {
+    // PLAY ANIMATION == display: block || when we have to popup element
+
+    gsap.set(body, { overflow: "hidden" });
+    gsap.to(gsapSettings.el, {
+      filter: `blur(${gsapSettings.blur || 10}px)`,
+      scale: gsapSettings.scale || 1.1,
+      opacity: 0,
+      x: 10,
+      duration: gsapSettings.duration || "0.3",
+      ease: gsapSettings.ease || "none",
+      onComplete() {
+        gsap.set(gsapSettings.el, { display: "none" });
+        gsap.set(body, { overflow: "unset" });
+        gsapSettings.onCompleteTransition();
+      },
+    });
+  } else {
+    // PLAY IN REVERSE == display: none || when we have to close element
+
+    gsap.set(gsapSettings.el, {
+      display: currentDisplay || "block",
+      filter: `blur(${gsapSettings.blur || 10}px)`,
+      scale: gsapSettings.scale || 1.1,
+    });
+    gsap.set(body, { overflow: "hidden" });
+
+    gsap.to(gsapSettings.el, {
+      filter: "blur(0px)",
+      scale: 1,
+      opacity: gsapSettings.opacity || 0.5,
+      x: 0,
+      ease: gsapSettings.ease,
+      duration: gsapSettings.duration,
+      onComplete() {
+        gsap.set(body, { overflow: "unset" });
+      },
+    });
+  }
+}
+
 function getDateRange(date) {
   const today = new Date().toISOString().split("T")[0];
   const [year, month, day] = date.split("-").map((number) => number);
@@ -48,7 +92,7 @@ function getDateRange(date) {
   const isOverMonth = diffMonth >= 1 && diffMonth <= 11;
 
   if (diffDay <= 28 && !isOverMonth) {
-    if (diffDay === 0) return "Due this day.";
+    if (diffDay === 0) return "Due this day";
 
     for (let i = 1; i <= 4; i++) {
       if (i == 1) {
@@ -131,7 +175,7 @@ function addInHTML(localTodoVarName, main, addNewTodo) {
         main.innerHTML += `
         <div id="${todoDate}" class="grid place-items-center gap-2.5 w-full">
            <h1
-                 class="relative z-10 text-xl px-3 tracking-wide bg-[#0f0f0f] before:content-[''] before:absolute before:w-full before:h-[1px] before:bg-gradient-to-l before:from-white before:to-transparent before:-left-full before:top-1/2 before:-translate-y-1/2 after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-gradient-to-r after:from-white after:to-transparent after:left-full after:top-1/2 after:-translate-y-1/2 font-bold"
+                 class="relative z-10 text-xl px-3 tracking-wide bg-none before:content-[''] before:absolute before:w-full before:h-[1px] before:bg-gradient-to-l before:from-white before:to-transparent before:-left-full before:top-1/2 before:-translate-y-1/2 after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-gradient-to-r after:from-white after:to-transparent after:left-full after:top-1/2 after:-translate-y-1/2 font-bold"
                >
                  ${todoDate.toUpperCase()}
            </h1>
@@ -163,7 +207,17 @@ addInHTML("todos", leftMain);
 addInHTML("completedTodos", rightMain);
 
 function showToDoPage() {
-  todoPage.style.display = "block";
+  smoothInnOutTransition(
+    {
+      el: todoPage,
+      duration: 0.7,
+      ease: "power2.out",
+      opacity: 1,
+      blur: 20,
+      scale: 1.2,
+    },
+    false
+  );
   [...midMain.children].forEach((el) => {
     if (el !== todoPage) el.style.display = "none";
   });
@@ -238,9 +292,42 @@ function resetTodoPageUI(shouldReset) {
 
 closeTodoBtn.forEach((btn) => {
   btn.addEventListener("click", () => {
-    todoPage.style.display = "none";
-    showTodoCreated.style.display = "none";
-    quoteBox.style.display = "flex";
+    smoothInnOutTransition(
+      {
+        el: todoPage,
+        duration: 0.5,
+        ease: "power2.out",
+        opacity: 1,
+        blur: 20,
+        scale: 1.2,
+        onCompleteTransition() {
+          smoothInnOutTransition(
+            {
+              el: quoteBox,
+              duration: 0.5,
+              ease: "power2.out",
+              opacity: 1,
+              blur: 20,
+              scale: 1.2,
+            },
+            false,
+            "flex"
+          );
+        },
+      },
+      true
+    );
+    smoothInnOutTransition(
+      {
+        el: showTodoCreated,
+        duration: 0.5,
+        ease: "power2.out",
+        opacity: 1,
+        blur: 20,
+        scale: 1.2,
+      },
+      true
+    );
     resetTodoPageFunc();
   });
 });
