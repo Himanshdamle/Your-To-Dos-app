@@ -27,7 +27,7 @@ const priorityColors = {
 };
 
 function getDateRange(date) {
-  const today = new Date().toLocaleDateString("en-CA").split("T")[0];
+  const today = new Date().toISOString().split("T")[0];
   const [year, month, day] = date.split("-").map((number) => number);
   const [currYear, currMonth, currDay] = today
     .split("-")
@@ -39,13 +39,16 @@ function getDateRange(date) {
     day - currDay,
   ];
 
+  if (diffYear < 0 || month < currMonth || day < currDay)
+    return "Expired todo's";
+
   if (diffDay < 0 || diffMonth) diffDay += 30;
   if (diffMonth < 0 || diffYear) diffMonth += 12;
 
-  const isOverMonth = diffMonth >= 1 && diffMonth <= 12;
+  const isOverMonth = diffMonth >= 1 && diffMonth <= 11;
 
   if (diffDay <= 28 && !isOverMonth) {
-    if (diffDay === 0) return "Due this day";
+    if (diffDay === 0) return "Due this day.";
 
     for (let i = 1; i <= 4; i++) {
       if (i == 1) {
@@ -56,7 +59,6 @@ function getDateRange(date) {
     }
   }
 
-  // condition for over a months
   if (isOverMonth) {
     return `due over ${diffMonth} months`;
   }
@@ -148,9 +150,10 @@ function addInHTML(localTodoVarName, main, addNewTodo) {
         document.getElementById(todoDate).append(articleWrapper);
       }
 
+      const isExpired = todoDate === "Expired todo's";
+
       groupedData[todoDate].forEach((json) => {
-        // console.log(json);
-        addInYoursTodo(json, articleWrapper);
+        addInYoursTodo(isExpired, json, articleWrapper);
       });
     });
   }
@@ -341,11 +344,32 @@ function backend(todoObject, localTodoVarName, shouldUpdate, updateIndex) {
   localStorage.setItem(`${localTodoVarName}`, JSON.stringify(todo));
 }
 
-function addInYoursTodo(userLatestTodo, mainDirection, id) {
+function addInYoursTodo(isExpiredTodo, userLatestTodo, mainDirection, id) {
   if (!userLatestTodo) {
     console.log("return addInYoursTodo()");
     return;
   }
+
+  const localeDateString = getLocaleDateString(userLatestTodo.date);
+
+  const expiredSticker = `
+                        <span
+                        class="absolute right-2 bottom-2 z-10 w-[100px] h-[100px]"
+                      >
+                        <span class="relative">
+                          <img
+                            class="w-full h-full"
+                            src="assets/Group 16.svg"
+                            alt="red-sticker"
+                          />
+                          <p
+                            class="text-sm text-nowrap absolute left-[50%] top-[50%] translate-x-[-50%] px-2"
+                          >
+                            <i><b>${localeDateString}</b></i>
+                          </p>
+                        </span>
+                      </span>
+  `;
 
   const todoHTML = `
     <span class="absolute left-0 top-0 block z-10 rounded-t-2xl overflow-hidden">
@@ -353,6 +377,8 @@ function addInYoursTodo(userLatestTodo, mainDirection, id) {
         priorityColors[userLatestTodo.priority]
       }] relative -top-2.5 -left-2.5 block rounded-full"></span>
     </span>
+
+     ${isExpiredTodo ? expiredSticker : ""}
 
     <header class="flex flex-col pb-2 justify-center items-center border-b">
       <p>Header</p>
@@ -373,16 +399,22 @@ function addInYoursTodo(userLatestTodo, mainDirection, id) {
   if (updated) {
     document.getElementById(id).innerHTML = todoHTML;
   } else {
+    const crossMarkerClassTw =
+      "before:content-[''] before:absolute before:w-[200%] before:h-[1px] before:bg-white before:block z-[100] before:rotate-30 before:-left-[75%] before:translate-y-10 overflow-hidden";
+    const addCrossMarker = isExpiredTodo ? crossMarkerClassTw : "";
+
     mainDirection.innerHTML += `
       <article class="grid gap-3 relative z-50 max-w-[300px] w-full overflow-hidden">
         <div class="grid place-items-end">
                   <header class="relative z-10 w-full text-sm font-medium pl-8 before:pl-3 mb-1.5 bg-[#0f0f0f] before:content-[''] before:absolute before:w-full before:h-[1px] before:left-4 before:bottom-0 before:bg-white">
-                    ${getLocaleDateString(userLatestTodo.date)}
+                    ${localeDateString}
                   </header>
               
                   <section
                     id="${userLatestTodo.id}"
-                    class="todo-card bg-[#1A1A1A] relative border max-h-max rounded-2xl p-2 flex-1 w-full cursor-grab"
+                    class="todo-card bg-[#1A1A1A] relative border max-h-max rounded-2xl p-2 flex-1 w-full cursor-grab
+                    ${addCrossMarker}
+                    "
                   >
                     ${todoHTML}
                   </section>

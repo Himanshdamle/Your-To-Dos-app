@@ -98,8 +98,7 @@ function generateTodos(count = 1000) {
   });
 }
 
-const largeTodoList = generateTodos(100);
-console.log(groupTodosWithDate(largeTodoList));
+const largeTodoList = generateTodos(10);
 
 function getDateRange(date) {
   const today = new Date().toISOString().split("T")[0];
@@ -114,10 +113,13 @@ function getDateRange(date) {
     day - currDay,
   ];
 
+  if (diffYear < 0 || month < currMonth || day < currDay)
+    return "delete this todo. out of date";
+
   if (diffDay < 0 || diffMonth) diffDay += 30;
   if (diffMonth < 0 || diffYear) diffMonth += 12;
 
-  const isOverMonth = diffMonth >= 1 && diffMonth <= 12;
+  const isOverMonth = diffMonth >= 1 && diffMonth <= 11;
 
   if (diffDay <= 28 && !isOverMonth) {
     if (diffDay === 0) return "Due this day.";
@@ -131,7 +133,6 @@ function getDateRange(date) {
     }
   }
 
-  // condition for over a months
   if (isOverMonth) {
     return `due over ${diffMonth} months`;
   }
@@ -139,7 +140,7 @@ function getDateRange(date) {
   return `over a year`; // lastly if its over a year
 }
 
-// console.log(getDateRange("2025-05-15"));
+console.log(getDateRange("2025-03-15"));
 
 function groupTodosWithDate(todoList) {
   const result = todoList.reduce((acc, curr) => {
@@ -151,7 +152,6 @@ function groupTodosWithDate(todoList) {
     }
     return acc;
   }, {});
-
   const keysNdValues = {
     keys: Object.keys(result),
     values: Object.values(result),
@@ -159,6 +159,7 @@ function groupTodosWithDate(todoList) {
 
   const range = keysNdValues.keys.map((date) => getDateRange(date));
 
+  console.log(range);
   const nlp = range.reduce((acc, curr, index) => {
     const todo = keysNdValues.values[index];
     if (!acc[curr]) {
@@ -169,5 +170,7 @@ function groupTodosWithDate(todoList) {
     return acc;
   }, {});
 
-  return nlp;
+  // return nlp;
 }
+
+// console.log(groupTodosWithDate(largeTodoList));
