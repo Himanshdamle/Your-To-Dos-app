@@ -232,6 +232,21 @@ const resetTodoPageFunc = () => {
     priority: "",
   };
 
+  const psuedoPlaceholdersCURD = document.querySelectorAll(
+    ".psuedo-placeholder-curd"
+  );
+
+  psuedoPlaceholdersCURD.forEach((placeholder) => {
+    smoothInnOutTransition(
+      {
+        duration: 0.5,
+        ease: "power2.out",
+        el: placeholder,
+      },
+      false
+    );
+  });
+
   typingInputIds.forEach((inputid) => {
     const el = document.getElementById(inputid);
 
@@ -248,7 +263,7 @@ const resetTodoPageFunc = () => {
 
 function resetTodoPageUI(shouldReset) {
   const elTwPropertiesPairArray = [
-    [["textarea", ".borderd-div", "select"], shouldReset, "border"],
+    [["textarea", ".borderd-div", "#priority-input"], shouldReset, "border"],
     [
       ["textarea", "#priority-section", "#priority-input"],
       !shouldReset,
@@ -290,33 +305,38 @@ function resetTodoPageUI(shouldReset) {
   });
 }
 
+function transitionBetweenPages(pageCloseEl, pageOpenEl) {
+  smoothInnOutTransition(
+    {
+      el: pageCloseEl,
+      duration: 0.5,
+      ease: "power2.out",
+      opacity: 1,
+      blur: 20,
+      scale: 1.2,
+      onCompleteTransition() {
+        smoothInnOutTransition(
+          {
+            el: pageOpenEl,
+            duration: 0.5,
+            ease: "power2.out",
+            opacity: 1,
+            blur: 20,
+            scale: 1.2,
+          },
+          false,
+          "flex"
+        );
+      },
+    },
+    true
+  );
+}
+
 closeTodoBtn.forEach((btn) => {
   btn.addEventListener("click", () => {
-    smoothInnOutTransition(
-      {
-        el: todoPage,
-        duration: 0.5,
-        ease: "power2.out",
-        opacity: 1,
-        blur: 20,
-        scale: 1.2,
-        onCompleteTransition() {
-          smoothInnOutTransition(
-            {
-              el: quoteBox,
-              duration: 0.5,
-              ease: "power2.out",
-              opacity: 1,
-              blur: 20,
-              scale: 1.2,
-            },
-            false,
-            "flex"
-          );
-        },
-      },
-      true
-    );
+    transitionBetweenPages(todoPage, quoteBox);
+
     smoothInnOutTransition(
       {
         el: showTodoCreated,
@@ -398,8 +418,8 @@ addTodoBtn.addEventListener("click", () => {
     currTodoDetails.time = `${hours}:${minutes}`;
   }
 
-  todoPage.style.display = "none";
-  showTodoCreated.style.display = "flex";
+  transitionBetweenPages(todoPage, showTodoCreated);
+
   todoName.innerText = currTodoDetails.heading;
 
   if (updated) {
