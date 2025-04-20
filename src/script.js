@@ -223,6 +223,15 @@ function showToDoPage() {
   });
 }
 
+const resize = (inputEl) => {
+  inputEl.style.width = `${inputEl.value.length + 0.5}ch`;
+};
+function toggleClasses(methodName, bgEl) {
+  bgEl.classList[methodName]("scale-100", "bg-span-el-tags-hover-effect");
+  bgEl.style.transformOrigin = `${hoverObject.x}px ${hoverObject.y}px`;
+}
+const tagStates = [];
+
 const resetTodoPageFunc = () => {
   currTodoDetails = {
     heading: "",
@@ -230,6 +239,8 @@ const resetTodoPageFunc = () => {
     date: "",
     time: "",
     priority: "",
+
+    tags: [],
   };
 
   const psuedoPlaceholdersCURD = document.querySelectorAll(
@@ -247,6 +258,28 @@ const resetTodoPageFunc = () => {
     );
   });
 
+  const tagNameInputs = document.querySelectorAll(".tag-name");
+  const bgSpanTagsHoverEffects = document.querySelectorAll(
+    ".bg-span-el-tags-hover-effect"
+  );
+  resetCurrentLenghtPtag("tags-input");
+  bgSpanTagsHoverEffects.forEach((span) => {
+    toggleClasses("remove", span);
+  });
+  tagNameInputs.forEach((tag) => {
+    tag.value = tag.getAttribute("value");
+    resize(tag);
+  });
+  tagStates.forEach((state) => {
+    state.isClicked = false;
+    state.isDblClick = false;
+  });
+
+  function resetCurrentLenghtPtag(getUniqueId) {
+    const pTag = document.getElementById(`current-len-${getUniqueId}`);
+    if (pTag) pTag.innerText = "0".repeat(pTag.getAttribute("maxDigit"));
+  }
+
   typingInputIds.forEach((inputid) => {
     const el = document.getElementById(inputid);
 
@@ -256,8 +289,7 @@ const resetTodoPageFunc = () => {
       el.value = "";
     }
 
-    const pTag = document.getElementById(`current-len-${inputid}`);
-    if (pTag) pTag.innerText = "0".repeat(pTag.getAttribute("maxDigit"));
+    resetCurrentLenghtPtag(inputid);
   });
 };
 
@@ -374,10 +406,15 @@ const typingInputIds = [
 typingInputIds.forEach((eachId) => {
   const input = document.getElementById(eachId);
   const key = input.name;
+
   currTodoDetails[key] = "";
+
   input.addEventListener("input", () => {
-    currTodoDetails[key] = input.value;
+    if (key === "tag") currTodoDetails[key].push(input.value);
+    else currTodoDetails[key] = input.value;
+
     const pTag = document.getElementById(`current-len-${eachId}`);
+
     if (pTag) {
       pTag.innerText = input.value.length
         .toString()
@@ -385,7 +422,6 @@ typingInputIds.forEach((eachId) => {
     }
   });
 });
-
 quickFill.addEventListener("click", () => {
   const now = new Date();
 
@@ -425,6 +461,7 @@ addTodoBtn.addEventListener("click", () => {
   if (updated) {
     backend(currTodoDetails, "todos", true, getTodoData.localStorageIndex);
     JSONData = JSON.parse(localStorage.getItem("todos"));
+
     addInYoursTodo(
       JSONData[getTodoData.localStorageIndex],
       leftMain,

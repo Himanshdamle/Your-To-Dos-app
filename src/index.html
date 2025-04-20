@@ -88,7 +88,7 @@
                     class="p-1.5 font-bold w-full outline-none text-xl italic h-min input"
                   />
                   <p
-                    class="absolute bottom-[50%] translate-y-[50%] left-1.5 opacity-50 pointer-events-none psuedo-placeholder"
+                    class="absolute bottom-[50%] text-nowrap translate-y-[50%] left-1.5 opacity-50 pointer-events-none psuedo-placeholder"
                   >
                     <b>Search by - </b>
                     <i class="font-light">TAG NAME</i>
@@ -378,7 +378,7 @@
               <section
                 class="flex flex-col py-4 justify-center items-center relative"
               >
-                <p><b>#</b>Tags [Only 3]</p>
+                <p><b>#</b>Tags</p>
 
                 <span class="absolute top-1 left-0 flex text-white/50"
                   >Tip:&nbsp;
@@ -408,10 +408,10 @@
                     ></span>
                     <b class="z-10" class="z-10">#</b>
                     <input
-                      class="bg-transparent text-white min-w-[4ch] z-10 border-none cursor-pointer rounded-sm focus:border pointer-events-none"
+                      class="tag-name bg-transparent text-white min-w-[4ch] z-10 border-none cursor-pointer rounded-sm focus:border pointer-events-none"
                       type="text"
+                      id="tag-input-1"
                       name="tag"
-                      id="tag-name"
                       value="Study"
                       maxlength="10"
                       disabled
@@ -426,10 +426,10 @@
                     ></span>
                     <b class="z-10">#</b>
                     <input
-                      class="bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
+                      class="tag-name bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
                       type="text"
+                      id="tag-input-2"
                       name="tag"
-                      id="tag-name"
                       value="Work"
                       disabled
                       maxlength="10"
@@ -444,10 +444,10 @@
                     ></span>
                     <b class="z-10">#</b>
                     <input
-                      class="bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
+                      class="tag-name bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
                       type="text"
+                      id="tag-input-3"
                       name="tag"
-                      id="tag-name"
                       value="Personal"
                       disabled
                       maxlength="10"
@@ -462,10 +462,10 @@
                     ></span>
                     <b class="z-10">#</b>
                     <input
-                      class="bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
+                      class="tag-name bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
                       type="text"
+                      id="tag-input-4"
                       name="tag"
-                      id="tag-name"
                       value="GYM"
                       disabled
                       maxlength="10"
@@ -480,31 +480,13 @@
                     ></span>
                     <b class="z-10">#</b>
                     <input
-                      class="bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
+                      class="tag-name bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
                       type="text"
+                      id="tag-input-5"
                       name="tag"
-                      id="tag-name"
                       value="Health"
                       disabled
                       maxlength="10"
-                    />
-                  </div>
-                  <div
-                    class="tag cursor-pointer z-50 relative flex justify-center items-center rounded-full py-4 pl-1"
-                  >
-                    <span
-                      class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0"
-                      id="bg-color-tag"
-                    ></span>
-                    <b class="z-10">#</b>
-                    <input
-                      class="bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
-                      type="text"
-                      name="tag"
-                      id="tag-name"
-                      value="Network"
-                      maxlength="10"
-                      disabled
                     />
                   </div>
                 </section>

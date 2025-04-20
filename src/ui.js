@@ -23,9 +23,7 @@ psuedoPlaceholders.forEach((placeholder, index) => {
 const inputs = document.querySelectorAll('input[name="tag"]');
 
 inputs.forEach((input) => {
-  const resize = () => {
-    input.style.width = `${input.value.length + 0.5}ch`;
-  };
-  resize();
-  input.addEventListener("input", resize);
+  // resize function is shifted to script.js (src\script.js) file
+  resize(input);
+  input.addEventListener("input", resize(input));
 });
