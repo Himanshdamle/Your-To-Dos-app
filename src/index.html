@@ -6,24 +6,40 @@
 
     <title>Yours To Do-App</title>
 
+    <!-- KARLA FONT. fonts.google.com -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap"
       rel="stylesheet"
     />
+
+    <!-- CSS STYLES FILE -->
+    <!-- TAILWIND CSS FILE -->
     <link href="./output.css" rel="stylesheet" />
+    <!-- FOR COMPLEX CSS STYLES (LOCAL FILE) -->
     <link rel="stylesheet" href="complex.css" />
+
+    <!-- CDN'S -->
+    <!-- TAILWIND -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- SORTABLE JS -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <!-- GSAP ANIMATIONS -->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/gsap.min.js"
       integrity="sha512-f6bQMg6nkSRw/xfHw5BCbISe/dJjXrVGfz9BSDwhZtiErHwk7ifbmBEtF9vFW8UNIQPhV2uEFVyI/UHob9r7Cw=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+
+    <!-- LOCAL JS FILES -->
+    <!-- BRAIN OF THE APP -->
     <script src="script.js" defer></script>
+    <script src="script2.js" defer></script>
+    <!-- CONTROLS QUOTES -->
     <script src="api.js" defer></script>
+    <!-- FOR ENHANCING UI EXPERINCES -->
     <script src="ui.js" defer></script>
   </head>
   <body
@@ -363,18 +379,28 @@
                 class="flex flex-col py-4 justify-center items-center relative"
               >
                 <p><b>#</b>Tags [Only 3]</p>
-                <span class="absolute top-0 right-0 flex text-white/50"
+
+                <span class="absolute top-1 left-0 flex text-white/50"
                   >Tip:&nbsp;
                   <ol class="text-center">
-                    <li>Double click to edit</li>
-                    <li>Click to select</li>
+                    <li class="leading-4">Double click to edit</li>
+                    <li class="leading-4">Click to select</li>
                   </ol>
                 </span>
+                <!--  -->
+
+                <span
+                  class="count-limit absolute top-0 right-0 flex text-white/50"
+                  >Tags selected:&nbsp;
+                  <p maxDigit="1" id="current-len-tags-input">0</p>
+                  /3</span
+                >
+
                 <section
-                  class="flex w-[70%] text-lg aspect-square justify-around items-center rounded-lg border border-white/30 overflow-hidden max-h-10"
+                  class="flex w-[80%] text-lg aspect-square justify-around items-center rounded-lg border border-white/30 overflow-hidden max-h-10"
                 >
                   <div
-                    class="tag cursor-pointer relative flex justify-center items-center rounded-full py-4 pl-1"
+                    class="tag z-50 cursor-pointer relative flex justify-center items-center rounded-full py-4 pl-1"
                   >
                     <span
                       class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0"
@@ -382,18 +408,17 @@
                     ></span>
                     <b class="z-10" class="z-10">#</b>
                     <input
-                      class="bg-transparent text-white z-10 border-none cursor-pointer focus:outline rounded-sm focus:outline-[rgba(255,255,255,0.3)]"
+                      class="bg-transparent text-white min-w-[4ch] z-10 border-none cursor-pointer rounded-sm focus:border pointer-events-none"
                       type="text"
                       name="tag"
                       id="tag-name"
                       value="Study"
                       maxlength="10"
-                      minlength="1"
                       disabled
                     />
                   </div>
                   <div
-                    class="tag cursor-pointer relative flex justify-center items-center rounded-full py-4 pl-1"
+                    class="tag cursor-pointer z-50 relative flex justify-center items-center rounded-full py-4 pl-1"
                   >
                     <span
                       class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0"
@@ -401,18 +426,17 @@
                     ></span>
                     <b class="z-10">#</b>
                     <input
-                      class="bg-transparent text-white z-10 border-none focus:outline rounded-sm focus:outline-[rgba(255,255,255,0.3)] cursor-pointer"
+                      class="bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
                       type="text"
                       name="tag"
                       id="tag-name"
                       value="Work"
                       disabled
                       maxlength="10"
-                      minlength="1"
                     />
                   </div>
                   <div
-                    class="tag cursor-pointer relative flex justify-center items-center rounded-full py-4 pl-1"
+                    class="tag cursor-pointer z-50 relative flex justify-center items-center rounded-full py-4 pl-1"
                   >
                     <span
                       class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0"
@@ -420,18 +444,17 @@
                     ></span>
                     <b class="z-10">#</b>
                     <input
-                      class="bg-transparent text-white z-10 border-none focus:outline rounded-sm focus:outline-[rgba(255,255,255,0.3)] cursor-pointer"
+                      class="bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
                       type="text"
                       name="tag"
                       id="tag-name"
                       value="Personal"
                       disabled
                       maxlength="10"
-                      minlength="1"
                     />
                   </div>
                   <div
-                    class="tag cursor-pointer relative flex justify-center items-center rounded-full py-4 pl-1"
+                    class="tag cursor-pointer z-50 relative flex justify-center items-center rounded-full py-4 pl-1"
                   >
                     <span
                       class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0"
@@ -439,18 +462,17 @@
                     ></span>
                     <b class="z-10">#</b>
                     <input
-                      class="bg-transparent text-white z-10 border-none focus:outline rounded-sm focus:outline-[rgba(255,255,255,0.3)] cursor-pointer"
+                      class="bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
                       type="text"
                       name="tag"
                       id="tag-name"
                       value="GYM"
                       disabled
                       maxlength="10"
-                      minlength="1"
                     />
                   </div>
                   <div
-                    class="tag cursor-pointer relative flex justify-center items-center rounded-full py-4 pl-1"
+                    class="tag cursor-pointer z-50 relative flex justify-center items-center rounded-full py-4 pl-1"
                   >
                     <span
                       class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0"
@@ -458,18 +480,17 @@
                     ></span>
                     <b class="z-10">#</b>
                     <input
-                      class="bg-transparent text-white z-10 border-none focus:outline rounded-sm focus:outline-[rgba(255,255,255,0.3)] cursor-pointer"
+                      class="bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
                       type="text"
                       name="tag"
                       id="tag-name"
                       value="Health"
                       disabled
                       maxlength="10"
-                      minlength="1"
                     />
                   </div>
                   <div
-                    class="tag cursor-pointer relative flex justify-center items-center rounded-full py-4 pl-1"
+                    class="tag cursor-pointer z-50 relative flex justify-center items-center rounded-full py-4 pl-1"
                   >
                     <span
                       class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0"
@@ -477,14 +498,13 @@
                     ></span>
                     <b class="z-10">#</b>
                     <input
-                      class="bg-transparent text-white z-10 border-none focus:outline rounded-sm focus:outline-[rgba(255,255,255,0.3)] cursor-pointer"
+                      class="bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
                       type="text"
                       name="tag"
                       id="tag-name"
                       value="Network"
-                      disabled
                       maxlength="10"
-                      minlength="1"
+                      disabled
                     />
                   </div>
                 </section>
