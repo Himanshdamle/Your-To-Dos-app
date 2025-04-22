@@ -52,7 +52,7 @@ function clickingLogic(el, bgEl, state) {
           currTodoDetails.tags.push(enterTagName.value);
         }
       }
-    }, 300);
+    }, 250);
   });
 
   el.addEventListener("dblclick", () => {

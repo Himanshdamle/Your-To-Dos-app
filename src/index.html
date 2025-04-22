@@ -40,7 +40,9 @@
     <!-- CONTROLS QUOTES -->
     <script src="api.js" defer></script>
     <!-- FOR ENHANCING UI EXPERINCES -->
-    <script src="ui.js" defer></script>
+    <script src="userExperince.js" defer></script>
+    <!-- FOR CUSTOM DROPDOWNS -->
+    <script src="dropdown.js" defer></script>
   </head>
   <body
     style="font-family: 'Karla', sans-serif"
@@ -258,11 +260,11 @@
                     name="heading"
                     id="heading-input"
                     wrap="soft"
-                    class="resize-none text-center p-1.5 w-96 font-bold outline-none text-2xl italic border h-min rounded-lg border-white/30 input"
+                    class="crud-input resize-none text-center p-1.5 w-96 font-bold outline-none text-2xl italic border h-min rounded-lg border-white/30 input"
                     maxlength="50"
                   ></textarea>
                   <p
-                    class="absolute top-1.5 left-1.5 opacity-50 pointer-events-none text-2xl italic psuedo-placeholder psuedo-placeholder-curd"
+                    class="absolute top-1 left-[30%] opacity-50 pointer-events-none text-2xl italic psuedo-placeholder psuedo-placeholder-curd"
                   >
                     e.g Buy grociers
                   </p>
@@ -285,7 +287,7 @@
                   <textarea
                     name="description"
                     id="description-input"
-                    class="mx-7 p-1.5 text-xl border w-full h-full resize-none outline-none rounded-lg border-white/30 input"
+                    class="crud-input mx-7 p-1.5 text-xl border w-full h-full resize-none outline-none rounded-lg border-white/30 input"
                     maxlength="200"
                   ></textarea>
                   <p
@@ -350,37 +352,65 @@
                 <p id="priority-pTag" class="text-xl hidden font-bold">
                   Priority
                 </p>
-                <select
-                  name="priority"
-                  id="priority-input"
-                  class="bg-[#1a1a1a] cursor-pointer pl-4 text-white border rounded-lg outline-none border-white/30 appearance-none"
-                  required
-                >
-                  <option hidden>Priority [must]</option>
-                  <option value="low" title="No rush, complete when convenient">
-                    🟦 Low - Do whenever
-                  </option>
-                  <option value="medium" title="Important but not urgent">
-                    🟨 Medium - Should do soon
-                  </option>
-                  <option value="high" title="Needs immediate attention">
-                    🟥 High - Do ASAP
-                  </option>
-                  <option
-                    value="urgent"
-                    title="Critical! Immediate action required"
+                <div class="relative w-64">
+                  <button
+                    id="priority-input"
+                    class="bg-[#1a1a1a] cursor-pointer pl-4 text-white border rounded-lg outline-none border-white/30 appearance-none flex justify-start gap-2.5 items-center py-1 w-full"
                   >
-                    🔴 Urgent - Emergency
-                  </option>
-                </select>
+                    <p>Priority [must]</p>
+                    <span id="dropdown-svg" style="transform: rotateZ('-90deg')"
+                      ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="20px"
+                        viewBox="0 -960 960 960"
+                        width="20px"
+                        fill="#FFFFFF"
+                      >
+                        <path d="M480-384 288-576h384L480-384Z" />
+                      </svg>
+                    </span>
+                  </button>
+
+                  <ul
+                    id="priority-dropdown"
+                    class="absolute overflow-hidden right-0 z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-full hidden"
+                  >
+                    <li
+                      data-value="low"
+                      class="pl-4 py-1 cursor-pointer hover:bg-[#2ecc71]"
+                    >
+                      🟦 Low - Do whenever
+                    </li>
+                    <li
+                      data-value="medium"
+                      class="pl-4 py-1 cursor-pointer hover:bg-[#f1c40f]"
+                    >
+                      🟨 Medium - Soon
+                    </li>
+                    <li
+                      data-value="high"
+                      class="pl-4 py-1 cursor-pointer hover:bg-[#e67e22]"
+                    >
+                      🟥 High - Do ASAP
+                    </li>
+                    <li
+                      data-value="urgent"
+                      class="pl-4 py-1 cursor-pointer hover:bg-[#e74c3c]"
+                    >
+                      🔴 Urgent - Emergency
+                    </li>
+                  </ul>
+                </div>
               </section>
 
               <section
                 class="flex flex-col py-4 justify-center items-center relative"
               >
-                <p><b>#</b>Tags</p>
+                <p class="text-xl"><b>#</b>Tags</p>
 
-                <span class="absolute top-1 left-0 flex text-white/50"
+                <span
+                  class="absolute top-1 left-0 flex text-white/50"
+                  id="tip-box"
                   >Tip:&nbsp;
                   <ol class="text-center">
                     <li class="leading-4">Double click to edit</li>

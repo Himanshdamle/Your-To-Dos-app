@@ -9,6 +9,7 @@ function placeholderEffect(psuedoPlaceholder, inputBox) {
       smoothInnOutTransition(setting, true);
     } else {
       smoothInnOutTransition(setting, false);
+      psuedoPlaceholder.classList.remove("!hidden");
     }
   });
 }

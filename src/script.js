@@ -1,7 +1,7 @@
 const closeTodoBtn = document.querySelectorAll(".close-todo-page");
 const quoteBox = document.querySelector("#quote-box");
 
-//CURD
+//CRUD
 const createTodo = document.querySelector("#create-new-todo-page");
 const updateU = document.querySelector("#update");
 const readR = document.querySelector("#read");
@@ -13,6 +13,10 @@ const rightMain = document.querySelector("#right-main");
 const todoPage = document.querySelector("#todo-page");
 const todoName = document.querySelector("#todo-name");
 const showTodoCreated = document.querySelector("#show-todo-created");
+const psuedoPlaceholdersCURD = document.querySelectorAll(
+  ".psuedo-placeholder-curd"
+);
+const crudInput = document.querySelectorAll(".crud-input");
 
 let getTodoData;
 let JSONData;
@@ -218,8 +222,18 @@ function showToDoPage() {
     },
     false
   );
+
   [...midMain.children].forEach((el) => {
     if (el !== todoPage) el.style.display = "none";
+  });
+
+  psuedoPlaceholdersCURD.forEach((placeholder, crudInputIndex) => {
+    if (crudInput[crudInputIndex].value.length === 0) {
+      placeholder.classList.remove("!hidden");
+      placeholder.style.display = "block"; // extra safety.
+    } else {
+      placeholder.classList.add("!hidden");
+    }
   });
 }
 
@@ -232,7 +246,7 @@ function toggleClasses(methodName, bgEl) {
 }
 const tagStates = [];
 
-const resetTodoPageFunc = () => {
+const resetTodoPageFunc = (transitionPlaceholders = true) => {
   currTodoDetails = {
     heading: "",
     description: "",
@@ -243,10 +257,6 @@ const resetTodoPageFunc = () => {
     tags: [],
   };
 
-  const psuedoPlaceholdersCURD = document.querySelectorAll(
-    ".psuedo-placeholder-curd"
-  );
-
   psuedoPlaceholdersCURD.forEach((placeholder) => {
     smoothInnOutTransition(
       {
@@ -254,7 +264,7 @@ const resetTodoPageFunc = () => {
         ease: "power2.out",
         el: placeholder,
       },
-      false
+      !transitionPlaceholders
     );
   });
 
@@ -262,14 +272,22 @@ const resetTodoPageFunc = () => {
   const bgSpanTagsHoverEffects = document.querySelectorAll(
     ".bg-span-el-tags-hover-effect"
   );
+
+  // reset its CurrentLenght (tags: 0 / 3);
   resetCurrentLenghtPtag("tags-input");
+
+  // reset the selected tags bg-color.
   bgSpanTagsHoverEffects.forEach((span) => {
     toggleClasses("remove", span);
   });
+
+  // reset tags width and its original value.
   tagNameInputs.forEach((tag) => {
     tag.value = tag.getAttribute("value");
     resize(tag);
   });
+
+  // reset state.
   tagStates.forEach((state) => {
     state.isClicked = false;
     state.isDblClick = false;
@@ -297,11 +315,15 @@ function resetTodoPageUI(shouldReset) {
   const elTwPropertiesPairArray = [
     [["textarea", ".borderd-div", "#priority-input"], shouldReset, "border"],
     [
-      ["textarea", "#priority-section", "#priority-input"],
+      ["#description-input", "#priority-section", "#priority-input"],
       !shouldReset,
       "text-center",
     ],
-    [["#quick-fill", ".count-limit"], !shouldReset, "hidden"],
+    [
+      ["#quick-fill", ".count-limit", ".psuedo-placeholder-curd", "#tip-box"],
+      !shouldReset,
+      "!hidden",
+    ],
     [["#priority-pTag"], !shouldReset, "!block"],
   ];
 
@@ -316,6 +338,7 @@ function resetTodoPageUI(shouldReset) {
   });
 
   const changeHeader = document.querySelectorAll(".must-section");
+
   if (!shouldReset) {
     changeHeader.forEach((header) => {
       const arr = header.innerHTML.trim().split(/\s+/);
@@ -368,7 +391,6 @@ function transitionBetweenPages(pageCloseEl, pageOpenEl) {
 closeTodoBtn.forEach((btn) => {
   btn.addEventListener("click", () => {
     transitionBetweenPages(todoPage, quoteBox);
-
     smoothInnOutTransition(
       {
         el: showTodoCreated,
@@ -380,13 +402,20 @@ closeTodoBtn.forEach((btn) => {
       },
       true
     );
-    resetTodoPageFunc();
+
+    // reset all the inputs.
+    resetTodoPageFunc(false);
+
+    // reset the messages, border of input, placeholders.
+    resetTodoPageUI(true);
   });
 });
 
 createTodo.addEventListener("click", () => {
-  resetTodoPageFunc();
+  resetTodoPageFunc(true);
   resetTodoPageUI(true);
+
+  // after resetting todo page, now show it.
   showToDoPage();
 });
 
@@ -568,13 +597,11 @@ function addInYoursTodo(isExpiredTodo, userLatestTodo, mainDirection, id) {
   }
 }
 
-// CURD OPERATION FUNCTION
+// U.R.D. OPERATION FUNCTION
 function update(todoData) {
   updated = true;
   const dataArray = Object.values(todoData);
   const todoKeys = Object.keys(todoData);
-
-  showToDoPage();
 
   currTodoDetails.id = dataArray[dataArray.length - 1];
 
@@ -592,6 +619,9 @@ function update(todoData) {
       pTag.innerText =
         dataLen >= 1 ? dataLen : "0".repeat(pTag.getAttribute("maxDigit"));
   });
+
+  // after updating the input.value show it to user.
+  showToDoPage();
 }
 function deleteTodo(localTodoVarName, todoIndex, getHtmlID) {
   document.getElementById(getHtmlID).remove();
