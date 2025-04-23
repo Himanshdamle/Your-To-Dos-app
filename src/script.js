@@ -27,7 +27,14 @@ const priorityColors = {
   low: "#2ecc71",
   medium: "#f1c40f",
   high: "#e67e22",
-  urgent: "#e74c3c",
+  urgent: "#FF3D3D",
+};
+
+const statusColors = (count) => {
+  if (count >= 20) return "#e74c3c";
+  if (count >= 10) return "#e67e22";
+  if (count >= 5) return "#f1c40f";
+  return "#2ecc71";
 };
 
 function smoothInnOutTransition(gsapSettings, play, currentDisplay) {
@@ -173,6 +180,7 @@ function addInHTML(localTodoVarName, main, addNewTodo) {
     // if (!JSONData[0]) return;
 
     const groupedData = groupTodosWithDate(JSONData);
+    let expiredTodoCount = 0;
 
     Object.keys(groupedData).forEach((todoDate) => {
       if (!addNewTodo) {
@@ -186,6 +194,23 @@ function addInHTML(localTodoVarName, main, addNewTodo) {
            <!--  -->
         </div>
        `;
+
+        console.log(todoDate);
+
+        const dateFilterDropdown = document.querySelector(
+          "#date-filter-dropdown"
+        );
+
+        dateFilterDropdown.innerHTML += `
+                               <li
+                               data-value="${todoDate}"
+                               class="text-start px-2 py-1 cursor-pointer"
+                             >
+                               Due on
+                               <b class="underline"><i>${todoDate}</i></b>
+                             </li>
+         `;
+
         articleWrapper = document.createElement("div");
         articleWrapper.classList.add(
           "article-wrappers",
@@ -201,9 +226,23 @@ function addInHTML(localTodoVarName, main, addNewTodo) {
       const isExpired = todoDate === "Expired todo's";
 
       groupedData[todoDate].forEach((json) => {
+        if (isExpired) expiredTodoCount++;
         addInYoursTodo(isExpired, json, articleWrapper);
       });
     });
+
+    const pendingTodoCountPtag = document.querySelector("#pending-todo-count");
+    const expiredTodoCountPtag = document.querySelector("#expired-todo-count");
+
+    const pendingTodoCount =
+      JSON.parse(localStorage.todos).length - expiredTodoCount;
+
+    pendingTodoCountPtag.innerText = pendingTodoCount;
+    expiredTodoCountPtag.innerText = expiredTodoCount;
+
+    pendingTodoCountPtag.style.color = statusColors(pendingTodoCount);
+
+    expiredTodoCountPtag.style.color = statusColors(expiredTodoCount);
   }
 }
 
@@ -518,12 +557,10 @@ function backend(todoObject, localTodoVarName, shouldUpdate, updateIndex) {
 }
 
 function addInYoursTodo(isExpiredTodo, userLatestTodo, mainDirection, id) {
-  if (!userLatestTodo) {
-    console.log("return addInYoursTodo()");
-    return;
-  }
+  if (!userLatestTodo) return;
 
   const localeDateString = getLocaleDateString(userLatestTodo.date);
+  const priorityColor = priorityColors[userLatestTodo.priority];
 
   const expiredSticker = `
                         <span
@@ -546,9 +583,7 @@ function addInYoursTodo(isExpiredTodo, userLatestTodo, mainDirection, id) {
 
   const todoHTML = `
     <span class="absolute left-0 top-0 block z-10 rounded-t-2xl overflow-hidden">
-      <span class="h-[40px] w-[40px] bg-[${
-        priorityColors[userLatestTodo.priority]
-      }] relative -top-2.5 -left-2.5 block rounded-full"></span>
+      <span class="h-[40px] w-[40px] bg-[${priorityColor}] relative -top-2.5 -left-2.5 block rounded-full"></span>
     </span>
 
      ${isExpiredTodo ? expiredSticker : ""}
@@ -577,7 +612,7 @@ function addInYoursTodo(isExpiredTodo, userLatestTodo, mainDirection, id) {
     const addCrossMarker = isExpiredTodo ? crossMarkerClassTw : "";
 
     mainDirection.innerHTML += `
-      <article class="grid gap-3 relative z-50 max-w-[300px] w-full overflow-hidden">
+      <article class="grid gap-3 relative z-50 max-w-[300px] w-full overflow-hidden" title="${userLatestTodo.heading}">
         <div class="grid place-items-end">
                   <header class="relative z-10 w-full text-sm font-medium pl-8 before:pl-3 mb-1.5 bg-[#0f0f0f] before:content-[''] before:absolute before:w-full before:h-[1px] before:left-4 before:bottom-0 before:bg-white">
                     ${localeDateString}

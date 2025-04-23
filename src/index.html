@@ -60,7 +60,7 @@
 
           <main
             id="left-main"
-            class="h-full w-full max-w-[110%] mt-8 resize-x flex min-w-[100%] flex-col gap-3.5 overflow-y-scroll overflow-x-hidden items-center"
+            class="overflow-x-hidden h-full w-full max-w-[110%] mt-8 resize-x flex min-w-[100%] flex-col gap-3.5 overflow-y-scroll items-center"
           >
             <section
               class="text-center text-xl italic p-2.5 border h-min max-w-[400px] rounded-lg border-white/30 bg-[#1A1A1A] flex flex-col gap-2"
@@ -116,27 +116,105 @@
                   </svg>
                 </div>
 
-                <select
-                  class="outline-none cursor-pointer border-r border-white/30 pr-2"
-                  name=""
-                  id="date-filter"
+                <!-- DATE FILTER -->
+                <section
+                  id="priority-section"
+                  class="flex flex-col justify-center items-center"
                 >
-                  <option hidden>Date</option>
-                </select>
-                <select
-                  class="outline-none cursor-pointer border-r border-white/30 pr-2"
-                  name=""
-                  id="priority-filter"
+                  <div class="relative w-max">
+                    <button
+                      id="date-filter-input"
+                      class="cursor-pointer border-r border-white/30 pr-2 text-white outline-none appearance-none flex justify-start gap-1 items-center"
+                    >
+                      <p>Date</p>
+                    </button>
+
+                    <ul
+                      id="date-filter-dropdown"
+                      class="absolute left-[-150%] overflow-hidden z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-max hidden"
+                    ></ul>
+                  </div>
+                </section>
+                <!--  -->
+
+                <section
+                  id="priority-section"
+                  class="flex flex-col justify-center items-center"
                 >
-                  <option hidden>Priority</option>
-                </select>
-                <select
-                  class="outline-none cursor-pointer"
-                  name=""
-                  id="status-filter"
+                  <div class="relative w-max">
+                    <button
+                      id="priority-filter-input"
+                      class="cursor-pointer border-r border-white/30 pr-2 text-white outline-none appearance-none flex justify-start items-center"
+                    >
+                      <p>Priority</p>
+                    </button>
+
+                    <ul
+                      id="priority-filter-dropdown"
+                      class="absolute left-[-100%] overflow-hidden z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-max hidden"
+                    >
+                      <li
+                        data-value="low"
+                        class="text-start pl-2 py-1 cursor-pointer hover:bg-[#2ecc71]"
+                      >
+                        🟦 Low - Do whenever
+                      </li>
+                      <li
+                        data-value="medium"
+                        class="text-start pl-2 py-1 cursor-pointer hover:bg-[#f1c40f]"
+                      >
+                        🟨 Medium - Soon
+                      </li>
+                      <li
+                        data-value="high"
+                        class="text-start pl-2 py-1 cursor-pointer hover:bg-[#e67e22]"
+                      >
+                        🟥 High - Do ASAP
+                      </li>
+                      <li
+                        data-value="urgent"
+                        class="text-start pl-2 py-1 cursor-pointer hover:bg-[#e74c3c]"
+                      >
+                        🔴 Urgent - Emergency
+                      </li>
+                    </ul>
+                  </div>
+                </section>
+
+                <!--  -->
+                <section
+                  id="priority-section"
+                  class="flex flex-col justify-center items-center"
                 >
-                  <option hidden>status</option>
-                </select>
+                  <div class="relative w-max">
+                    <button
+                      id="status-filter-input"
+                      class="cursor-pointer border-white/30 text-white outline-none appearance-none flex justify-start items-center"
+                    >
+                      <p>Status</p>
+                    </button>
+
+                    <ul
+                      id="status-filter-dropdown"
+                      class="absolute left-[-50%] overflow-hidden z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-max hidden"
+                    >
+                      <li
+                        data-value="low"
+                        class="text-start px-2 py-1 cursor-pointer flex gap-1.5"
+                      >
+                        <p><b id="expired-todo-count">32</b></p>
+                        EXPIRED
+                      </li>
+                      <li
+                        data-value="medium"
+                        class="text-start px-2 py-1 cursor-pointer flex gap-1.5"
+                      >
+                        <p><b id="pending-todo-count">10</b></p>
+                        PENDING
+                      </li>
+                    </ul>
+                  </div>
+                </section>
               </div>
             </section>
           </main>
@@ -213,11 +291,11 @@
               class="flex flex-col items-center"
             >
               <div class="flex items-center">
-                <h1 class="text-2xl font-bold text-[#FF6B6B]">D</h1>
+                <h1 class="text-2xl font-bold text-[#FF3D3D]">D</h1>
                 <p class="text-base text-gray-300 tracking-wide">ELETE</p>
               </div>
               <div
-                class="bg-[#FF6B6B] text-white font-semibold text-center rounded-xl py-2 px-6"
+                class="bg-[#FF3D3D] text-white font-semibold text-center rounded-xl py-2 px-6"
               >
                 REMOVE TASK
               </div>
@@ -547,16 +625,10 @@
               id="quote-box"
               class="w-fit flex flex-col max-w-[70%] gap-3 text-3xl"
             >
-              <h1 id="quotes" class="font-extralight italic">
-                Withstand the setbacks and failures, the days of d…rk that are
-                always a part of any creative action.
-              </h1>
+              <h1 id="quotes" class="font-extralight italic"></h1>
               <div class="flex gap-1.5 w-full items-center">
-                <span
-                  id="dash-author-before"
-                  class="bg-white h-[1px] w-[25%]"
-                ></span>
-                <h2 id="author" class="font-bold hidden">Robert Greene</h2>
+                <span id="dash-author-before" class="bg-white h-[1px]"></span>
+                <h2 id="author" class="font-bold"></h2>
               </div>
             </div>
           </main>
