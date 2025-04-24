@@ -82,43 +82,33 @@ function smoothInnOutTransition(gsapSettings, play, currentDisplay) {
 }
 
 function getDateRange(date) {
-  const today = new Date().toISOString().split("T")[0];
-  const [year, month, day] = date.split("-").map((number) => number);
-  const [currYear, currMonth, currDay] = today
-    .split("-")
-    .map((number) => number);
+  const today = new Date();
+  const todoDate = new Date(date);
 
-  let [diffYear, diffMonth, diffDay] = [
-    year - currYear,
-    month - currMonth,
-    day - currDay,
-  ];
+  // Set both to midnight for accurate comparison
+  today.setHours(0, 0, 0, 0);
+  todoDate.setHours(0, 0, 0, 0);
 
-  if (diffYear < 0 || month < currMonth || day < currDay)
-    return "Expired todo's";
+  const diffTime = todoDate.getTime() - today.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-  if (diffDay < 0 || diffMonth) diffDay += 30;
-  if (diffMonth < 0 || diffYear) diffMonth += 12;
+  if (diffDays < 0) return "Expired todo's";
+  if (diffDays === 0) return "Due this day";
 
-  const isOverMonth = diffMonth >= 1 && diffMonth <= 11;
-
-  if (diffDay <= 28 && !isOverMonth) {
-    if (diffDay === 0) return "Due this day";
-
+  if (diffDays <= 28) {
     for (let i = 1; i <= 4; i++) {
-      if (i == 1) {
-        if (diffDay / (7 * i) <= 1) return "due this week";
-      } else {
-        if (diffDay / (7 * i) <= 1) return `due over ${i} weeks`;
+      if (diffDays <= 7 * i) {
+        return i === 1 ? "due this week" : `due over ${i} weeks`;
       }
     }
   }
 
-  if (isOverMonth) {
-    return `due over ${diffMonth} months`;
+  if (diffDays <= 365) {
+    const months = Math.floor(diffDays / 30);
+    return `due over ${months} months`;
   }
 
-  return `over a year`; // lastly if its over a year
+  return "over a year";
 }
 
 function groupTodosWithDate(todoList) {
@@ -194,8 +184,6 @@ function addInHTML(localTodoVarName, main, addNewTodo) {
            <!--  -->
         </div>
        `;
-
-        console.log(todoDate);
 
         const dateFilterDropdown = document.querySelector(
           "#date-filter-dropdown"
