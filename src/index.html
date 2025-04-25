@@ -49,7 +49,7 @@
     class="bg-[#0F0F0F] text-white font-medium h-screen"
   >
     <div class="h-full">
-      <div class="flex justify-between items-start relative h-full mx-3.5">
+      <main class="flex justify-between items-start relative h-full mx-1">
         <!-- SHOW-PENDING-TO-DOS -->
         <section class="flex-[1] flex flex-col h-full">
           <header
@@ -220,14 +220,16 @@
           </main>
         </section>
 
+        <!-- LINES -->
         <img
           src="assets/Line 1.svg"
           alt="Line"
           class="absolute w-full top-[80px]"
         />
 
+        <!-- SHOW CRUD OPRATIONS -->
         <section
-          class="flex-[3] flex flex-col h-full after:content-[''] after:absolute relative after:w-[1px] after:h-[110%] after:right-0 after:top-[-10%] after:bg-white before:absolute before:w-[1px] before:h-[110%] before:left-0 before:top-[-10%] before:bg-white after:opacity-[0.3] before:opacity-[0.3]"
+          class="flex-[3] flex flex-col h-full after:content-[''] after:absolute relative after:w-[1px] after:h-[110%] after:right-0 after:top-[-10%] after:bg-white before:absolute before:w-[1px] before:h-[110%] before:left-0 before:top-[-10%] before:bg-white"
         >
           <!-- CURD OPTIONS -->
           <header
@@ -241,29 +243,12 @@
             >
               <div class="flex items-center">
                 <h1 class="text-2xl font-bold text-[#2CB67D]">C</h1>
-                <p class="text-base text-gray-300 tracking-wide">REATE</p>
+                <p class="text-base mt-1 text-gray-300 tracking-wide">REATE</p>
               </div>
               <div
                 class="bg-[#2CB67D] text-black font-semibold text-center rounded-xl py-2 px-6"
               >
                 TO DO
-              </div>
-            </button>
-
-            <!-- UPDATE -->
-            <button
-              id="update"
-              title="Drag and drop task to update"
-              class="flex flex-col items-center"
-            >
-              <div class="flex items-center">
-                <h1 class="text-2xl font-bold text-[#5C82FF]">U</h1>
-                <p class="text-base text-gray-300 tracking-wide">PDATE</p>
-              </div>
-              <div
-                class="bg-[#5C82FF] text-white font-semibold text-center rounded-xl py-2 px-6"
-              >
-                MODIFY TASK
               </div>
             </button>
 
@@ -275,12 +260,29 @@
             >
               <div class="flex items-center no-drag">
                 <h1 class="text-2xl font-bold text-[#F4D35E]">R</h1>
-                <p class="text-base text-gray-300 tracking-wide">EAD</p>
+                <p class="text-base mt-1 text-gray-300 tracking-wide">EAD</p>
               </div>
               <div
                 class="bg-[#F4D35E] text-black font-semibold text-center rounded-xl py-2 px-6 no-drag"
               >
                 VIEW TASKS
+              </div>
+            </button>
+
+            <!-- UPDATE -->
+            <button
+              id="update"
+              title="Drag and drop task to update"
+              class="flex flex-col items-center"
+            >
+              <div class="flex items-center">
+                <h1 class="text-2xl font-bold text-[#1C52F0]">U</h1>
+                <p class="text-base mt-1 text-gray-300 tracking-wide">PDATE</p>
+              </div>
+              <div
+                class="bg-[#1C52F0] text-white font-semibold text-center rounded-xl py-2 px-6"
+              >
+                MODIFY TASK
               </div>
             </button>
 
@@ -292,7 +294,7 @@
             >
               <div class="flex items-center">
                 <h1 class="text-2xl font-bold text-[#FF3D3D]">D</h1>
-                <p class="text-base text-gray-300 tracking-wide">ELETE</p>
+                <p class="text-base mt-1 text-gray-300 tracking-wide">ELETE</p>
               </div>
               <div
                 class="bg-[#FF3D3D] text-white font-semibold text-center rounded-xl py-2 px-6"
@@ -302,6 +304,7 @@
             </button>
           </header>
 
+          <!-- SPACE FOR CRUD OPERRATIONS -->
           <main id="mid-main" class="h-full flex items-center justify-center">
             <!-- CREATE TODO PAGE -->
             <div
@@ -632,6 +635,121 @@
               </div>
             </div>
           </main>
+
+          <!-- DOWN NAV BAR CHILD -->
+          <footer class="flex border-t-[1px] pt-1.5">
+            <!-- PROGRESS SECTION -->
+            <section class="w-full border-r-[1px]">
+              <h1
+                class="border-b-[1px] pb-1.5 text-center tracking-wide font-light italic text-xl"
+              >
+                PROGRESS
+              </h1>
+              <div class="flex flex-row py-1.5 text-lg">
+                <div
+                  class="flex flex-col justify-center px-1 border-r-[1px] w-full"
+                >
+                  <section class="flex gap-1.5 justify-center">
+                    <p class="text-center font-light text-nowrap">
+                      Today's task
+                    </p>
+                    <span class="flex"
+                      ><p>05</p>
+                      /
+                      <p>10</p></span
+                    >
+                  </section>
+
+                  <!-- PROGRESS BAR -->
+                  <section
+                    class="w-full h-[10px] bg-[#1A1A1A] border rounded-2xl border-white/30"
+                  >
+                    <div
+                      class="progress-bar-bg-color h-full w-[50%] rounded-2xl hover-animation"
+                    ></div>
+                  </section>
+                </div>
+                <!--  -->
+
+                <div class="flex flex-col justify-center px-1 w-full">
+                  <section class="flex gap-1.5 justify-center">
+                    <span class="flex"
+                      ><p>45</p>
+                      /
+                      <p>50</p></span
+                    >
+                    <p class="text-center font-light text-nowrap">
+                      All time tasks
+                    </p>
+                  </section>
+
+                  <!-- PROGRESS BAR -->
+                  <section
+                    class="w-full h-[10px] bg-[#1A1A1A] border rounded-2xl border-white/30"
+                  >
+                    <div
+                      class="progress-bar-bg-color h-full w-[95%] rounded-2xl"
+                    ></div>
+                  </section>
+                </div>
+              </div>
+            </section>
+
+            <!-- SYNC SECTION -->
+            <section
+              class="w-max border-r-[1px] px-3 flex flex-col items-center justify-center gap-2"
+            >
+              <span class="flex text-nowrap text-xl font-light italic"
+                >Last synced at: &nbsp;
+                <p>3:15 pm</p></span
+              >
+              <button
+                class="cursor-pointer text-lg font-light bg-[#1A1A1A] rounded-2xl border border-white/30 px-3"
+                title="Will sync current changes."
+              >
+                Sync now
+              </button>
+            </section>
+
+            <!-- USER ACCOUNT SHOW -->
+            <section class="flex items-center justify-around w-full">
+              <div class="flex items-center gap-3">
+                <div>
+                  <img
+                    class="w-14 h-14 object-cover rounded-full hover:scale-130 transition-transform duration-300 ease-in-out"
+                    src="https://plus.unsplash.com/premium_photo-1671656349322-41de944d259b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    alt="user_profile_picture"
+                  />
+                </div>
+                <div class="flex text-2xl text-center flex-col">
+                  <p class="font-extralight leading-5.5 gap-4 tracking-wide">
+                    Good Morning
+                  </p>
+                  <p class="font-bold text-2xl leading-5.5 tracking-wide">
+                    Himansh.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flex bg-[#1A1A1A] rounded-2xl justify-center items-center gap-2 border border-white/30] px-3"
+                title="Steak 🔥"
+              >
+                <!-- Wrapper with gradient -->
+                <div
+                  class="p-[2px] rounded-full fire-gradient inline-block my-1"
+                >
+                  <!-- Inner span with neutral background -->
+                  <span
+                    class="rounded-full bg-[#1A1A1A] px-1 py-1 text-white text-sm"
+                  >
+                    🔥
+                  </span>
+                </div>
+
+                <p class="">20</p>
+              </div>
+            </section>
+          </footer>
         </section>
 
         <!-- SHOW-COMPLETED-TO-DOS -->
@@ -647,7 +765,7 @@
             class="h-full w-full mt-8 flex flex-col items-center gap-3.5 overflow-y-scroll overflow-x-hidden"
           ></main>
         </section>
-      </div>
+      </main>
     </div>
   </body>
 </html>

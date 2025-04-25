@@ -16,6 +16,7 @@ setInterval(() => {
         author.style.display = "block";
         author.innerText = quoteData.author;
 
+        dashAuthorBefore.style.display = "block";
         dashAuthorBefore.style.width = `${
           (25 / 100) * author.innerText.length
         }ch`;
