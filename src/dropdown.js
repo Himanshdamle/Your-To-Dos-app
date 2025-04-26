@@ -10,6 +10,8 @@ function createAnimatedDropdown({
   let isOpen = false;
   const duration = 0.5;
 
+  console.log(button, menu);
+
   const rotateIcon = (angle) => {
     if (!svgId) return;
     gsap.to(`#${svgId}`, {
