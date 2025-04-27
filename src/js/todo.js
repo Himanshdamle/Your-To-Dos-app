@@ -1,9 +1,4 @@
-import {
-  addInYoursTodo,
-  addInHTML,
-  showToDoPage,
-  resetTodoPageUI,
-} from "./core.js";
+import { showToDoPage, resetTodoPageUI } from "./core.js";
 
 export function backend(
   todoObject,
@@ -35,6 +30,15 @@ export function update(todoData) {
     const current = dataArray[index] || "";
 
     el.value = current;
+    if (inputid === "priority-input") {
+      el.innerText = priorityDropdown.preset[current];
+      el.classList.remove("justify-start");
+      el.classList.remove("cursor-pointer");
+
+      el.classList.add("cursor-text");
+      el.classList.add("justify-center");
+      el.classList.add("pointer-events-none");
+    }
     window.currTodoDetails[todoKeys[index]] = current;
 
     const pTag = document.getElementById(`current-len-${inputid}`);

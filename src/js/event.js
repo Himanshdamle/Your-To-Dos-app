@@ -41,9 +41,6 @@ export function setupEventListeners() {
           .toString()
           .padStart(pTag.getAttribute("maxDigit"), "0");
       }
-      if (key === "heading" || key === "description") {
-        resize(input);
-      }
     });
   });
 

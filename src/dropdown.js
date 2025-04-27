@@ -6,14 +6,17 @@ function createAnimatedDropdown({
 }) {
   const button = document.getElementById(buttonId);
   const menu = document.getElementById(menuId);
+  const preset = {
+    low: "🟦 Low - Do whenever",
+    medium: "🟨 Medium - Soon",
+    high: "  🟥 High - Do ASAP",
+    urgent: " 🔴 Urgent - Emergency",
+  };
   let selectedValue = "";
   let isOpen = false;
   const duration = 0.5;
 
-  console.log(button, menu);
-
   const rotateIcon = (angle) => {
-    if (!svgId) return;
     gsap.to(`#${svgId}`, {
       rotate: angle,
       duration,
@@ -77,7 +80,7 @@ function createAnimatedDropdown({
   });
 
   return {
-    getSelectedValue: () => selectedValue,
+    preset,
   };
 }
 

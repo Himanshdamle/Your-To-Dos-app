@@ -1,6 +1,7 @@
 import { initializeUI, startQuoteRotation } from "./ui.js";
 import { setupEventListeners } from "./event.js";
 import { hoverEffect, clickingLogic, initializeTagInputs } from "./tag.js";
+import { middle } from "./downNavbar.js";
 import {
   pickedTodoData,
   backend,
@@ -29,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners();
   startQuoteRotation();
   initializeTagInputs();
+  middle();
 
   const closeTodoButtons = document.querySelectorAll(".close-todo-page");
   closeTodoButtons.forEach((btn) => {

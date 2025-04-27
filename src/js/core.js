@@ -10,7 +10,6 @@ export function smoothInnOutTransition(gsapSettings, play, currentDisplay) {
       filter: `blur(${gsapSettings.blur || 10}px)`,
       scale: gsapSettings.scale || 1.1,
       opacity: 0,
-      x: 10,
       duration: gsapSettings.duration || 0.3,
       ease: gsapSettings.ease || "none",
       onComplete() {
@@ -32,7 +31,6 @@ export function smoothInnOutTransition(gsapSettings, play, currentDisplay) {
       filter: "blur(0px)",
       scale: 1,
       opacity: gsapSettings.opacity || 0.5,
-      x: 0,
       ease: gsapSettings.ease,
       duration: gsapSettings.duration,
       onComplete() {
@@ -49,7 +47,7 @@ export function transitionBetweenPages(pageCloseEl, pageOpenEl) {
   smoothInnOutTransition(
     {
       el: pageCloseEl,
-      duration: 0.5,
+      duration: 0.7,
       ease: "power2.out",
       opacity: 1,
       blur: 20,
@@ -58,7 +56,7 @@ export function transitionBetweenPages(pageCloseEl, pageOpenEl) {
         smoothInnOutTransition(
           {
             el: pageOpenEl,
-            duration: 0.5,
+            duration: 0.7,
             ease: "power2.out",
             opacity: 1,
             blur: 20,
@@ -486,15 +484,33 @@ export function resetTodoPageFunc(transitionPlaceholders = true) {
     state.isDblClick = false;
   });
 
+  const priorityBtnHTML = `                    <p>Priority [must]</p>
+                    <span id="dropdown-svg" style="transform: rotateZ('-90deg')"
+                      ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="20px"
+                        viewBox="0 -960 960 960"
+                        width="20px"
+                        fill="#FFFFFF"
+                      >
+                        <path d="M480-384 288-576h384L480-384Z" />
+                      </svg>
+                    </span>`;
+
   window.typingInputIds.forEach((inputid) => {
     const el = document.getElementById(inputid);
     if (el) {
-      if (el.tagName === "SELECT") {
-        el.selectedIndex = 0;
-      } else if (el.value.length >= 1) {
-        el.value = "";
+      if (inputid === "priority-input") {
+        el.innerHTML = priorityBtnHTML;
+        el.classList.remove("justify-center");
+        el.classList.remove("cursor-text");
+        el.classList.remove("pointer-events-none");
+
+        el.classList.add("cursor-pointer");
+        el.classList.add("justify-start");
       }
 
+      if (el.value.length >= 1) el.value = "";
       const pTag = document.getElementById(`current-len-${inputid}`);
       if (pTag) {
         pTag.innerText = "0".repeat(pTag.getAttribute("maxDigit") || 2);

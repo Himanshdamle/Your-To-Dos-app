@@ -31,8 +31,9 @@
       referrerpolicy="no-referrer"
     ></script>
 
-    <script src="dist/bundle.js" defer></script>
+    <!-- <script src="dist/bundle.js" defer></script> -->
     <script src="dropdown.js" defer></script>
+    <script src="js/main.js" type="module" defer></script>
   </head>
   <body
     style="font-family: 'Karla', sans-serif"
@@ -192,14 +193,14 @@
                         data-value="low"
                         class="text-start px-2 py-1 cursor-pointer flex gap-1.5"
                       >
-                        <p><b id="expired-todo-count">32</b></p>
+                        <p><b id="expired-todo-count">0</b></p>
                         EXPIRED
                       </li>
                       <li
                         data-value="medium"
                         class="text-start px-2 py-1 cursor-pointer flex gap-1.5"
                       >
-                        <p><b id="pending-todo-count">10</b></p>
+                        <p><b id="pending-todo-count">0</b></p>
                         PENDING
                       </li>
                     </ul>
@@ -691,10 +692,13 @@
             >
               <span class="flex text-nowrap text-xl font-light italic"
                 >Last synced at: &nbsp;
-                <p>3:15 pm</p></span
+                <p id="last-synced-time" class="font-medium">
+                  No Sync History
+                </p></span
               >
               <button
-                class="cursor-pointer text-lg font-light bg-[#1A1A1A] rounded-2xl border border-white/30 px-3"
+                class="cursor-pointer text-lg hover:scale-105 transition-transform duration-300 ease-in-out font-light bg-[#1A1A1A] rounded-2xl border border-white/30 px-3"
+                id="snyc-now"
                 title="Will sync current changes."
               >
                 Sync now
@@ -702,22 +706,49 @@
             </section>
 
             <!-- USER ACCOUNT SHOW -->
-            <section class="flex items-center justify-around w-full">
+            <section
+              class="flex items-center px-1 max-w-[430px] gap-1 justify-around w-full"
+            >
               <div class="flex items-center gap-3">
-                <div>
+                <input
+                  type="file"
+                  id="fileInput"
+                  accept="image/*"
+                  style="display: none"
+                />
+                <button
+                  id="select-user-photo"
+                  class="h-full items-center cursor-pointer"
+                >
                   <img
-                    class="w-14 h-14 object-cover rounded-full hover:scale-130 transition-transform duration-300 ease-in-out"
+                    class="w-14 h-14 border border-white/30 object-cover rounded-full hover:scale-130 transition-transform duration-300 ease-in-out"
                     src="https://plus.unsplash.com/premium_photo-1671656349322-41de944d259b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                     alt="user_profile_picture"
                   />
-                </div>
-                <div class="flex text-2xl text-center flex-col">
-                  <p class="font-extralight leading-5.5 gap-4 tracking-wide">
+                </button>
+                <div class="flex text-2xl max-w-[15ch] text-center flex-col">
+                  <p
+                    id="greeting"
+                    class="font-extralight leading-5.5 gap-4 tracking-wide"
+                  >
                     Good Morning
                   </p>
-                  <p class="font-bold text-2xl leading-5.5 tracking-wide">
-                    Himansh.
-                  </p>
+                  <div class="relative w-[175px]">
+                    <input
+                      type="text"
+                      name="user_name"
+                      id="user-name"
+                      class="font-medium italic input outline-none focus:border focus:border-white/30 rounded-lg text-center text-2xl leading-5.5 tracking-wide w-full"
+                      maxlength="12"
+                      autocomplete="off"
+                    />
+                    <p
+                      class="absolute bottom-[50%] left-[50%] translate-x-[-50%] text-nowrap translate-y-[50%] opacity-50 pointer-events-none psuedo-placeholder"
+                      id="psuedo-placeholder-user-name"
+                    >
+                      <i class="font-medium">Drop your name.</i>
+                    </p>
+                  </div>
                 </div>
               </div>
               <div

@@ -1,4 +1,4 @@
-import { addInHTML } from "./core.js";
+import { addInHTML, smoothInnOutTransition } from "./core.js";
 
 /**
  * Initializes the UI, including todo rendering and placeholder effects.
@@ -6,8 +6,9 @@ import { addInHTML } from "./core.js";
 export function initializeUI() {
   const leftMain = document.querySelector("#left-main");
   const rightMain = document.querySelector("#right-main");
-  if (leftMain) addInHTML("todos", leftMain);
-  if (rightMain) addInHTML("completedTodos", rightMain);
+
+  addInHTML("todos", leftMain);
+  addInHTML("completedTodos", rightMain);
 
   const psuedoPlaceholders = document.querySelectorAll(".psuedo-placeholder");
   const inputs = document.querySelectorAll(".input");
@@ -40,16 +41,16 @@ export function startQuoteRotation() {
         .then((res) => res.json())
         .then((data) => {
           const quoteData = data.data;
-          if (quote) quote.innerText = `" ${quoteData.quote} "`;
-          if (author) {
+          if (quoteData) {
+            quote.innerText = `" ${quoteData.quote} "`;
+
             author.style.display = "block";
             author.innerText = quoteData.author;
-          }
-          if (dashAuthorBefore) {
-            dashAuthorBefore.style.display = "block";
+
             dashAuthorBefore.style.width = `${
               (25 / 100) * (author?.innerText.length || 0)
             }ch`;
+            dashAuthorBefore.style.display = "block";
           }
         })
         .catch((err) => console.error("Error fetching stoic quote:", err));
@@ -71,11 +72,18 @@ export function startQuoteRotation() {
  */
 function placeholderEffect(psuedoPlaceholder, inputBox) {
   if (psuedoPlaceholder && inputBox) {
+    const settings = {
+      el: psuedoPlaceholder,
+      scale: 1.2,
+      duration: 0.3,
+      blur: 20,
+    };
+
     inputBox.addEventListener("input", () => {
       if (inputBox.value) {
-        psuedoPlaceholder.classList.add("!hidden");
+        smoothInnOutTransition(settings, true);
       } else {
-        psuedoPlaceholder.classList.remove("!hidden");
+        smoothInnOutTransition(settings, false);
       }
     });
   }
