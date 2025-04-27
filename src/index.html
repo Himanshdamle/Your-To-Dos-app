@@ -709,7 +709,7 @@
             <section
               class="flex items-center px-1 max-w-[430px] gap-1 justify-around w-full"
             >
-              <div class="flex items-center gap-3">
+              <div class="flex items-center gap-1">
                 <input
                   type="file"
                   id="fileInput"
@@ -734,6 +734,15 @@
                     Good Morning
                   </p>
                   <div class="relative w-[175px]">
+                    <span
+                      id="full-stop"
+                      class="absolute left-[50%] justify-end bottom-0 mb-[5px] text-2xl font-bold select-none pointer-events-none"
+                      >.</span
+                    >
+                    <span
+                      class="absolute invisible whitespace-pre"
+                      id="measure-span"
+                    ></span>
                     <input
                       type="text"
                       name="user_name"
