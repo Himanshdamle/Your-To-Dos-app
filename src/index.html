@@ -638,37 +638,31 @@
               </h1>
               <div class="flex flex-row py-1.5 text-lg">
                 <div
-                  class="flex flex-col justify-center px-1 border-r-[1px] w-full"
+                  class="flex flex-col justify-center py-.5 px-1 border-r-[1px] w-full"
                 >
                   <section class="flex gap-1.5 justify-center">
                     <p class="text-center font-light text-nowrap">
                       Today's task
                     </p>
-                    <span class="flex"
-                      ><p>05</p>
-                      /
-                      <p>10</p></span
-                    >
                   </section>
 
                   <!-- PROGRESS BAR -->
                   <section
-                    class="w-full h-[10px] bg-[#1A1A1A] border rounded-2xl border-white/30"
+                    class="w-full h-[17px] bg-[#1A1A1A] relative left-0 border rounded-2xl border-white/30"
                   >
                     <div
                       class="progress-bar-bg-color h-full w-[50%] rounded-2xl hover-animation"
                     ></div>
+                    <span
+                      class="absolute top-0.5 right-2 leading-3 text-sm text-white"
+                      >25 / 50</span
+                    >
                   </section>
                 </div>
                 <!--  -->
 
                 <div class="flex flex-col justify-center px-1 w-full">
                   <section class="flex gap-1.5 justify-center">
-                    <span class="flex"
-                      ><p>45</p>
-                      /
-                      <p>50</p></span
-                    >
                     <p class="text-center font-light text-nowrap">
                       All time tasks
                     </p>
@@ -676,11 +670,16 @@
 
                   <!-- PROGRESS BAR -->
                   <section
-                    class="w-full h-[10px] bg-[#1A1A1A] border rounded-2xl border-white/30"
+                    class="w-full flex relative h-[17px] bg-[#1A1A1A] border rounded-2xl border-white/30"
                   >
                     <div
-                      class="progress-bar-bg-color h-full w-[95%] rounded-2xl"
+                      class="progress-bar-bg-color h-full w-[97%] rounded-2xl"
                     ></div>
+                    <span
+                      id="all-time-todo"
+                      class="absolute top-0.5 right-2 leading-3 text-sm text-white"
+                      >48 / 50</span
+                    >
                   </section>
                 </div>
               </div>
@@ -722,7 +721,7 @@
                 >
                   <img
                     class="w-14 h-14 border border-white/30 object-cover rounded-full hover:scale-130 transition-transform duration-300 ease-in-out"
-                    src="https://plus.unsplash.com/premium_photo-1671656349322-41de944d259b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    src=""
                     alt="user_profile_picture"
                   />
                 </button>

@@ -1,3 +1,11 @@
+import {
+  pickedTodoData,
+  backend,
+  update,
+  readTodo,
+  deleteTodo,
+} from "./todo.js";
+
 /**
  * Animates smooth in/out transitions for elements using GSAP.
  */
@@ -47,7 +55,7 @@ export function transitionBetweenPages(pageCloseEl, pageOpenEl) {
   smoothInnOutTransition(
     {
       el: pageCloseEl,
-      duration: 0.7,
+      duration: 0.6,
       ease: "power2.out",
       opacity: 1,
       blur: 20,
@@ -56,7 +64,7 @@ export function transitionBetweenPages(pageCloseEl, pageOpenEl) {
         smoothInnOutTransition(
           {
             el: pageOpenEl,
-            duration: 0.7,
+            duration: 0.6,
             ease: "power2.out",
             opacity: 1,
             blur: 20,
@@ -247,7 +255,7 @@ export function addInYoursTodo(
 
   if (id && window.updated) {
     const element = document.getElementById(id);
-    if (element) element.innerHTML = todoHTML;
+    element.innerHTML = todoHTML;
   } else {
     const crossMarkerClassTw =
       "before:content-[''] before:absolute before:w-[200%] before:h-[1px] before:bg-white before:block z-[100] before:rotate-30 before:-left-[75%] before:translate-y-10 overflow-hidden";
@@ -274,7 +282,12 @@ export function addInYoursTodo(
 /**
  * Adds all to-do items from localStorage to the DOM, grouped by date range.
  */
-export function addInHTML(localTodoVarName, main, addNewTodo = false) {
+export function addInHTML(
+  localTodoVarName,
+  main,
+  initializeDragBehaviourAruguement,
+  addNewTodo = false
+) {
   const data = localStorage.getItem(localTodoVarName);
   if (!data && !addNewTodo) return;
 
@@ -282,45 +295,41 @@ export function addInHTML(localTodoVarName, main, addNewTodo = false) {
   if (!JSONData.length && !addNewTodo) return;
 
   const groupedData = groupTodosWithDate(JSONData);
+
   let expiredTodoCount = 0;
 
   Object.keys(groupedData).forEach((todoDate) => {
-    let articleWrapper;
-    if (!addNewTodo) {
-      main.innerHTML += `
-        <div id="${todoDate}" class="grid place-items-center gap-2.5 w-full">
-          <h1
-            class="relative z-10 text-xl px-3 tracking-wide bg-none before:content-[''] before:absolute before:w-full before:h-[1px] before:bg-gradient-to-l before:from-white before:to-transparent before:-left-full before:top-1/2 before:-translate-y-1/2 after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-gradient-to-r after:from-white after:to-transparent after:left-full after:top-1/2 after:-translate-y-1/2 font-bold"
-          >
-            ${todoDate.toUpperCase()}
-          </h1>
-        </div>
-      `;
+    const noSpaceID = todoDate.replace(/\s/g, "");
+    main.innerHTML += `
+      <div id="${noSpaceID}" class="grid place-items-center gap-2.5 w-full">
+        <h1
+          class="relative z-10 text-xl px-3 tracking-wide bg-none before:content-[''] before:absolute before:w-full before:h-[1px] before:bg-gradient-to-l before:from-white before:to-transparent before:-left-full before:top-1/2 before:-translate-y-1/2 after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-gradient-to-r after:from-white after:to-transparent after:left-full after:top-1/2 after:-translate-y-1/2 font-bold"
+        >
+          ${todoDate.toUpperCase()}
+        </h1>
+      </div>
+    `;
 
-      const dateFilterDropdown = document.querySelector(
-        "#date-filter-dropdown"
-      );
-      if (dateFilterDropdown) {
-        dateFilterDropdown.innerHTML += `
-          <li data-value="${todoDate}" class="text-start px-2 py-1 cursor-pointer">
-            Due on <b class="underline"><i>${todoDate}</i></b>
-          </li>
-        `;
-      }
+    const dateFilterDropdown = document.querySelector("#date-filter-dropdown");
+    dateFilterDropdown.innerHTML += `
+    <li data-value="${todoDate}" class="text-start px-2 py-1 cursor-pointer">
+      Due on <b class="underline"><i>${todoDate}</i></b>
+    </li>
+  `;
 
-      articleWrapper = document.createElement("div");
-      articleWrapper.classList.add(
-        "article-wrappers",
-        "grid",
-        "grid-cols-[repeat(auto-fit,minmax(250px,1fr))]",
-        "w-full",
-        "place-items-center",
-        "gap-2.5"
-      );
-      if (todoDate) document.getElementById(todoDate).append(articleWrapper);
-    }
+    let articleWrapper = document.createElement("div");
+    articleWrapper.classList.add(
+      "article-wrappers",
+      "grid",
+      "grid-cols-[repeat(auto-fit,minmax(250px,1fr))]",
+      "w-full",
+      "place-items-center",
+      "gap-2.5"
+    );
+    main.querySelector(`#${noSpaceID}`).append(articleWrapper);
 
     const isExpired = todoDate === "Expired todo's";
+
     groupedData[todoDate].forEach((json) => {
       if (isExpired) expiredTodoCount++;
       addInYoursTodo(isExpired, json, articleWrapper);
@@ -330,16 +339,20 @@ export function addInHTML(localTodoVarName, main, addNewTodo = false) {
   const pendingTodoCountPtag = document.querySelector("#pending-todo-count");
   const expiredTodoCountPtag = document.querySelector("#expired-todo-count");
 
+  initializeDragBehaviour(initializeDragBehaviourAruguement);
+
   const pendingTodoCount = JSONData.length - expiredTodoCount;
 
-  if (pendingTodoCountPtag) {
-    pendingTodoCountPtag.innerText = pendingTodoCount;
-    pendingTodoCountPtag.style.color = statusColors(pendingTodoCount);
+  function updateTodoCount(element, count) {
+    if (!element) return;
+
+    element.innerText = count;
+    element.style.color = statusColors(count);
   }
-  if (expiredTodoCountPtag) {
-    expiredTodoCountPtag.innerText = expiredTodoCount;
-    expiredTodoCountPtag.style.color = statusColors(expiredTodoCount);
-  }
+
+  // Update the UI
+  updateTodoCount(pendingTodoCountPtag, pendingTodoCount);
+  updateTodoCount(expiredTodoCountPtag, expiredTodoCount);
 }
 
 /**
@@ -515,6 +528,99 @@ export function resetTodoPageFunc(transitionPlaceholders = true) {
       if (pTag) {
         pTag.innerText = "0".repeat(pTag.getAttribute("maxDigit") || 2);
       }
+    }
+  });
+}
+
+/**
+ * Helps to switch todo data from one storage to another
+ */
+export function dragAndDropTodos(getLocalTodoVarNameObject) {
+  const fromDragVarName = getLocalTodoVarNameObject.dragVarName;
+  const toDropVarName = getLocalTodoVarNameObject.dropVarName;
+  const evt = getLocalTodoVarNameObject.dragedTodo;
+
+  window.getTodoData = pickedTodoData(
+    fromDragVarName,
+    evt.item.querySelector(".todo-card")
+  );
+
+  const JSONData = JSON.parse(localStorage.getItem(fromDragVarName)) || [];
+  JSONData.splice(window.getTodoData.localStorageIndex, 1);
+
+  localStorage.setItem(fromDragVarName, JSON.stringify(JSONData));
+  backend(window.getTodoData.matchedId, toDropVarName);
+}
+
+/**
+ * Initialize drag and drop behaviour on todo card.
+ */
+export function initializeDragBehaviour(getSettings) {
+  const articleWrappers =
+    getSettings.todoMainSide.querySelectorAll(".article-wrappers");
+
+  // short cut for allowing all the crud operations - true.
+  const allowCRUDArray =
+    getSettings.allowCRUD === true
+      ? ["#update", "#read", "#delete"]
+      : getSettings.allowCRUD;
+
+  articleWrappers.forEach((wrapper) => {
+    Sortable.create(wrapper, {
+      group: {
+        name: "shared",
+        pull: true,
+        put: true,
+      },
+      animation: 300,
+
+      // logic for drag and drop CRUD operations.
+      onEnd(evt) {
+        let getTodoData = {};
+        const { clientX, clientY } = evt.originalEvent;
+        const dropTarget = document.elementFromPoint(clientX, clientY);
+
+        if (!dropTarget) return;
+
+        allowCRUDArray.forEach((elID) => {
+          const ancestor = dropTarget.closest(elID);
+
+          if (!ancestor) return; // if droped somewhere out of the CRUD buttons.
+
+          getTodoData = pickedTodoData(
+            getSettings.localTodoVarName,
+            evt.item.querySelector("section")
+          );
+
+          if (elID === "#update") update(getTodoData.matchedId);
+          else if (elID === "#read") readTodo(getTodoData.matchedId);
+          else if (elID === "#delete")
+            deleteTodo(
+              getSettings.localTodoVarName,
+              getTodoData.localStorageIndex,
+              getTodoData.actualID
+            );
+        });
+      },
+    });
+  });
+
+  allowCRUDArray.forEach((elID) => {
+    const target = document.querySelector(elID);
+    if (target) {
+      target.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        target.style.cursor = "copy";
+      });
+
+      target.addEventListener("dragleave", () => {
+        target.style.cursor = "default";
+      });
+
+      target.addEventListener("drop", (e) => {
+        e.preventDefault();
+        target.style.cursor = "default";
+      });
     }
   });
 }

@@ -49,7 +49,7 @@ export function middle() {
       const fullStop = document.querySelector("#full-stop");
 
       if (userName) {
-        userNameInput.value = userName;
+        userNameInput.value = userName + ".";
         placeholderUserName.style.display = "none";
         fullStop.style.display = "none";
       } else {

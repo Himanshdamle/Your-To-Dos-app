@@ -44,20 +44,5 @@ select {
 
 .progress-bar-bg-color {
   background: #ffffff;
-  background: -webkit-linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(44, 182, 125, 1) 100%
-  );
-  background: -moz-linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(44, 182, 125, 1) 100%
-  );
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(44, 182, 125, 1) 100%
-  );
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#FFFFFF", endColorstr="#2CB67D", GradientType=1);
+  background: linear-gradient(90deg, #ffffff 0%, #2cb67d 50%, #0d9488 100%);
 }

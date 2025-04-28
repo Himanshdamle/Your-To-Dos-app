@@ -7,11 +7,22 @@ export function initializeUI() {
   const leftMain = document.querySelector("#left-main");
   const rightMain = document.querySelector("#right-main");
 
-  addInHTML("todos", leftMain);
-  addInHTML("completedTodos", rightMain);
+  addInHTML("todos", leftMain, {
+    allowCRUD: true,
+    localTodoVarName: "todos",
+    todoMainSide: leftMain,
+  });
 
+  addInHTML("completedTodos", rightMain, {
+    allowCRUD: ["#delete"],
+    localTodoVarName: "completedTodos",
+    todoMainSide: rightMain,
+  });
+
+  // placeholder effect
   const psuedoPlaceholders = document.querySelectorAll(".psuedo-placeholder");
   const inputs = document.querySelectorAll(".input");
+
   psuedoPlaceholders.forEach((placeholder, index) => {
     placeholderEffect(placeholder, inputs[index]);
   });
@@ -20,6 +31,7 @@ export function initializeUI() {
     ".psuedo-placeholder-curd"
   );
   const crudInputs = document.querySelectorAll(".crud-input");
+
   psuedoPlaceholdersCURD.forEach((placeholder, index) => {
     placeholderEffect(placeholder, crudInputs[index]);
   });

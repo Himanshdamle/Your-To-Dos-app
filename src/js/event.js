@@ -1,8 +1,8 @@
 import {
-  resize,
   transitionBetweenPages,
   addInYoursTodo,
   addInHTML,
+  initializeDragBehaviour,
 } from "./core.js";
 import { backend } from "./todo.js";
 
@@ -95,7 +95,9 @@ export function setupEventListeners() {
         true,
         window.getTodoData.localStorageIndex
       );
+
       const JSONData = JSON.parse(localStorage.getItem("todos"));
+
       addInYoursTodo(
         false,
         JSONData[window.getTodoData.localStorageIndex],
@@ -105,7 +107,11 @@ export function setupEventListeners() {
     } else {
       const newTodo = { ...window.currTodoDetails, id: crypto.randomUUID() };
       backend(newTodo, "todos");
-      addInHTML("todos", document.querySelector("#left-main"), true);
+      addInHTML("todos", document.querySelector("#left-main"), {
+        allowCRUD: true,
+        localTodoVarName: "todos",
+        todoMainSide: document.querySelector("#left-main"),
+      });
     }
   });
 
