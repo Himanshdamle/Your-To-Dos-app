@@ -332,7 +332,7 @@
                     name="heading"
                     id="heading-input"
                     wrap="soft"
-                    class="crud-input resize-none text-center p-1.5 w-96 font-bold outline-none text-2xl italic border h-min rounded-lg border-white/30 input"
+                    class="crud-input capitalize resize-none text-center p-1.5 w-96 font-bold outline-none text-2xl italic border h-min rounded-lg border-white/30 input"
                     maxlength="50"
                   ></textarea>
                   <p
@@ -359,8 +359,8 @@
                   <textarea
                     name="description"
                     id="description-input"
-                    class="crud-input mx-7 p-1.5 text-xl border w-full h-full resize-none outline-none rounded-lg border-white/30 input"
-                    maxlength="200"
+                    class="crud-input capitalize mx-7 p-1.5 text-xl border w-full h-full resize-none outline-none rounded-lg border-white/30 input"
+                    maxlength="250"
                   ></textarea>
                   <p
                     class="absolute top-1.5 left-1.5 opacity-50 pointer-events-none text-2xl italic psuedo-placeholder psuedo-placeholder-curd"
@@ -376,7 +376,7 @@
                   class="count-limit absolute top-2 right-0 flex text-white/50"
                   >Characters:&nbsp;
                   <p maxDigit="3" id="current-len-description-input">000</p>
-                  /200</span
+                  /300</span
                 >
               </section>
 
@@ -736,6 +736,7 @@
                     <span
                       id="full-stop"
                       class="absolute left-[50%] justify-end bottom-0 mb-[5px] text-2xl font-bold select-none pointer-events-none"
+                      style="display: none"
                       >.</span
                     >
                     <span
@@ -791,7 +792,7 @@
 
           <main
             id="right-main"
-            class="h-full w-full mt-8 flex flex-col items-center gap-3.5 overflow-y-scroll overflow-x-hidden"
+            class="h-full w-full mt-8 flex flex-col pl-2 items-center gap-3.5 overflow-y-scroll overflow-x-hidden"
           ></main>
         </section>
       </main>

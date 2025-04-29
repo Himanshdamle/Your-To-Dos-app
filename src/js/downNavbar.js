@@ -4,6 +4,7 @@ export function middle() {
     const lastSyncedTime = document.querySelector("#last-synced-time");
     lastSyncedTime.innerText =
       localStorage.getItem("lastSyncedTime") || "Never Synced";
+
     syncNow.addEventListener("click", () => {
       location.reload();
       const timeNow = new Date();
@@ -72,7 +73,7 @@ export function middle() {
           duration: 0.2,
           ease: "power2.out",
         });
-        localStorage.setItem("userName", userNameInput.value);
+        localStorage.setItem("userName", userNameInput.value || "");
       });
 
       userNameInput.addEventListener("focus", () => {

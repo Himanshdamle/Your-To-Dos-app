@@ -98,7 +98,16 @@ export function getLocaleDateString(date) {
     "Nov",
     "Dec",
   ];
-  const suffix = day === 3 ? "rd" : day === 2 ? "nd" : day === 1 ? "st" : "th";
+  if (!day || !month || !year) return "Invalid date input!";
+
+  const dayStr = day.toString();
+  let suffix;
+
+  if (dayStr.includes("3")) suffix = "rd";
+  else if (dayStr.includes("2")) suffix = "nd";
+  else if (dayStr.includes("1")) suffix = "st";
+  else suffix = "th";
+
   return `${day}${suffix} ${months[month - 1]}, ${year}`;
 }
 
