@@ -2,74 +2,66 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
+    <title>Selectable Example</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/selectable.js@latest/selectable.min.css"
+    />
     <style>
-      .drag-ghost {
-        opacity: 0.4;
-        background-color: #ffffff55;
-        transform: scale(1.05);
-        transition: all 0.2s ease;
+      #container {
+        display: flex;
+        flex-wrap: wrap;
+        height: 100vh;
+        width: 100vw;
+        gap: 10px;
+        padding: 20px;
+      }
+      .item {
+        width: 80px;
+        height: 80px;
+        background-color: #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid transparent;
+        user-select: none;
+      }
+      .ui-selected {
+        border-color: #1e90ff;
+        background-color: #d0e8ff;
+      }
+      .ui-selecting {
+        border-color: #1e90ff;
+        border-style: dashed;
+        background-color: #d0e8ff;
       }
     </style>
-    <script src="colors.js" defer></script>
   </head>
-  <body class="bg-black">
-    <div
-      id="completed-todo"
-      class="text-3xl bg-amber-400 max-w-max min-w-[250px] p-2 min-h-36 h-fit"
-    >
-      <div
-        class="todo-item active:cursor-grabbing sortable-chosen:cursor-grabbing bg-white text-black p-2 rounded mb-2"
-      >
-        doing science hw
-      </div>
+  <body>
+    <div id="container">
+      <div class="item">1</div>
+      <div class="item">2</div>
+      <div class="item">3</div>
+      <div class="item">4</div>
     </div>
 
-    <div
-      id="yours-todo"
-      class="text-3xl bg-amber-700 max-w-max min-w-[250px] p-2 min-h-36 h-fit"
-    >
-      <div
-        class="todo-item active:cursor-grabbing bg-white text-black p-2 rounded mb-2"
-      >
-        doing math hw
-      </div>
-      <div
-        class="todo-item active:cursor-grabbing bg-white text-black p-2 rounded mb-2"
-      >
-        doing sst hw
-      </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/selectable.js@latest/selectable.min.js"></script>
     <script>
-      // "Yours todo" - can drag from here
-      Sortable.create(document.getElementById("yours-todo"), {
-        group: {
-          name: "shared",
-          pull: true, // or true if you want to *move* instead of clone
-          put: true, // can't drop things *into* yours-todo
+      const selectable = new Selectable({
+        appendTo: "body",
+        filter: ".item",
+        toggle: true,
+        lasso: {
+          border: "2px solid #1e90ff",
+          backgroundColor: "rgba(30, 144, 255, 0.1)",
         },
-        animation: 150,
-        ghostClass: "drag-ghost",
       });
 
-      // "Completed todo" - can receive todos
-      Sortable.create(document.getElementById("completed-todo"), {
-        group: {
-          name: "shared",
-          pull: true, // can't drag from here
-          put: true, // can receive from others
-        },
-        animation: 150,
-        ghostClass: "drag-ghost",
-        onAdd: function (evt) {
-          // Optional: Do something when todo is marked completed
-          console.log("Moved to completed:", evt.item.textContent);
-        },
+      document.addEventListener("click", (e) => {
+        // If the clicked element is NOT one of the items
+        if (!e.target.closest(".item")) {
+          selectable.clear(); // deselect all
+        }
       });
     </script>
   </body>

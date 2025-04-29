@@ -141,23 +141,25 @@ export function getDateRange(date) {
   const diffTime = todoDate.getTime() - today.getTime();
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-  if (diffDays < 0) return "Expired todo's";
-  if (diffDays === 0) return "Due this day";
+  if (diffDays < 0) return { 0: "Expired todo's" };
+  if (diffDays === 0) return { 1: "Due this day" };
 
   if (diffDays <= 28) {
     for (let i = 1; i <= 4; i++) {
       if (diffDays <= 7 * i) {
-        return i === 1 ? "due this week" : `due over ${i} weeks`;
+        return i === 1
+          ? { 2: "due this week" }
+          : { [i + 1]: `due over ${i} weeks` };
       }
     }
   }
 
   if (diffDays <= 365) {
     const months = Math.floor(diffDays / 30);
-    return `due over ${months} months`;
+    return { [months * 5]: `due over ${months} months` };
   }
 
-  return "over a year";
+  return { 100: "over a year" };
 }
 
 /**
@@ -179,9 +181,36 @@ export function groupTodosWithDate(todoList) {
     values: Object.values(result),
   };
 
-  const range = keysNdValues.keys.map((date) => getDateRange(date));
+  // This creates an object `range` where the keys are priority numbers (like 0, 1, 2, etc.)
+  // and the values are human-readable date range labels (like "Expired todo's", "Due today", etc.)
+  const range = keysNdValues.keys.reduce((acc, curr) => {
+    // Call getDateRange() with a date to get back something like { 0: "Expired todo's" }
+    const dateRange = getDateRange(curr);
 
-  const nlp = range.reduce((acc, curr, index) => {
+    // Extract the numeric key from the returned object (e.g., 0)
+    const key = Number(Object.keys(dateRange)[0]);
+
+    // Use the numeric key as the index and store the label in the accumulator object
+    acc[key] = dateRange[key];
+    return acc;
+  }, {}); // Start with an empty object
+
+  // Get all the numeric keys (as strings) from the `range` object
+  const getValues = Object.keys(range);
+
+  // Sort the keys in ascending order and then use them to get the corresponding labels
+  const sortedRange = getValues
+    // First map the string keys back to their numeric form (if needed)
+    .map((range) => range)
+    // Sort the keys numerically so that they follow urgency order (0 -> expired, 1 -> today, etc.)
+    .sort((a, b) => a + b)
+    // Finally, map each key back to its human-readable label
+    .map((value) => range[value]);
+
+  // Result: sortedRange now holds the labels in order like:
+  // ["Expired todo's", "Due today", "due in 2 weeks", ..., "over a year"]
+
+  const nlp = sortedRange.reduce((acc, curr, index) => {
     const todo = keysNdValues.values[index];
     if (!acc[curr]) {
       acc[curr] = [...todo];
@@ -294,13 +323,14 @@ export function addInYoursTodo(
 export function addInHTML(
   localTodoVarName,
   main,
-  initializeDragBehaviourAruguement,
+  initializeDragBehaviourParams,
   addNewTodo = false
 ) {
   const data = localStorage.getItem(localTodoVarName);
   if (!data && !addNewTodo) return;
 
-  const JSONData = JSON.parse(data) || [];
+  const JSONData = addNewTodo ? localTodoVarName : JSON.parse(data) || [];
+
   if (!JSONData.length && !addNewTodo) return;
 
   const groupedData = groupTodosWithDate(JSONData);
@@ -309,8 +339,11 @@ export function addInHTML(
 
   Object.keys(groupedData).forEach((todoDate) => {
     const noSpaceID = todoDate.replace(/\s/g, "");
-    main.innerHTML += `
-      <div id="${noSpaceID}" class="grid place-items-center gap-2.5 w-full">
+    const isDueDateSectionPresent = main.querySelector(`#${noSpaceID}`);
+
+    if (!isDueDateSectionPresent) {
+      main.innerHTML += `
+      <div id="${noSpaceID}" class="grid cards-wrapper place-items-center gap-2.5 w-full">
         <h1
           class="relative z-10 text-xl px-3 tracking-wide bg-none before:content-[''] before:absolute before:w-full before:h-[1px] before:bg-gradient-to-l before:from-white before:to-transparent before:-left-full before:top-1/2 before:-translate-y-1/2 after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-gradient-to-r after:from-white after:to-transparent after:left-full after:top-1/2 after:-translate-y-1/2 font-bold"
         >
@@ -318,6 +351,7 @@ export function addInHTML(
         </h1>
       </div>
     `;
+    }
 
     const dateFilterDropdown = document.querySelector("#date-filter-dropdown");
     dateFilterDropdown.innerHTML += `
@@ -333,7 +367,8 @@ export function addInHTML(
       "grid-cols-[repeat(auto-fit,minmax(250px,1fr))]",
       "w-full",
       "place-items-center",
-      "gap-2.5"
+      "gap-2.5",
+      "selectable-item"
     );
     main.querySelector(`#${noSpaceID}`).append(articleWrapper);
 
@@ -348,7 +383,7 @@ export function addInHTML(
   const pendingTodoCountPtag = document.querySelector("#pending-todo-count");
   const expiredTodoCountPtag = document.querySelector("#expired-todo-count");
 
-  initializeDragBehaviour(initializeDragBehaviourAruguement);
+  initializeDragBehaviour(initializeDragBehaviourParams);
 
   const pendingTodoCount = JSONData.length - expiredTodoCount;
 
@@ -579,11 +614,14 @@ export function initializeDragBehaviour(getSettings) {
       group: {
         name: "shared",
         pull: true,
-        put: true,
+        // only allow drop into the same section
+        put: (to, from) => {
+          return to.el === from.el;
+        },
       },
       animation: 300,
 
-      // logic for drag and drop CRUD operations.
+      // fires when droped a todo card.
       onEnd(evt) {
         let getTodoData = {};
         const { clientX, clientY } = evt.originalEvent;
@@ -594,7 +632,7 @@ export function initializeDragBehaviour(getSettings) {
         allowCRUDArray.forEach((elID) => {
           const ancestor = dropTarget.closest(elID);
 
-          if (!ancestor) return; // if droped somewhere out of the CRUD buttons.
+          if (!ancestor) return;
 
           getTodoData = pickedTodoData(
             getSettings.localTodoVarName,

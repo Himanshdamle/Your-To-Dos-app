@@ -20,6 +20,7 @@ window.updated = false;
 window.hoverObject = {};
 
 document.addEventListener("DOMContentLoaded", () => {
+  console.time("Performance");
   initializeUI();
   setupEventListeners();
   startQuoteRotation();
@@ -63,8 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
     window.tagStates.push(state);
   });
 
-  const rightMain = document.querySelector("#right-main");
-  Sortable.create(rightMain, {
+  const completedTodosSection = document.querySelector("#right-main");
+
+  Sortable.create(completedTodosSection, {
     group: {
       name: "shared",
       pull: true,
@@ -74,22 +76,23 @@ document.addEventListener("DOMContentLoaded", () => {
     ghostClass: "drag-ghost",
 
     onAdd(evt) {
+      console.log("droped", evt.to);
       dragAndDropTodos({
         dragVarName: "todos",
         dropVarName: "completedTodos",
-        dragedTodo: evt,
+        dragedTodo: evt.item,
       });
 
       initializeDragBehaviour({
         allowCRUD: ["#delete"],
         localTodoVarName: "completedTodos",
-        todoMainSide: rightMain,
+        todoMainSide: completedTodosSection,
       });
     },
   });
 
-  const leftMain = document.querySelector("#left-main");
-  Sortable.create(leftMain, {
+  const pendingTodosSection = document.querySelector("#left-main");
+  Sortable.create(pendingTodosSection, {
     group: {
       name: "shared",
       pull: true,
@@ -99,18 +102,20 @@ document.addEventListener("DOMContentLoaded", () => {
     ghostClass: "drag-ghost",
 
     onAdd(evt) {
-      // Move todo from completedTodos back to todos
+      console.log("droped", evt.to);
+      // Move todo card from 'completedTodos' back to 'todos'
       dragAndDropTodos({
-        dragVarName: "completedTodos", // dragged FROM completedTodos
+        dragVarName: "completedTodos", // dragged FROM 'completedTodos'
         dropVarName: "todos", // dropped INTO todos
-        dragedTodo: evt,
+        dragedTodo: evt.item,
       });
 
       initializeDragBehaviour({
         allowCRUD: true, // means allow all the crud functions.
         localTodoVarName: "todos",
-        todoMainSide: leftMain,
+        todoMainSide: pendingTodosSection,
       });
     },
   });
+  console.timeEnd("Performance");
 });

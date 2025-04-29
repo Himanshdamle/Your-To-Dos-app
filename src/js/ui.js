@@ -4,19 +4,19 @@ import { addInHTML, smoothInnOutTransition } from "./core.js";
  * Initializes the UI, including todo rendering and placeholder effects.
  */
 export function initializeUI() {
-  const leftMain = document.querySelector("#left-main");
-  const rightMain = document.querySelector("#right-main");
+  const pendingTodosSection = document.querySelector("#left-main");
+  const completedTodosSection = document.querySelector("#right-main");
 
-  addInHTML("todos", leftMain, {
+  addInHTML("todos", pendingTodosSection, {
     allowCRUD: true,
     localTodoVarName: "todos",
-    todoMainSide: leftMain,
+    todoMainSide: pendingTodosSection,
   });
 
-  addInHTML("completedTodos", rightMain, {
+  addInHTML("completedTodos", completedTodosSection, {
     allowCRUD: ["#delete"],
     localTodoVarName: "completedTodos",
-    todoMainSide: rightMain,
+    todoMainSide: completedTodosSection,
   });
 
   // placeholder effect

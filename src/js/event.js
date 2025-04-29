@@ -107,11 +107,16 @@ export function setupEventListeners() {
     } else {
       const newTodo = { ...window.currTodoDetails, id: crypto.randomUUID() };
       backend(newTodo, "todos");
-      addInHTML("todos", document.querySelector("#left-main"), {
-        allowCRUD: true,
-        localTodoVarName: "todos",
-        todoMainSide: document.querySelector("#left-main"),
-      });
+      addInHTML(
+        [newTodo],
+        document.querySelector("#left-main"),
+        {
+          allowCRUD: true,
+          localTodoVarName: "todos",
+          todoMainSide: document.querySelector("#left-main"),
+        },
+        true // add only new todo to the 'pendingTodosSection'.
+      );
     }
   });
 

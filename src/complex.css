@@ -46,3 +46,11 @@ select {
   background: #ffffff;
   background: linear-gradient(90deg, #ffffff 0%, #2cb67d 50%, #0d9488 100%);
 }
+
+.ui-selected {
+  border-color: #2cb67d;
+}
+.ui-selecting {
+  border-style: dashed;
+  border-color: #2cb67d;
+}
