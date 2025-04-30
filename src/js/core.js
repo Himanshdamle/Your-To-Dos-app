@@ -11,10 +11,12 @@ import {
  */
 export function smoothInnOutTransition(gsapSettings, play, currentDisplay) {
   const body = document.body;
+  const bodyOverflow = window.getComputedStyle(body).overflow;
 
   if (play) {
     gsap.set(body, { overflow: "hidden" });
-    gsap.to(gsapSettings.el, {
+
+    gsap.to(gsapSettings.el || document.querySelector(gsapSettings.el), {
       filter: `blur(${gsapSettings.blur || 10}px)`,
       scale: gsapSettings.scale || 1.1,
       opacity: 0,
@@ -22,7 +24,7 @@ export function smoothInnOutTransition(gsapSettings, play, currentDisplay) {
       ease: gsapSettings.ease || "none",
       onComplete() {
         gsap.set(gsapSettings.el, { display: "none" });
-        gsap.set(body, { overflow: "unset" });
+        gsap.set(body, { overflow: bodyOverflow });
         if (gsapSettings.onCompleteTransition)
           gsapSettings.onCompleteTransition();
       },
@@ -42,7 +44,7 @@ export function smoothInnOutTransition(gsapSettings, play, currentDisplay) {
       ease: gsapSettings.ease,
       duration: gsapSettings.duration,
       onComplete() {
-        gsap.set(body, { overflow: "unset" });
+        gsap.set(body, { overflow: bodyOverflow });
       },
     });
   }
@@ -51,27 +53,78 @@ export function smoothInnOutTransition(gsapSettings, play, currentDisplay) {
 /**
  * Transitions between two pages using smoothInnOutTransition.
  */
-export function transitionBetweenPages(pageCloseEl, pageOpenEl) {
+export function transitionBetweenPages(settings = {}) {
+  const {
+    // Common settings
+    duration = 0.6,
+    ease = "power2.out",
+
+    // Close animation target & styles
+    pageCloseEl,
+    opacityClose,
+    blurClose,
+    scaleClose,
+
+    // Open animation target & styles
+    pageOpenEl,
+    opacityOpen,
+    blurOpen,
+    scaleOpen,
+
+    // Fallback/general styles
+    opacity = 1,
+    blur = 20,
+    scale = 1.2,
+
+    // Display type after opening
+    display = "flex",
+
+    // Optional callbacks
+    onCloseComplete = () => {},
+    onOpenComplete = () => {},
+    onBothComplete = () => {},
+  } = settings;
+
+  const closeElement =
+    typeof pageCloseEl === "string"
+      ? document.querySelector(pageCloseEl)
+      : pageCloseEl;
+  const openElement =
+    typeof pageOpenEl === "string"
+      ? document.querySelector(pageOpenEl)
+      : pageOpenEl;
+
+  if (!closeElement || !openElement) {
+    console.warn("Invalid elements passed to transitionBetweenPages");
+    return;
+  }
+
   smoothInnOutTransition(
     {
-      el: pageCloseEl,
-      duration: 0.6,
-      ease: "power2.out",
-      opacity: 1,
-      blur: 20,
-      scale: 1.2,
+      el: closeElement,
+      duration,
+      ease,
+      opacity: opacityClose ?? opacity,
+      blur: blurClose ?? blur,
+      scale: scaleClose ?? scale,
       onCompleteTransition() {
+        onCloseComplete();
+
         smoothInnOutTransition(
           {
-            el: pageOpenEl,
-            duration: 0.6,
-            ease: "power2.out",
-            opacity: 1,
-            blur: 20,
-            scale: 1.2,
+            el: openElement,
+            duration,
+            ease,
+            opacity: opacityOpen ?? opacity,
+            blur: blurOpen ?? blur,
+            scale: scaleOpen ?? scale,
+            onCompleteTransition() {
+              onOpenComplete();
+              onBothComplete();
+            },
           },
           false,
-          "flex"
+          display
         );
       },
     },
@@ -100,7 +153,7 @@ export function getLocaleDateString(date) {
   ];
   if (!day || !month || !year) return "Invalid date input!";
 
-  const dayStr = day.toString();
+  const dayStr = day.toString().split("").at(-1);
   let suffix;
 
   if (dayStr.includes("3")) suffix = "rd";
@@ -141,7 +194,7 @@ export function getDateRange(date) {
   const diffTime = todoDate.getTime() - today.getTime();
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-  if (diffDays < 0) return { 0: "Expired todo's" };
+  if (diffDays < 0) return { 0: "Expired todos" };
   if (diffDays === 0) return { 1: "Due this day" };
 
   if (diffDays <= 28) {
@@ -258,7 +311,6 @@ export function addInYoursTodo(
   if (!userLatestTodo) return;
 
   const localeDateString = getLocaleDateString(userLatestTodo.date);
-  const priorityColor = getPriorityColor(userLatestTodo.priority);
 
   const expiredSticker = `
     <span class="absolute right-2 bottom-2 z-10 w-[100px] h-[100px]">
@@ -271,23 +323,36 @@ export function addInYoursTodo(
     </span>
   `;
 
+  let tagsHTMLPresentation = "";
+  userLatestTodo.tags.forEach((tag) => {
+    tagsHTMLPresentation += `
+        <p title="#${tag}" class="font-light">
+          <b class="font-bold">#</b>${tag}
+        </p> `;
+  });
+
   const todoHTML = `
-    <span class="absolute left-0 top-0 block z-10 rounded-t-2xl overflow-hidden">
-      <span class="h-[40px] w-[40px] bg-[${priorityColor}] relative -top-2.5 -left-2.5 block rounded-full"></span>
+    <span title="Priority - ${
+      userLatestTodo.priority
+    }" class="absolute left-0 top-0 block z-10 rounded-t-2xl overflow-hidden">
+      <span class="h-[40px] w-[40px] bg-[${getPriorityColor(
+        userLatestTodo.priority
+      )}] relative -top-2.5 -left-2.5 block rounded-full"></span>
     </span>
+
     ${isExpiredTodo ? expiredSticker : ""}
     <header class="flex flex-col pb-2 justify-center items-center border-b">
-      <p>Header</p>
-      <h3 id="show-heading" class="text-center p-1.5 w-[95%] font-bold text-xl italic">
+      <h3 id="show-heading" class="text-center w-[95%] font-bold text-2xl italic">
         ${userLatestTodo.heading}
       </h3>
     </header>
+
     <div class="flex flex-col py-2 relative justify-center items-center">
-      <p>Description</p>
-      <p id="show-description" class="text-center p-1.5 w-[95%] overflow-hidden max-h-20 font-normal text-xl italic">
-        ${userLatestTodo.description || "No description provided."}
-      </p>
-      <div class="absolute bottom-2 left-0 w-full h-6 bg-gradient-to-t from-[#1a1a1a] to-transparent pointer-events-none"></div>
+      <span
+        class="flex text-xl gap-2 w-full justify-center items-center"
+      >
+        ${tagsHTMLPresentation || "No tags provided."}
+      </span>
     </div>
   `;
 
@@ -302,7 +367,7 @@ export function addInYoursTodo(
     mainDirection.innerHTML += `
       <article class="grid gap-3 relative z-50 max-w-[300px] w-full overflow-hidden" title="${userLatestTodo.heading}">
         <div class="grid place-items-end">
-          <header class="relative z-10 w-full text-sm font-medium pl-8 before:pl-3 mb-1.5 bg-[#0f0f0f] before:content-[''] before:absolute before:w-full before:h-[1px] before:left-4 before:bottom-0 before:bg-white">
+          <header class="relative z-10 w-full text-sm font-medium pl-8 before:pl-3 mb-1.5 before:content-[''] before:absolute before:w-full before:h-[1px] before:left-4 before:bottom-0 before:bg-white">
             ${localeDateString}
           </header>
           <section
@@ -342,13 +407,17 @@ export function addInHTML(
     const isDueDateSectionPresent = main.querySelector(`#${noSpaceID}`);
 
     if (!isDueDateSectionPresent) {
+      const wordArray = todoDate.toUpperCase().split(" ");
+      const first = wordArray[0];
+      const last = wordArray.slice(1, 3).join(" ");
       main.innerHTML += `
       <div id="${noSpaceID}" class="grid cards-wrapper place-items-center gap-2.5 w-full">
-        <h1
-          class="relative z-10 text-xl px-3 tracking-wide bg-none before:content-[''] before:absolute before:w-full before:h-[1px] before:bg-gradient-to-l before:from-white before:to-transparent before:-left-full before:top-1/2 before:-translate-y-1/2 after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-gradient-to-r after:from-white after:to-transparent after:left-full after:top-1/2 after:-translate-y-1/2 font-bold"
+        <span
+          class="relative z-10 text-xl px-3 tracking-wide bg-none before:content-[''] before:absolute before:w-full before:h-[1px] before:bg-gradient-to-l before:from-white before:to-transparent before:-left-full before:top-1/2 before:-translate-y-1/2 after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-gradient-to-r after:from-white after:to-transparent after:left-full after:top-1/2 after:-translate-y-1/2 flex gap-2"
         >
-          ${todoDate.toUpperCase()}
-        </h1>
+          <p class="font-light">${first}</p>
+          <p class="italic font-bold tracking-wider">${last}</p>
+        </span>
       </div>
     `;
     }
@@ -361,6 +430,11 @@ export function addInHTML(
   `;
 
     let articleWrapper = document.createElement("div");
+    // const awsParent = document.createElement("section");
+    // awsParent.id = `${noSpaceID}-article-wrappers-parent`;
+
+    // const ddSection = main.querySelector(`#${noSpaceID}`);
+    // ddSection.append(awsParent);
     articleWrapper.classList.add(
       "article-wrappers",
       "grid",
@@ -372,7 +446,7 @@ export function addInHTML(
     );
     main.querySelector(`#${noSpaceID}`).append(articleWrapper);
 
-    const isExpired = todoDate === "Expired todo's";
+    const isExpired = todoDate === "Expired todos";
 
     groupedData[todoDate].forEach((json) => {
       if (isExpired) expiredTodoCount++;
@@ -541,7 +615,7 @@ export function resetTodoPageFunc(transitionPlaceholders = true) {
     state.isDblClick = false;
   });
 
-  const priorityBtnHTML = `                    <p>Priority [must]</p>
+  const priorityBtnHTML = `<p>Priority [must]</p>
                     <span id="dropdown-svg" style="transform: rotateZ('-90deg')"
                       ><svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -583,7 +657,7 @@ export function dragAndDropTodos(getLocalTodoVarNameObject) {
   const fromDragVarName = getLocalTodoVarNameObject.dragVarName;
   const toDropVarName = getLocalTodoVarNameObject.dropVarName;
   const evt = getLocalTodoVarNameObject.dragedTodo;
-
+  console.log(evt);
   window.getTodoData = pickedTodoData(
     fromDragVarName,
     evt.item.querySelector(".todo-card")

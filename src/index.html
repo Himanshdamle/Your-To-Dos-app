@@ -39,11 +39,11 @@
     <!-- <script src="dist/bundle.js" defer></script> -->
     <script src="dropdown.js" defer></script>
     <script src="js/main.js" type="module" defer></script>
-    <script src="dragRectangle.js" defer></script>
+    <!-- <script src="dragRectangle.js" defer></script> -->
   </head>
   <body
     style="font-family: 'Karla', sans-serif"
-    class="bg-[#0F0F0F] text-white font-medium h-screen"
+    class="bg-[#0F0F0F] text-white font-medium overflow-hidden h-screen"
   >
     <div class="h-full">
       <main class="flex justify-between items-start relative h-full mx-1">
@@ -57,7 +57,7 @@
 
           <main
             id="left-main"
-            class="overflow-x-hidden h-full w-full max-w-[110%] mt-8 resize-x flex min-w-[100%] flex-col gap-3.5 overflow-y-scroll items-center"
+            class="overflow-x-hidden h-full w-full max-w-[526px] mt-8 resize-x flex min-w-[100%] flex-col gap-3.5 overflow-y-scroll items-center"
           >
             <section
               class="text-center text-xl italic p-2.5 border h-min max-w-[400px] rounded-lg border-white/30 bg-[#1A1A1A] flex flex-col gap-2"
@@ -229,76 +229,100 @@
           class="flex-[3] flex flex-col h-full after:content-[''] after:absolute relative after:w-[1px] after:h-[110%] after:right-0 after:top-[-10%] after:bg-white before:absolute before:w-[1px] before:h-[110%] before:left-0 before:top-[-10%] before:bg-white"
         >
           <!-- CURD OPTIONS -->
-          <header
-            class="flex flex-row gap-6 justify-between items-center px-7 pb-2"
-          >
-            <!-- CREATE -->
-            <button
-              title="Click to add a new task"
-              class="flex flex-col items-center hover:cursor-pointer"
-              id="create-new-todo-page"
+          <header class="min-h-[80px]">
+            <section
+              id="task-path"
+              class="hidden w-full h-full mx-1.5 justify-start items-center"
             >
-              <div class="flex items-center">
-                <h1 class="text-2xl font-bold text-[#2CB67D]">C</h1>
-                <p class="text-base mt-1 text-gray-300 tracking-wide">REATE</p>
+              <div class="text-xl flex gap-2 items-center">
+                <p
+                  id="task-parent"
+                  class="hover:bg-[#1A1A1A] rounded-lg transition-all duration-300 hover:border border-white/30 py-1 px-2 cursor-pointer"
+                >
+                  Coding karte raho
+                </p>
+                <span>></span>
+                <p></p>
               </div>
-              <div
-                class="bg-[#2CB67D] text-black font-semibold text-center rounded-xl py-2 px-6"
-              >
-                TO DO
-              </div>
-            </button>
+            </section>
 
-            <!-- READ -->
-            <button
-              id="read"
-              title="Drag and drop task to read"
-              class="flex flex-col items-center"
+            <section
+              id="crud-operation-btns"
+              class="flex flex-row gap-6 justify-between items-center px-7 pb-2"
             >
-              <div class="flex items-center no-drag">
-                <h1 class="text-2xl font-bold text-[#F4D35E]">R</h1>
-                <p class="text-base mt-1 text-gray-300 tracking-wide">EAD</p>
-              </div>
-              <div
-                class="bg-[#F4D35E] text-black font-semibold text-center rounded-xl py-2 px-6 no-drag"
+              <!-- CREATE -->
+              <button
+                title="Click to add a new task"
+                class="flex flex-col items-center hover:cursor-pointer"
+                id="create-new-todo-page"
               >
-                VIEW TASKS
-              </div>
-            </button>
+                <div class="flex items-center">
+                  <h1 class="text-2xl font-bold text-[#2CB67D]">C</h1>
+                  <p class="text-base mt-1 text-gray-300 tracking-wide">
+                    REATE
+                  </p>
+                </div>
+                <div
+                  class="bg-[#2CB67D] text-black font-semibold text-center rounded-xl py-2 px-6"
+                >
+                  TO DO
+                </div>
+              </button>
+              <!-- READ -->
+              <button
+                id="read"
+                title="Drag and drop task to read"
+                class="flex flex-col items-center"
+              >
+                <div class="flex items-center no-drag">
+                  <h1 class="text-2xl font-bold text-[#F4D35E]">R</h1>
+                  <p class="text-base mt-1 text-gray-300 tracking-wide">EAD</p>
+                </div>
+                <div
+                  class="bg-[#F4D35E] text-black font-semibold text-center rounded-xl py-2 px-6 no-drag"
+                >
+                  VIEW TASKS
+                </div>
+              </button>
 
-            <!-- UPDATE -->
-            <button
-              id="update"
-              title="Drag and drop task to update"
-              class="flex flex-col items-center"
-            >
-              <div class="flex items-center">
-                <h1 class="text-2xl font-bold text-[#1C52F0]">U</h1>
-                <p class="text-base mt-1 text-gray-300 tracking-wide">PDATE</p>
-              </div>
-              <div
-                class="bg-[#1C52F0] text-white font-semibold text-center rounded-xl py-2 px-6"
+              <!-- UPDATE -->
+              <button
+                id="update"
+                title="Drag and drop task to update"
+                class="flex flex-col items-center"
               >
-                MODIFY TASK
-              </div>
-            </button>
+                <div class="flex items-center">
+                  <h1 class="text-2xl font-bold text-[#1C52F0]">U</h1>
+                  <p class="text-base mt-1 text-gray-300 tracking-wide">
+                    PDATE
+                  </p>
+                </div>
+                <div
+                  class="bg-[#1C52F0] text-white font-semibold text-center rounded-xl py-2 px-6"
+                >
+                  MODIFY TASK
+                </div>
+              </button>
 
-            <!-- DELETE -->
-            <button
-              id="delete"
-              title="Drag and drop task to delete"
-              class="flex flex-col items-center"
-            >
-              <div class="flex items-center">
-                <h1 class="text-2xl font-bold text-[#FF3D3D]">D</h1>
-                <p class="text-base mt-1 text-gray-300 tracking-wide">ELETE</p>
-              </div>
-              <div
-                class="bg-[#FF3D3D] text-white font-semibold text-center rounded-xl py-2 px-6"
+              <!-- DELETE -->
+              <button
+                id="delete"
+                title="Drag and drop task to delete"
+                class="flex flex-col items-center"
               >
-                REMOVE TASK
-              </div>
-            </button>
+                <div class="flex items-center">
+                  <h1 class="text-2xl font-bold text-[#FF3D3D]">D</h1>
+                  <p class="text-base mt-1 text-gray-300 tracking-wide">
+                    ELETE
+                  </p>
+                </div>
+                <div
+                  class="bg-[#FF3D3D] text-white font-semibold text-center rounded-xl py-2 px-6"
+                >
+                  REMOVE TASK
+                </div>
+              </button>
+            </section>
           </header>
 
           <!-- SPACE FOR CRUD OPERRATIONS -->
@@ -311,20 +335,35 @@
               <div class="absolute top-2 left-2.5 z-10 flex gap-3.5">
                 <button
                   class="cursor-pointer rounded-full h-[20px] w-[20px] bg-[#2CB67D]"
-                  title="add todo?"
+                  title="Add todo?"
                   id="add-todo"
                 ></button>
 
                 <button
-                  class="close-todo-page cursor-pointer rounded-full h-[20px] w-[20px] bg-[#FF6B6B]"
-                  title="close this page?"
+                  class="close-todo-page cursor-pointer rounded-full h-[20px] w-[20px] bg-[#FF3D3D]"
+                  title="Close this page?"
                 ></button>
 
                 <button
                   class="cursor-pointer rounded-full h-[20px] w-[20px] bg-gray-400"
-                  title="reset form?"
+                  title="Reset form?"
                   id="reset-todo"
                 ></button>
+
+                <div
+                  class="bg-[#0F0F0F] rounded-2xl border border-white/30 flex justify-between items-center py-1 w-15 px-1 gap-2 -translate-y-1"
+                >
+                  <button
+                    class="cursor-pointer rounded-full h-[20px] w-[20px] bg-[#3B82F6]"
+                    title="Add subtask?"
+                    id="add-subtask-btn"
+                  ></button>
+                  <button
+                    class="cursor-pointer rounded-full h-[20px] w-[20px] bg-[#3B82F6]"
+                    title="Add task in?"
+                    id="add-subtask-btn"
+                  ></button>
+                </div>
               </div>
 
               <section
@@ -360,6 +399,12 @@
                 class="flex flex-col relative py-4 justify-center items-center border-b"
               >
                 <p>Description</p>
+                <span
+                  class="count-limit absolute top-2 right-0 flex text-white/50"
+                  >Characters:&nbsp;
+                  <p maxDigit="3" id="current-len-description-input">000</p>
+                  /300</span
+                >
 
                 <div class="relative w-full h-36 grid place-items-center">
                   <textarea
@@ -377,13 +422,6 @@
                     supplies.
                   </p>
                 </div>
-
-                <span
-                  class="count-limit absolute top-2 right-0 flex text-white/50"
-                  >Characters:&nbsp;
-                  <p maxDigit="3" id="current-len-description-input">000</p>
-                  /300</span
-                >
               </section>
 
               <section
@@ -457,7 +495,7 @@
                       data-value="low"
                       class="pl-4 py-1 cursor-pointer hover:bg-[#2ecc71]"
                     >
-                      🟦 Low - Do whenever
+                      🟩 Low - Do whenever
                     </li>
                     <li
                       data-value="medium"
@@ -469,13 +507,13 @@
                       data-value="high"
                       class="pl-4 py-1 cursor-pointer hover:bg-[#e67e22]"
                     >
-                      🟥 High - Do ASAP
+                      🟧 High - Do ASAP
                     </li>
                     <li
                       data-value="urgent"
                       class="pl-4 py-1 cursor-pointer hover:bg-[#e74c3c]"
                     >
-                      🔴 Urgent - Emergency
+                      🟥 Urgent - Emergency
                     </li>
                   </ul>
                 </div>
@@ -489,7 +527,7 @@
                 <span
                   class="absolute top-1 left-0 flex text-white/50"
                   id="tip-box"
-                  >Tip:&nbsp;
+                  >Tips:&nbsp;
                   <ol class="text-center">
                     <li class="leading-4">Double click to edit</li>
                     <li class="leading-4">Click to select</li>

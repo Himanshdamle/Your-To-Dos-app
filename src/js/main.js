@@ -35,10 +35,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const quoteBox = document.querySelector("#quote-box");
 
       if (todoPage && quoteBox) {
-        transitionBetweenPages(todoPage, quoteBox);
+        transitionBetweenPages({ pageCloseEl: todoPage, pageOpenEl: quoteBox });
       }
       if (showTodoCreated && quoteBox) {
-        transitionBetweenPages(showTodoCreated, quoteBox);
+        transitionBetweenPages({
+          pageCloseEl: showTodoCreated,
+          pageOpenEl: quoteBox,
+        });
       }
 
       resetTodoPageFunc(false);

@@ -2,7 +2,9 @@ import {
   transitionBetweenPages,
   addInYoursTodo,
   addInHTML,
-  initializeDragBehaviour,
+  resetTodoPageFunc,
+  resetTodoPageUI,
+  showToDoPage,
 } from "./core.js";
 import { backend } from "./todo.js";
 
@@ -24,6 +26,22 @@ export function setupEventListeners() {
     tags: [],
   };
 
+  function addTodoInBackend(todoDetailsObject) {
+    const newTodo = { ...todoDetailsObject, id: crypto.randomUUID() };
+    backend(newTodo, "todos");
+    addInHTML(
+      [newTodo],
+      document.querySelector("#left-main"),
+      {
+        allowCRUD: true,
+        localTodoVarName: "todos",
+        todoMainSide: document.querySelector("#left-main"),
+      },
+      true // add only new todo to the 'pendingTodosSection'.
+    );
+  }
+
+  // reset match current typed character lenght of input fields
   window.typingInputIds.forEach((eachId) => {
     const input = document.getElementById(eachId);
     const key = input.name;
@@ -44,6 +62,7 @@ export function setupEventListeners() {
     });
   });
 
+  // reset quick fill current date and time
   document.querySelector("#quick-fill").addEventListener("click", () => {
     const now = new Date();
 
@@ -66,6 +85,7 @@ export function setupEventListeners() {
     window.currTodoDetails.time = formattedTime;
   });
 
+  // reset add new todo
   document.querySelector("#add-todo").addEventListener("click", () => {
     if (
       window.currTodoDetails.heading === "" ||
@@ -80,10 +100,10 @@ export function setupEventListeners() {
       window.currTodoDetails.time = `${hours}:${minutes}`;
     }
 
-    transitionBetweenPages(
-      document.querySelector("#todo-page"),
-      document.querySelector("#show-todo-created")
-    );
+    transitionBetweenPages({
+      pageCloseEl: "#todo-page",
+      pageOpenEl: "#show-todo-created",
+    });
 
     document.querySelector("#todo-name").innerText =
       window.currTodoDetails.heading;
@@ -105,22 +125,34 @@ export function setupEventListeners() {
         window.getTodoData.actualID
       );
     } else {
-      const newTodo = { ...window.currTodoDetails, id: crypto.randomUUID() };
-      backend(newTodo, "todos");
-      addInHTML(
-        [newTodo],
-        document.querySelector("#left-main"),
-        {
-          allowCRUD: true,
-          localTodoVarName: "todos",
-          todoMainSide: document.querySelector("#left-main"),
-        },
-        true // add only new todo to the 'pendingTodosSection'.
-      );
+      addTodoInBackend(window.currTodoDetails);
     }
   });
 
+  // reset input fields
   document.querySelector("#reset-todo").addEventListener("click", () => {
     resetTodoPageFunc(true);
+  });
+
+  // add sub task
+  document.querySelector("#add-subtask-btn").addEventListener("click", () => {
+    if (window.currTodoDetails.heading === "") return;
+    addTodoInBackend(window.currTodoDetails);
+
+    const parentTask = document.querySelector("#task-parent");
+    parentTask.innerText = window.currTodoDetails.heading;
+
+    resetTodoPageFunc(true);
+    resetTodoPageUI(true);
+    showToDoPage();
+
+    transitionBetweenPages({
+      pageCloseEl: "#crud-operation-btns",
+      pageOpenEl: "#task-path",
+      blur: 10,
+      scale: 1.1,
+      duration: 0.3,
+      display: "flex",
+    });
   });
 }
