@@ -54,3 +54,7 @@ select {
   border-style: dashed;
   border-color: #2cb67d;
 }
+
+.active {
+  color: #0f0f0f;
+}

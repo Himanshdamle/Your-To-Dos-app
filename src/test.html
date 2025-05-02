@@ -2,67 +2,64 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Selectable Example</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/selectable.js@latest/selectable.min.css"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>toggle</title>
+
     <style>
-      #container {
+      body {
+        background: black;
+        color: white;
+      }
+      .toggle_wrapper {
         display: flex;
-        flex-wrap: wrap;
-        height: 100vh;
-        width: 100vw;
+        border: 1px solid #fff;
+        border-radius: 32px;
+        width: max-content;
         gap: 10px;
-        padding: 20px;
+        padding: 5px 10px 5px 10px;
+        position: relative;
       }
-      .item {
-        width: 80px;
-        height: 80px;
-        background-color: #ccc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 2px solid transparent;
-        user-select: none;
+      .toggle {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        border: 1px solid black;
       }
-      .ui-selected {
-        border-color: #1e90ff;
-        background-color: #d0e8ff;
+      .togg_1,
+      .togg_2 {
+        cursor: pointer;
+        padding: 2px 4px 2px 4px;
       }
-      .ui-selecting {
-        border-color: #1e90ff;
-        border-style: dashed;
-        background-color: #d0e8ff;
+      .bg_1,
+      .bg_2 {
+        color: black;
+      }
+      .slider {
+        height: 100%;
+        width: 100%;
+        background-color: #fff;
+        position: absolute;
+
+        z-index: -1;
+        top: 5px;
+        border-radius: 32px;
       }
     </style>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/gsap.min.js"
+      integrity="sha512-f6bQMg6nkSRw/xfHw5BCbISe/dJjXrVGfz9BSDwhZtiErHwk7ifbmBEtF9vFW8UNIQPhV2uEFVyI/UHob9r7Cw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="test.js" defer></script>
   </head>
   <body>
-    <div id="container">
-      <div class="item">1</div>
-      <div class="item">2</div>
-      <div class="item">3</div>
-      <div class="item">4</div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/selectable.js@latest/selectable.min.js"></script>
-    <script>
-      const selectable = new Selectable({
-        appendTo: "body",
-        filter: ".item",
-        toggle: true,
-        lasso: {
-          border: "2px solid #1e90ff",
-          backgroundColor: "rgba(30, 144, 255, 0.1)",
-        },
-      });
-
-      document.addEventListener("click", (e) => {
-        // If the clicked element is NOT one of the items
-        if (!e.target.closest(".item")) {
-          selectable.clear(); // deselect all
-        }
-      });
-    </script>
+    <section class="toggle_wrapper">
+      <div class="slider"></div>
+      <div class="togg_1 bg_1">TASK CATEGORY</div>
+      <div class="togg_2">TASK</div>
+    </section>
   </body>
 </html>

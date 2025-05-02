@@ -5,8 +5,9 @@ import {
   resetTodoPageFunc,
   resetTodoPageUI,
   showToDoPage,
+  initToggleSlider,
 } from "./core.js";
-import { backend } from "./todo.js";
+import { backend, pickedTodoData } from "./todo.js";
 
 export function setupEventListeners() {
   window.typingInputIds = [
@@ -24,10 +25,16 @@ export function setupEventListeners() {
     time: "",
     priority: "",
     tags: [],
+    isFolder: false,
+    isFile: false,
+    childOf: null,
   };
 
   function addTodoInBackend(todoDetailsObject) {
-    const newTodo = { ...todoDetailsObject, id: crypto.randomUUID() };
+    const newTodo = {
+      ...todoDetailsObject.todoObject,
+      id: crypto.randomUUID(),
+    };
     backend(newTodo, "todos");
     addInHTML(
       [newTodo],
@@ -41,7 +48,7 @@ export function setupEventListeners() {
     );
   }
 
-  // reset match current typed character lenght of input fields
+  //  match current typed character lenght of input fields
   window.typingInputIds.forEach((eachId) => {
     const input = document.getElementById(eachId);
     const key = input.name;
@@ -125,7 +132,7 @@ export function setupEventListeners() {
         window.getTodoData.actualID
       );
     } else {
-      addTodoInBackend(window.currTodoDetails);
+      addTodoInBackend({ todoObject: window.currTodoDetails });
     }
   });
 
@@ -135,24 +142,170 @@ export function setupEventListeners() {
   });
 
   // add sub task
-  document.querySelector("#add-subtask-btn").addEventListener("click", () => {
-    if (window.currTodoDetails.heading === "") return;
-    addTodoInBackend(window.currTodoDetails);
+  const headingArr = [];
+  let once = true;
+  function fileFunc(headingList = headingArr) {
+    window.currTodoDetails.isFile = true;
+    window.currTodoDetails.childOf = headingList[headingList.length - 1];
+  }
+  function folderFunc(heading, headingList = headingArr) {
+    window.currTodoDetails.isFolder = true;
+    window.currTodoDetails.childOf = headingList[headingList.length - 1];
+    headingArr.push(heading);
+  }
+  function nestFolder(isFolderBtn, heading) {
+    if (!isFolderBtn) return;
 
-    const parentTask = document.querySelector("#task-parent");
-    parentTask.innerText = window.currTodoDetails.heading;
+    console.log(isFolderBtn);
+    const parentID = heading.replace(/\s+/g, "");
+    taskPath.innerHTML += `
+        <div class="text-xl flex gap-2 items-center">
+          <p
+            id="task-parent-${parentID}"
+            class="hover:bg-[#1A1A1A] rounded-lg transition-all duration-300 hover:border border-white/30 py-1 px-2 cursor-pointer"
+          ></p>
+          <span>></span>
+          <p
+                class="border-dashed border-2 border-white/30 py-1 px-2  rounded-lg cursor-not-allowed"
+              >
+                Drop task folder to open.
+          </p>
+        </div>
+        `;
+    const parentTask = document.querySelector(`#task-parent-${parentID}`);
+    parentTask.innerText = heading;
+  }
 
-    resetTodoPageFunc(true);
-    resetTodoPageUI(true);
-    showToDoPage();
+  // create a task folder (task category)
+  const taskPath = document.querySelector("#task-path");
+  document
+    .querySelector("#create-task-folder")
+    .addEventListener("click", () => {
+      const heading = window.currTodoDetails.heading;
 
-    transitionBetweenPages({
-      pageCloseEl: "#crud-operation-btns",
-      pageOpenEl: "#task-path",
-      blur: 10,
-      scale: 1.1,
-      duration: 0.3,
-      display: "flex",
+      if (heading === "") return;
+
+      const folderOrFile = document.querySelector(".active");
+      const isFolderBtn =
+        folderOrFile.getAttribute("data-isfolderbtn") === "true" || "true";
+
+      // nestFolder(isFolderBtn, heading);
+
+      const toggleWrapper = document.querySelector(".toggle_wrapper");
+      if (once) {
+        folderFunc(heading);
+        nestFolder(true, heading);
+        // intialize toggle b/w task folder & sub task
+        toggleWrapper.classList.remove("hidden");
+        initToggleSlider(toggleWrapper);
+      }
+      if (!isFolderBtn) {
+        console.log("created a file (parallel)");
+        fileFunc();
+      } else {
+        console.log("created a folder (parallel)");
+        fileFunc();
+        folderFunc(heading);
+      }
+
+      addTodoInBackend({
+        todoObject: window.currTodoDetails,
+        isFolder: true,
+      });
+
+      transitionBetweenPages({
+        pageCloseEl: "#crud-operation-btns",
+        pageOpenEl: "#task-path",
+        blur: 10,
+        scale: 1.1,
+        duration: 0.3,
+        display: "flex",
+      });
+
+      resetTodoPageFunc(true);
+      resetTodoPageUI(true);
+      showToDoPage();
+
+      once = false;
+    });
+
+  // // create a task file (sub task)
+  // document.querySelector("#add-subtask-btn").addEventListener("click", () => {
+  //   const heading = window.currTodoDetails.heading;
+  //   nestFolder(true, heading);
+
+  //   addTodoInBackend({
+  //     todoObject: window.currTodoDetails,
+  //   });
+
+  //   transitionBetweenPages({
+  //     pageCloseEl: "#crud-operation-btns",
+  //     pageOpenEl: "#task-path",
+  //     blur: 10,
+  //     scale: 1.1,
+  //     duration: 0.3,
+  //     display: "flex",
+  //   });
+
+  //   resetTodoPageFunc(true);
+  //   resetTodoPageUI(true);
+  //   showToDoPage();
+  // });
+
+  const articleWrappers = document.querySelectorAll(".article-wrappers");
+
+  articleWrappers.forEach((todoCard) => {
+    todoCard.addEventListener("click", () => {
+      console.log("openFolder");
+    });
+  });
+}
+
+// download todo as notepad.
+export function downloadTodos(downloadBtns) {
+  downloadBtns.forEach((button) => {
+    button.addEventListener("click", () => {
+      const storageKey = button.getAttribute("localtodovarname");
+      const todoID = button.getAttribute("todoid");
+      const todoDetails = pickedTodoData(storageKey, null, todoID).matchedId;
+
+      const formatted = [todoDetails]
+        .map((todo) => {
+          return `
+  ==================== 📌 TODO ====================
+            
+  📝 Title     : ${todo.heading}
+  🗓️  Due Date  : ${todo.date}
+  ⏰ Time      : ${todo.time}
+  🎯 Priority  : ${todo.priority.toUpperCase()}
+  🏷️  Tags      : ${todo.tags.length ? "#" + todo.tags.join(", #") : "None"}
+  📝 Description:\n
+           ${todo.description}
+  
+  ======================================================
+            
+              `;
+        })
+        .join("\n\n");
+
+      const blob = new Blob([formatted], { type: "text/plain" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      const safeTitle = todoDetails.heading
+        .replace(/[^a-z0-9]/gi, "_")
+        .toLowerCase();
+
+      // Then use it as the file name
+      a.download = `todo_${safeTitle}.txt`;
+
+      // Simulate click
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+
+      // Cleanup
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
     });
   });
 }

@@ -68,13 +68,17 @@ export function readTodo(getTodoData) {
   showToDoPage();
 }
 
-export function pickedTodoData(localTodoVarName, pickedItemHTML) {
+export function pickedTodoData(
+  localTodoVarName,
+  pickedItemHTML,
+  pickedItemHTMLID
+) {
   const JSONData = JSON.parse(localStorage.getItem(localTodoVarName)) || [];
-  const actualID = pickedItemHTML.id;
+  const actualID = pickedItemHTMLID || pickedItemHTML.id;
   const matchedId = JSONData.find((arr) => arr.id === actualID);
 
   return {
-    matchedId: matchedId,
+    matchedId,
     localStorageIndex: JSONData.indexOf(matchedId),
     actualID,
   };

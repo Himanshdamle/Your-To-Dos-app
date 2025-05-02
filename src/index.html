@@ -233,18 +233,7 @@
             <section
               id="task-path"
               class="hidden w-full h-full mx-1.5 justify-start items-center"
-            >
-              <div class="text-xl flex gap-2 items-center">
-                <p
-                  id="task-parent"
-                  class="hover:bg-[#1A1A1A] rounded-lg transition-all duration-300 hover:border border-white/30 py-1 px-2 cursor-pointer"
-                >
-                  Coding karte raho
-                </p>
-                <span>></span>
-                <p></p>
-              </div>
-            </section>
+            ></section>
 
             <section
               id="crud-operation-btns"
@@ -351,19 +340,40 @@
                 ></button>
 
                 <div
-                  class="bg-[#0F0F0F] rounded-2xl border border-white/30 flex justify-between items-center py-1 w-15 px-1 gap-2 -translate-y-1"
+                  class="bg-[#0F0F0F] rounded-2xl border border-white/30 justify-between items-center py-1 px-1 -translate-y-1 flex w-max gap-1.5"
                 >
                   <button
                     class="cursor-pointer rounded-full h-[20px] w-[20px] bg-[#3B82F6]"
-                    title="Add subtask?"
-                    id="add-subtask-btn"
+                    title="create task folder"
+                    id="create-task-folder"
                   ></button>
                   <button
                     class="cursor-pointer rounded-full h-[20px] w-[20px] bg-[#3B82F6]"
-                    title="Add task in?"
+                    title="Add subtask"
                     id="add-subtask-btn"
                   ></button>
                 </div>
+
+                <section
+                  class="toggle_wrapper flex gap-2.5 w-max bg-[#0F0F0F] rounded-2xl border border-white/30 justify-between items-center py-1 px-2 -translate-y-1 relative hidden"
+                >
+                  <div class="slider absolute bg-white rounded-2xl -z-1"></div>
+                  <button
+                    class="toggle_btn active cursor-pointer"
+                    title="create task folder"
+                    data-isfolderbtn="true"
+                  >
+                    TASK CATEGORY
+                  </button>
+
+                  <button
+                    class="toggle_btn cursor-pointer"
+                    title="Add subtask"
+                    data-isfolderbtn="false"
+                  >
+                    SUB TASK
+                  </button>
+                </section>
               </div>
 
               <section

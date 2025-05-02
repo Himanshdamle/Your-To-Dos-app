@@ -6,6 +6,8 @@ import {
   deleteTodo,
 } from "./todo.js";
 
+import { downloadTodos } from "./event.js";
+
 /**
  * Animates smooth in/out transitions for elements using GSAP.
  */
@@ -130,6 +132,54 @@ export function transitionBetweenPages(settings = {}) {
     },
     true
   );
+}
+
+/**
+ * Transitions between two pages using smoothInnOutTransition.
+ * 
+ * HTML STRUC. REQ. :
+ * 
+ * <section class="toggle_wrapper">
+    <div class="slider"></div>
+    <div class="toggle_btn active">TASK CATEGORY</div>
+    <div class="toggle_btn">TASK</div>
+  </section>
+ */
+export function initToggleSlider(wrapperSelector) {
+  const wrapper = wrapperSelector || document.querySelector(wrapperSelector);
+  if (!wrapper) return;
+
+  const buttons = wrapper.querySelectorAll(".toggle_btn");
+  const slider = wrapper.querySelector(".slider");
+
+  if (!buttons.length || !slider) return;
+
+  let activeBtn = wrapper.querySelector(".toggle_btn.active") || buttons[0];
+  buttons.forEach((btn) => btn.classList.remove("active"));
+  activeBtn.classList.add("active");
+
+  // Initial position of slider
+  gsap.set(slider, {
+    width: activeBtn.offsetWidth + 10,
+    height: activeBtn.offsetHeight,
+    left: activeBtn.offsetLeft - 10 / 2,
+  });
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (btn.classList.contains("active")) return;
+
+      buttons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      gsap.to(slider, {
+        width: btn.offsetWidth + 10,
+        left: btn.offsetLeft - 10 / 2,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    });
+  });
 }
 
 /**
@@ -303,10 +353,11 @@ export function statusColors(count) {
  * Adds a to-do item's HTML representation to the DOM.
  */
 export function addInYoursTodo(
-  isExpiredTodo,
+  looksSettings,
   userLatestTodo,
   mainDirection,
-  id
+  id,
+  localTodoVarName
 ) {
   if (!userLatestTodo) return;
 
@@ -340,11 +391,39 @@ export function addInYoursTodo(
       )}] relative -top-2.5 -left-2.5 block rounded-full"></span>
     </span>
 
-    ${isExpiredTodo ? expiredSticker : ""}
+    ${looksSettings.isExpired ? expiredSticker : ""}
     <header class="flex flex-col pb-2 justify-center items-center border-b">
       <h3 id="show-heading" class="text-center w-[95%] font-bold text-2xl italic">
         ${userLatestTodo.heading}
       </h3>
+
+      <div class="absolute z-50 right-1.5 top-1 ">
+      ${
+        looksSettings.isFolder
+          ? `<button class="rotate-90">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
+      </button>`
+          : ""
+      }
+        <button 
+              class="cursor-pointer download-todo"
+        title="download todo as notepad format"
+              todoid="${userLatestTodo.id}"
+        localTodoVarName="${localTodoVarName}"
+      >
+            <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 -960 960 960"
+        width="24px"
+        fill="#FFFFFF"
+      >
+        <path
+          d="m720-120 160-160-56-56-64 64v-167h-80v167l-64-64-56 56 160 160ZM560 0v-80h320V0H560ZM240-160q-33 0-56.5-23.5T160-240v-560q0-33 23.5-56.5T240-880h280l240 240v121h-80v-81H480v-200H240v560h240v80H240Zm0-80v-560 560Z"
+        />
+      </svg>
+      </button>
+      </div>
     </header>
 
     <div class="flex flex-col py-2 relative justify-center items-center">
@@ -356,16 +435,25 @@ export function addInYoursTodo(
     </div>
   `;
 
+  const folder = looksSettings.isFolder
+    ? `folder-${userLatestTodo.heading.split(" ").join("-")}`
+    : "";
+
+  const file = userLatestTodo.isFile
+    ? `file-${userLatestTodo.heading.split(" ").join("-")}`
+    : "";
+  const childOf = `child-of-${userLatestTodo.childOf}`;
+
   if (id && window.updated) {
     const element = document.getElementById(id);
     element.innerHTML = todoHTML;
   } else {
     const crossMarkerClassTw =
       "before:content-[''] before:absolute before:w-[200%] before:h-[1px] before:bg-white before:block z-[100] before:rotate-30 before:-left-[75%] before:translate-y-10 overflow-hidden";
-    const addCrossMarker = isExpiredTodo ? crossMarkerClassTw : "";
+    const addCrossMarker = looksSettings.isExpired ? crossMarkerClassTw : "";
 
     mainDirection.innerHTML += `
-      <article class="grid gap-3 relative z-50 max-w-[300px] w-full overflow-hidden" title="${userLatestTodo.heading}">
+      <article class="grid gap-3 ${folder} ${file} ${childOf} relative z-50 max-w-[300px] w-full overflow-hidden" title="${userLatestTodo.heading}">
         <div class="grid place-items-end">
           <header class="relative z-10 w-full text-sm font-medium pl-8 before:pl-3 mb-1.5 before:content-[''] before:absolute before:w-full before:h-[1px] before:left-4 before:bottom-0 before:bg-white">
             ${localeDateString}
@@ -380,6 +468,8 @@ export function addInYoursTodo(
       </article>
     `;
   }
+
+  downloadTodos([document.querySelector(`[todoid="${userLatestTodo.id}"]`)]);
 }
 
 /**
@@ -430,11 +520,6 @@ export function addInHTML(
   `;
 
     let articleWrapper = document.createElement("div");
-    // const awsParent = document.createElement("section");
-    // awsParent.id = `${noSpaceID}-article-wrappers-parent`;
-
-    // const ddSection = main.querySelector(`#${noSpaceID}`);
-    // ddSection.append(awsParent);
     articleWrapper.classList.add(
       "article-wrappers",
       "grid",
@@ -450,7 +535,16 @@ export function addInHTML(
 
     groupedData[todoDate].forEach((json) => {
       if (isExpired) expiredTodoCount++;
-      addInYoursTodo(isExpired, json, articleWrapper);
+      addInYoursTodo(
+        {
+          isExpired,
+          isFolder: json.isFolder,
+        },
+        json,
+        articleWrapper,
+        null,
+        initializeDragBehaviourParams.localTodoVarName
+      );
     });
   });
 
