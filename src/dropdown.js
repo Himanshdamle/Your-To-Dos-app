@@ -12,6 +12,7 @@ function createAnimatedDropdown({
     high: "  🟥 High - Do ASAP",
     urgent: " 🔴 Urgent - Emergency",
   };
+
   let selectedValue = "";
   let isOpen = false;
   const duration = 0.5;
@@ -25,6 +26,7 @@ function createAnimatedDropdown({
 
   const openDropdown = () => {
     menu.classList.remove("hidden");
+
     gsap.set(menu, { height: 0 });
     gsap.to(menu, {
       height: "auto",

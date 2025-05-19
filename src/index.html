@@ -52,7 +52,7 @@
           <header
             class="text-4xl pt-5 pb-2 w-full text-center font-bold grid place-items-center"
           >
-            YOUR'S TO DO
+            YOUR TO-DOs
           </header>
 
           <main
@@ -90,7 +90,7 @@
                     class="absolute bottom-[50%] text-nowrap translate-y-[50%] left-1.5 opacity-50 pointer-events-none psuedo-placeholder"
                   >
                     <b>Search by - </b>
-                    <i class="font-light">TAG NAME</i>
+                    <i class="font-light" id="search-by">TAG NAME</i>
                   </p>
                 </div>
               </div>
@@ -252,7 +252,7 @@
                   </p>
                 </div>
                 <div
-                  class="bg-[#2CB67D] text-black font-semibold text-center rounded-xl py-2 px-6"
+                  class="bg-[#2CB67D] text-black font-semibold text-center rounded-xl py-2 px-6 hover:scale-110 hover:bg-[#008950] transition-all duration-350"
                 >
                   TO DO
                 </div>
@@ -338,21 +338,6 @@
                   title="Reset form?"
                   id="reset-todo"
                 ></button>
-
-                <div
-                  class="bg-[#0F0F0F] rounded-2xl border border-white/30 justify-between items-center py-1 px-1 -translate-y-1 flex w-max gap-1.5"
-                >
-                  <button
-                    class="cursor-pointer rounded-full h-[20px] w-[20px] bg-[#3B82F6]"
-                    title="create task folder"
-                    id="create-task-folder"
-                  ></button>
-                  <button
-                    class="cursor-pointer rounded-full h-[20px] w-[20px] bg-[#3B82F6]"
-                    title="Add subtask"
-                    id="add-subtask-btn"
-                  ></button>
-                </div>
 
                 <section
                   class="toggle_wrapper flex gap-2.5 w-max bg-[#0F0F0F] rounded-2xl border border-white/30 justify-between items-center py-1 px-2 -translate-y-1 relative hidden"
@@ -649,25 +634,6 @@
               </section>
             </div>
 
-            <!-- SHOW TODO CREATED SUCESSFULLY -->
-            <span
-              class="bg-[#1A1A1A] hidden relative border rounded-2xl p-4 text-3xl flex-col gap-2.5 justify-center items-center"
-              id="show-todo-created"
-            >
-              <button
-                class="close-todo-page cursor-pointer absolute top-2 left-2.5 z-10 rounded-full h-[20px] w-[20px] bg-[#FF6B6B]"
-                title="close this page?"
-              ></button>
-              <p
-                id="todo-name"
-                class="font-black text-4xl italic text-center p-1.5 w-96 break-words"
-              >
-                code
-              </p>
-              to do created succesfully
-              <p class="rotate-90 text-7xl font-medium">:)</p></span
-            >
-
             <!-- SHOW AFFIRMATIONS AND QUOTES -->
             <div
               id="quote-box"
@@ -679,10 +645,102 @@
                 <h2 id="author" class="font-bold"></h2>
               </div>
             </div>
+
+            <!-- SHOW DELETE CONFIRMATION POPUP FOR TO-DO-->
+            <section
+              class="rounded-xl overflow-hidden text-2xl border border-[#FF3D3D] bg-[#2c1f1fa4] backdrop-blur-xl py-2 hidden"
+              id="delete-confirmation-box"
+            >
+              <article
+                class="relative before:absolute before:bg-white before:h-[1px] before:w-full w-full before:top-0 before:left-[-45%] before:rotate-90"
+              >
+                <!-- HEADING -->
+                <div
+                  class="text-3xl font-bold flex gap-2 border-b px-7.5 pb-1.5"
+                >
+                  <p class="text-[#FF3D3D]">DELETE</p>
+                  <p>TO-DO ?</p>
+                </div>
+
+                <!-- SOME ENGAGING TEXT BUTTONS -->
+                <div
+                  class="font-medium px-7.5 pt-1.5 mt-1.5 pb-1.5 mb-2 flex flex-col gap-2.5"
+                >
+                  <p class="leading-4">POOF!</p>
+                  <p class="leading-4">This task will be gone forever.</p>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div
+                  class="px-7.5 flex flex-row justify-around items-center pt-1.5 pb-1.5"
+                >
+                  <button
+                    class="rounded-[5px] bg-[#2CB67D] flex flex-row gap-1 py-1 px-1.5 cursor-pointer hover:scale-110 hover:bg-[#008950] transition-all duration-350"
+                    id="cancle-delete"
+                  >
+                    <img
+                      src="assets/cancle_delete.svg"
+                      alt="cancle deletation of todo"
+                      class="scale-110"
+                    />
+
+                    <p>CANCLE</p>
+                  </button>
+                  <button
+                    class="rounded-[5px] bg-[#FF3D3D] flex flex-row gap-1 py-1 px-1.5 cursor-pointer hover:scale-110 hover:bg-[#E40000] transition-all duration-350"
+                    id="delete-to-do"
+                  >
+                    <img
+                      src="assets/delete svg.svg"
+                      alt="delete"
+                      class="scale-110"
+                    />
+
+                    <p>DELETE</p>
+                  </button>
+                </div>
+              </article>
+            </section>
           </main>
 
           <!-- DOWN NAV BAR CHILD -->
-          <footer class="flex border-t-[1px] pt-1.5">
+          <footer class="flex border-t-[1px] pt-1.5 relative">
+            <!-- MESSAGE POPUP -->
+            <section
+              class="text-3xl rounded-xl border border-[#1EA86F] bg-[#30a57438] px-4 py-2 flex flex-row gap-4 items-center absolute top-[-100%] z-[200] left-[50%] translate-x-[-50%] w-max"
+              id="message-popup"
+            >
+              <article>
+                <p class="font-bold" id="message">
+                  "But grociers" To-Do completed
+                </p>
+                <p class="font-light">SUCESSFULLY</p>
+              </article>
+
+              <article>
+                <button
+                  class="rounded-full bg-[#008950] w-[50px] h-[50px] flex justify-center items-center cursor-pointer"
+                  title="close"
+                >
+                  <div
+                    class="bg-[#00FF96] w-[80%] h-[80%] rounded-full text-center"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="45px"
+                      viewBox="0 -960 960 960"
+                      width="45px"
+                      fill="#000000"
+                    >
+                      <path
+                        d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"
+                      />
+                    </svg>
+                  </div>
+                </button>
+              </article>
+            </section>
+
             <!-- PROGRESS SECTION -->
             <section class="w-full border-r-[1px]">
               <h1
@@ -774,7 +832,7 @@
                   class="h-full items-center cursor-pointer"
                 >
                   <img
-                    class="w-14 h-14 border border-white/30 object-cover rounded-full hover:scale-130 transition-transform duration-300 ease-in-out"
+                    class="w-14 h-14 border border-white/30 object-cover rounded-full scale-120 hover:scale-130 transition-transform duration-300 ease-in-out"
                     src=""
                     alt="user_profile_picture"
                   />
@@ -841,7 +899,7 @@
           <header
             class="text-[1.9rem] w-full pt-5 pb-2 grid place-items-center text-center font-bold"
           >
-            COMPLETED TO DO
+            COMPLETED TO-DOs
           </header>
 
           <main

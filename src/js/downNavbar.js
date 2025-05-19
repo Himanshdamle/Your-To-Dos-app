@@ -90,7 +90,7 @@ export function middle() {
 
     function getUserPfp() {
       const selectPhotoBtn = document.querySelector("#select-user-photo");
-      const img = selectPhotoBtn.querySelector("img");
+      let img = selectPhotoBtn.querySelector("img");
 
       img.src =
         localStorage.getItem("userPfp") ||

@@ -1,37 +1,77 @@
-const toggle1 = document.querySelector(".togg_1");
-const toggle2 = document.querySelector(".togg_2");
-const slider = document.querySelector(".slider");
+const h1 = document.querySelector("h1");
+const wordList = ["HIMANSH", "ABHAY"];
 
-// Set initial position
-const toggle1Rect = toggle1.getBoundingClientRect();
-gsap.set(slider, {
-  height: toggle1Rect.height,
-  width: toggle1Rect.width,
-  left: toggle1.offsetLeft,
+const tl = gsap.timeline({
+  defaults: {
+    duration: 0.3,
+    ease: "power1.inOut",
+  },
 });
 
-toggle1.addEventListener("click", () => {
-  if (toggle1.classList.contains("bg_1")) return; // already active
+const wordWrapper = document.querySelector("span");
 
-  toggle1.classList.add("bg_1");
-  toggle2.classList.remove("bg_2");
-
-  gsap.to(slider, {
-    width: toggle1.offsetWidth,
-    left: toggle1.offsetLeft,
-    duration: 0.5,
+let count = 0;
+let letters = [];
+function animate(wordWrapper) {
+  const tl2 = gsap.timeline({
+    defaults: {
+      duration: 0.3,
+      ease: "power1.inOut",
+    },
+    onComplete() {
+      count++;
+      if (count === wordList.length) {
+        console.log("done", letters);
+        animateFromStart();
+        count = 0;
+      }
+    },
   });
-});
 
-toggle2.addEventListener("click", () => {
-  if (toggle2.classList.contains("bg_2")) return; // already active
+  wordWrapper.querySelectorAll("h1").forEach((h1) => {
+    tl2.to(h1, {
+      y: "-200%",
+      onComplete() {
+        gsap.set(h1, { y: "100%" });
+      },
+    });
+  });
+}
 
-  toggle2.classList.add("bg_2");
-  toggle1.classList.remove("bg_1");
+function animateFromStart() {
+  letters.forEach((h1List) => {
+    h1List.forEach((h1) => {
+      tl.to(h1, {
+        y: 0,
+      });
+    });
+  });
+}
 
-  gsap.to(slider, {
-    width: toggle2.offsetWidth,
-    left: toggle2.offsetLeft,
-    duration: 0.5,
+wordList.forEach((element, index) => {
+  const el = document.createElement("div");
+  el.id = element;
+
+  letters.push([]);
+  for (let i = 0; i < element.length; i++) {
+    const word = element[i];
+
+    const h1 = document.createElement("h1");
+    h1.textContent = word;
+    el.append(h1);
+
+    letters.at(-1).push(h1);
+
+    tl.to(h1, {
+      y: "-100%",
+    });
+  }
+  wordWrapper.append(el);
+  el.classList.add("flex", "gap-0.5", "font-medium");
+  tl.add(() => {
+    console.log(`✅ Done animating word: ${element}`);
+    setTimeout(() => {
+      animate(document.querySelector(`#${element}`));
+    }, 1000);
   });
 });

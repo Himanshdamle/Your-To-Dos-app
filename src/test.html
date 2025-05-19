@@ -3,63 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>toggle</title>
-
-    <style>
-      body {
-        background: black;
-        color: white;
-      }
-      .toggle_wrapper {
-        display: flex;
-        border: 1px solid #fff;
-        border-radius: 32px;
-        width: max-content;
-        gap: 10px;
-        padding: 5px 10px 5px 10px;
-        position: relative;
-      }
-      .toggle {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        border: 1px solid black;
-      }
-      .togg_1,
-      .togg_2 {
-        cursor: pointer;
-        padding: 2px 4px 2px 4px;
-      }
-      .bg_1,
-      .bg_2 {
-        color: black;
-      }
-      .slider {
-        height: 100%;
-        width: 100%;
-        background-color: #fff;
-        position: absolute;
-
-        z-index: -1;
-        top: 5px;
-        border-radius: 32px;
-      }
-    </style>
+    <title>Document</title>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/gsap.min.js"
       integrity="sha512-f6bQMg6nkSRw/xfHw5BCbISe/dJjXrVGfz9BSDwhZtiErHwk7ifbmBEtF9vFW8UNIQPhV2uEFVyI/UHob9r7Cw=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+    <!-- TAILWIND -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/selectable.js@latest/selectable.min.css"
+    />
     <script src="test.js" defer></script>
   </head>
   <body>
-    <section class="toggle_wrapper">
-      <div class="slider"></div>
-      <div class="togg_1 bg_1">TASK CATEGORY</div>
-      <div class="togg_2">TASK</div>
-    </section>
+    <span class="overflow-hidden flex flex-col gap-0.5 text-5xl"> </span>
   </body>
 </html>

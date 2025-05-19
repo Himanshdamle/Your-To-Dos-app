@@ -47,6 +47,9 @@ export function smoothInnOutTransition(gsapSettings, play, currentDisplay) {
       duration: gsapSettings.duration,
       onComplete() {
         gsap.set(body, { overflow: bodyOverflow });
+
+        if (gsapSettings.onCompleteTransition)
+          gsapSettings.onCompleteTransition();
       },
     });
   }
@@ -393,18 +396,11 @@ export function addInYoursTodo(
 
     ${looksSettings.isExpired ? expiredSticker : ""}
     <header class="flex flex-col pb-2 justify-center items-center border-b">
-      <h3 id="show-heading" class="text-center w-[95%] font-bold text-2xl italic">
+      <h3 id="show-heading" class="text-center max-w-[185px] truncate  font-bold text-2xl italic">
         ${userLatestTodo.heading}
       </h3>
 
-      <div class="absolute z-50 right-1.5 top-1 ">
-      ${
-        looksSettings.isFolder
-          ? `<button class="rotate-90">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
-      </button>`
-          : ""
-      }
+      <div class="absolute z-50 right-1.5 top-1 opacity-0 download-todo-button-parent">
         <button 
               class="cursor-pointer download-todo"
         title="download todo as notepad format"
@@ -428,21 +424,12 @@ export function addInYoursTodo(
 
     <div class="flex flex-col py-2 relative justify-center items-center">
       <span
-        class="flex text-xl gap-2 w-full justify-center items-center"
+        class="flex text-xl gap-2 w-full justify-center items-center font-light"
       >
         ${tagsHTMLPresentation || "No tags provided."}
       </span>
     </div>
   `;
-
-  const folder = looksSettings.isFolder
-    ? `folder-${userLatestTodo.heading.split(" ").join("-")}`
-    : "";
-
-  const file = userLatestTodo.isFile
-    ? `file-${userLatestTodo.heading.split(" ").join("-")}`
-    : "";
-  const childOf = `child-of-${userLatestTodo.childOf}`;
 
   if (id && window.updated) {
     const element = document.getElementById(id);
@@ -453,7 +440,7 @@ export function addInYoursTodo(
     const addCrossMarker = looksSettings.isExpired ? crossMarkerClassTw : "";
 
     mainDirection.innerHTML += `
-      <article class="grid gap-3 ${folder} ${file} ${childOf} relative z-50 max-w-[300px] w-full overflow-hidden" title="${userLatestTodo.heading}">
+      <article class="grid gap-3 relative z-50 max-w-[300px] w-full overflow-hidden" title="${userLatestTodo.heading}">
         <div class="grid place-items-end">
           <header class="relative z-10 w-full text-sm font-medium pl-8 before:pl-3 mb-1.5 before:content-[''] before:absolute before:w-full before:h-[1px] before:left-4 before:bottom-0 before:bg-white">
             ${localeDateString}
@@ -538,7 +525,6 @@ export function addInHTML(
       addInYoursTodo(
         {
           isExpired,
-          isFolder: json.isFolder,
         },
         json,
         articleWrapper,
@@ -568,6 +554,17 @@ export function addInHTML(
 }
 
 /**
+ * shows **ONLY** a perticular card(page) at a perticular container at one time.
+ */
+export function showThis(page, atContainer) {
+  page.classList.toggle("hidden");
+
+  [...atContainer.children].forEach((el) => {
+    if (el !== page) el.style.display = "none";
+  });
+}
+
+/**
  * Shows the to-do page with animations and placeholder updates.
  */
 export function showToDoPage() {
@@ -591,9 +588,7 @@ export function showToDoPage() {
       false
     );
 
-    [...midMain.children].forEach((el) => {
-      if (el !== todoPage) el.style.display = "none";
-    });
+    showThis(todoPage, midMain);
   }
 
   psuedoPlaceholdersCURD.forEach((placeholder, crudInputIndex) => {
@@ -809,12 +804,54 @@ export function initializeDragBehaviour(getSettings) {
 
           if (elID === "#update") update(getTodoData.matchedId);
           else if (elID === "#read") readTodo(getTodoData.matchedId);
-          else if (elID === "#delete")
-            deleteTodo(
-              getSettings.localTodoVarName,
-              getTodoData.localStorageIndex,
-              getTodoData.actualID
+          else if (elID === "#delete") {
+            const confimationBox = document.querySelector(
+              "#delete-confirmation-box"
             );
+            const midMain = document.querySelector("#mid-main");
+            if (!confimationBox) return;
+
+            const transitionOptions = {
+              el: confimationBox,
+              duration: 0.5,
+              ease: "power2.out",
+              blur: 20,
+              scale: 1.2,
+            };
+
+            smoothInnOutTransition(
+              {
+                ...transitionOptions,
+                opacity: 1,
+                onCompleteTransition() {
+                  showThis(confimationBox, midMain);
+                },
+              },
+              false
+            );
+
+            function closeConfirmationPage() {
+              smoothInnOutTransition({ ...transitionOptions }, true);
+            }
+
+            // When user DOES**NOT** confirmed to delete to-do
+            const cancleDeleteBtn = document.querySelector("#cancle-delete");
+            cancleDeleteBtn.addEventListener("click", () => {
+              closeConfirmationPage();
+            });
+
+            // When user confirmed to delete to-do
+            const deleteToDoBtn = document.querySelector("#delete-to-do");
+            deleteToDoBtn.addEventListener("click", () => {
+              deleteTodo(
+                getSettings.localTodoVarName,
+                getTodoData.localStorageIndex,
+                getTodoData.actualID
+              );
+
+              closeConfirmationPage();
+            });
+          }
         });
       },
     });

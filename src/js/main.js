@@ -28,20 +28,14 @@ document.addEventListener("DOMContentLoaded", () => {
   middle();
 
   const closeTodoButtons = document.querySelectorAll(".close-todo-page");
+
   closeTodoButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
       const todoPage = document.querySelector("#todo-page");
-      const showTodoCreated = document.querySelector("#show-todo-created");
       const quoteBox = document.querySelector("#quote-box");
 
       if (todoPage && quoteBox) {
         transitionBetweenPages({ pageCloseEl: todoPage, pageOpenEl: quoteBox });
-      }
-      if (showTodoCreated && quoteBox) {
-        transitionBetweenPages({
-          pageCloseEl: showTodoCreated,
-          pageOpenEl: quoteBox,
-        });
       }
 
       resetTodoPageFunc(false);

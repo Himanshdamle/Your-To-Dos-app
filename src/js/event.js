@@ -3,9 +3,7 @@ import {
   addInYoursTodo,
   addInHTML,
   resetTodoPageFunc,
-  resetTodoPageUI,
-  showToDoPage,
-  initToggleSlider,
+  smoothInnOutTransition,
 } from "./core.js";
 import { backend, pickedTodoData } from "./todo.js";
 
@@ -109,7 +107,7 @@ export function setupEventListeners() {
 
     transitionBetweenPages({
       pageCloseEl: "#todo-page",
-      pageOpenEl: "#show-todo-created",
+      pageOpenEl: "#quote-box",
     });
 
     document.querySelector("#todo-name").innerText =
@@ -141,122 +139,39 @@ export function setupEventListeners() {
     resetTodoPageFunc(true);
   });
 
-  // add sub task
-  const headingArr = [];
-  let once = true;
-  function fileFunc(headingList = headingArr) {
-    window.currTodoDetails.isFile = true;
-    window.currTodoDetails.childOf = headingList[headingList.length - 1];
-  }
-  function folderFunc(heading, headingList = headingArr) {
-    window.currTodoDetails.isFolder = true;
-    window.currTodoDetails.childOf = headingList[headingList.length - 1];
-    headingArr.push(heading);
-  }
-  function nestFolder(isFolderBtn, heading) {
-    if (!isFolderBtn) return;
+  // MouseEnter && MouseLeave ---> todo card
+  const todoCardList = document.querySelectorAll(".todo-card");
 
-    console.log(isFolderBtn);
-    const parentID = heading.replace(/\s+/g, "");
-    taskPath.innerHTML += `
-        <div class="text-xl flex gap-2 items-center">
-          <p
-            id="task-parent-${parentID}"
-            class="hover:bg-[#1A1A1A] rounded-lg transition-all duration-300 hover:border border-white/30 py-1 px-2 cursor-pointer"
-          ></p>
-          <span>></span>
-          <p
-                class="border-dashed border-2 border-white/30 py-1 px-2  rounded-lg cursor-not-allowed"
-              >
-                Drop task folder to open.
-          </p>
-        </div>
-        `;
-    const parentTask = document.querySelector(`#task-parent-${parentID}`);
-    parentTask.innerText = heading;
-  }
+  todoCardList.forEach((todoCard) => {
+    const downloadButton = todoCard.querySelector(
+      ".download-todo-button-parent"
+    );
 
-  // create a task folder (task category)
-  const taskPath = document.querySelector("#task-path");
-  document
-    .querySelector("#create-task-folder")
-    .addEventListener("click", () => {
-      const heading = window.currTodoDetails.heading;
-
-      if (heading === "") return;
-
-      const folderOrFile = document.querySelector(".active");
-      const isFolderBtn =
-        folderOrFile.getAttribute("data-isfolderbtn") === "true" || "true";
-
-      // nestFolder(isFolderBtn, heading);
-
-      const toggleWrapper = document.querySelector(".toggle_wrapper");
-      if (once) {
-        folderFunc(heading);
-        nestFolder(true, heading);
-        // intialize toggle b/w task folder & sub task
-        toggleWrapper.classList.remove("hidden");
-        initToggleSlider(toggleWrapper);
-      }
-      if (!isFolderBtn) {
-        console.log("created a file (parallel)");
-        fileFunc();
-      } else {
-        console.log("created a folder (parallel)");
-        fileFunc();
-        folderFunc(heading);
-      }
-
-      addTodoInBackend({
-        todoObject: window.currTodoDetails,
-        isFolder: true,
-      });
-
-      transitionBetweenPages({
-        pageCloseEl: "#crud-operation-btns",
-        pageOpenEl: "#task-path",
-        blur: 10,
-        scale: 1.1,
-        duration: 0.3,
-        display: "flex",
-      });
-
-      resetTodoPageFunc(true);
-      resetTodoPageUI(true);
-      showToDoPage();
-
-      once = false;
+    // mouseenter event listner code.
+    todoCard.addEventListener("mouseenter", () => {
+      smoothInnOutTransition(
+        {
+          el: downloadButton,
+          blur: 10,
+          opacity: 1,
+          scale: 1.5,
+          duration: 0.3,
+        },
+        false // means show
+      );
     });
 
-  // // create a task file (sub task)
-  // document.querySelector("#add-subtask-btn").addEventListener("click", () => {
-  //   const heading = window.currTodoDetails.heading;
-  //   nestFolder(true, heading);
-
-  //   addTodoInBackend({
-  //     todoObject: window.currTodoDetails,
-  //   });
-
-  //   transitionBetweenPages({
-  //     pageCloseEl: "#crud-operation-btns",
-  //     pageOpenEl: "#task-path",
-  //     blur: 10,
-  //     scale: 1.1,
-  //     duration: 0.3,
-  //     display: "flex",
-  //   });
-
-  //   resetTodoPageFunc(true);
-  //   resetTodoPageUI(true);
-  //   showToDoPage();
-  // });
-
-  const articleWrappers = document.querySelectorAll(".article-wrappers");
-
-  articleWrappers.forEach((todoCard) => {
-    todoCard.addEventListener("click", () => {
-      console.log("openFolder");
+    // mouseLeave event listner code.
+    todoCard.addEventListener("mouseleave", () => {
+      smoothInnOutTransition(
+        {
+          el: downloadButton,
+          blur: 10,
+          scale: 1.5,
+          duration: 0.3,
+        },
+        true // means hide
+      );
     });
   });
 }
