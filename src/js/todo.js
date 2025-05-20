@@ -1,4 +1,10 @@
-import { showToDoPage, resetTodoPageUI } from "./core.js";
+import {
+  showToDoPage,
+  resetTodoPageUI,
+  showMessagePopup,
+  showThis,
+  smoothInnOutTransition,
+} from "./core.js";
 
 export function backend(
   todoObject,
@@ -53,12 +59,65 @@ export function update(todoData) {
   showToDoPage();
 }
 
+export function deleteTodoFRONTEND(delTodoFunction) {
+  const confimationBox = document.querySelector("#delete-confirmation-box");
+  const midMain = document.querySelector("#mid-main");
+  if (!confimationBox) return;
+
+  const transitionOptions = {
+    el: confimationBox,
+    duration: 0.5,
+    ease: "power2.out",
+    blur: 20,
+    scale: 1.2,
+  };
+
+  showThis(confimationBox, midMain);
+  smoothInnOutTransition(
+    {
+      ...transitionOptions,
+      opacity: 1,
+    },
+    false
+  );
+
+  function closeConfirmationPage() {
+    smoothInnOutTransition({ ...transitionOptions }, true);
+  }
+
+  // When user DOES **NOT** confirmed to delete to-do
+  const cancleDeleteBtn = document.querySelector("#cancle-delete");
+  cancleDeleteBtn.addEventListener("click", () => {
+    closeConfirmationPage();
+  });
+
+  // When user confirmed to delete to-do
+  const deleteToDoBtn = document.querySelector("#delete-to-do");
+
+  deleteToDoBtn.addEventListener("click", () => {
+    const deletedTodoData = delTodoFunction();
+
+    closeConfirmationPage();
+
+    // THEN SHOW MESSAGE.
+    showMessagePopup({
+      invertedBoldTxt: deletedTodoData.heading,
+      boldTxt: "To-Do deleted",
+    });
+  });
+}
+
 export function deleteTodo(localTodoVarName, todoIndex, getHtmlID) {
   document.getElementById(getHtmlID).remove();
 
   const JSONData = JSON.parse(localStorage.getItem(localTodoVarName)) || [];
+
+  const deleteTodoData = JSONData[todoIndex];
+
   JSONData.splice(todoIndex, 1);
   localStorage.setItem(localTodoVarName, JSON.stringify(JSONData));
+
+  return deleteTodoData;
 }
 
 export function readTodo(getTodoData) {

@@ -4,8 +4,16 @@ import {
   addInHTML,
   resetTodoPageFunc,
   smoothInnOutTransition,
+  showMessagePopup,
 } from "./core.js";
-import { backend, pickedTodoData } from "./todo.js";
+import {
+  backend,
+  pickedTodoData,
+  update,
+  readTodo,
+  deleteTodoFRONTEND,
+  deleteTodo,
+} from "./todo.js";
 
 export function setupEventListeners() {
   window.typingInputIds = [
@@ -23,9 +31,6 @@ export function setupEventListeners() {
     time: "",
     priority: "",
     tags: [],
-    isFolder: false,
-    isFile: false,
-    childOf: null,
   };
 
   function addTodoInBackend(todoDetailsObject) {
@@ -110,9 +115,6 @@ export function setupEventListeners() {
       pageOpenEl: "#quote-box",
     });
 
-    document.querySelector("#todo-name").innerText =
-      window.currTodoDetails.heading;
-
     if (window.updated) {
       backend(
         window.currTodoDetails,
@@ -129,8 +131,15 @@ export function setupEventListeners() {
         document.querySelector("#left-main"),
         window.getTodoData.actualID
       );
+
+      console.log("update kiya");
     } else {
       addTodoInBackend({ todoObject: window.currTodoDetails });
+
+      showMessagePopup({
+        invertedBoldTxt: window.currTodoDetails.heading,
+        lightTxt: "To-Do created succesfully",
+      });
     }
   });
 
@@ -222,5 +231,39 @@ export function downloadTodos(downloadBtns) {
       document.body.removeChild(a);
       URL.revokeObjectURL(a.href);
     });
+  });
+}
+
+export function clickToCrudOperation(todoCard) {
+  todoCard.setAttribute("tabindex", "0");
+
+  // FOCUS
+  todoCard.addEventListener("click", () => {
+    todoCard.classList.add("border-[#2CB67D]");
+  });
+
+  todoCard.addEventListener("blur", () => {
+    todoCard.classList.remove("border-[#2CB67D]");
+  });
+
+  // KEY DOWN EVENT
+  todoCard.addEventListener("keydown", (e) => {
+    const keyPressed = e.key.toLowerCase();
+
+    const getTodoData = pickedTodoData(
+      todoCard.getAttribute("data-localtodovarname"),
+      todoCard
+    );
+
+    if (keyPressed === "r") readTodo(getTodoData.matchedId);
+    else if (keyPressed === "u") update(getTodoData.matchedId);
+    else if (keyPressed === "d")
+      deleteTodoFRONTEND(() =>
+        deleteTodo(
+          todoCard.getAttribute("data-localtodovarname"),
+          getTodoData.localStorageIndex,
+          getTodoData.actualID
+        )
+      );
   });
 }

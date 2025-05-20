@@ -43,11 +43,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  const createTodoButton = document.querySelector("#create-new-todo-page");
-  createTodoButton.addEventListener("click", () => {
+  function openCreateToDoPage() {
     resetTodoPageFunc(true);
     resetTodoPageUI(true);
     showToDoPage();
+  }
+
+  const createTodoButton = document.querySelector("#create-new-todo-page");
+  createTodoButton.addEventListener("click", () => {
+    openCreateToDoPage();
+  });
+
+  document.body.addEventListener("keydown", (e) => {
+    if (e.key.toLowerCase() === "c") openCreateToDoPage();
   });
 
   const tags = document.querySelectorAll(".tag");

@@ -4,9 +4,10 @@ import {
   update,
   readTodo,
   deleteTodo,
+  deleteTodoFRONTEND,
 } from "./todo.js";
 
-import { downloadTodos } from "./event.js";
+import { downloadTodos, clickToCrudOperation } from "./event.js";
 
 /**
  * Animates smooth in/out transitions for elements using GSAP.
@@ -53,6 +54,132 @@ export function smoothInnOutTransition(gsapSettings, play, currentDisplay) {
       },
     });
   }
+}
+
+/**
+ * Show message to user.
+ */
+let isAnimationRunning = false;
+let timerAnimation = null;
+export function showMessagePopup(messageObject) {
+  const messageBold = document.querySelector("#message-bold");
+  const messageLight = document.querySelector("#message-light");
+
+  /**
+   * SEND MESSAGE TO USER IN FORMAT.
+   */
+  messageBold.textContent = `"${messageObject.invertedBoldTxt || ""}" ${
+    messageObject.boldTxt || ""
+  }`;
+  messageLight.textContent = messageObject.lightTxt || "SUCESSFULLY";
+
+  const messageBox = document.querySelector("#message-popup");
+
+  const timer = document.querySelector("#timer-message-popup-end");
+
+  //POPOUT GSAP SETTINGS.
+  const popOut = {
+    top: "-130%",
+    opacity: 0,
+    filter: "blur(10px)",
+    duration: 0.5,
+    scale: 0.9,
+    ease: "power3.in",
+
+    onComplete() {
+      messageBox.style.display = "none";
+    },
+  };
+
+  // CHANGE CONIC TIMER ANGLE (ARC)
+  function timerCircle(angle) {
+    timer.style.background = `
+      conic-gradient(
+        #008950 0deg ${angle}deg,
+        transparent ${angle}deg 360deg
+      )`;
+  }
+
+  //POPOUT ANIMATION FUNC.
+  function popOutAnimation(onAnimationComplete) {
+    gsap.to(messageBox, {
+      ...popOut,
+      onComplete() {
+        onAnimationComplete();
+      },
+    });
+  }
+
+  if (isAnimationRunning || timerAnimation) {
+    timerAnimation.kill();
+
+    popOutAnimation(() => {
+      isAnimationRunning = false;
+      timerCircle(0);
+    });
+  }
+
+  // TIMER COUNTDOWN ANIMATION
+  timerAnimation = gsap.to(
+    { count: 0 },
+    {
+      count: 360,
+      duration: 3,
+      ease: "none", // linear timing
+
+      onUpdate() {
+        isAnimationRunning = true;
+        const angle = this.targets()[0].count;
+        timerCircle(angle);
+      },
+
+      onComplete() {
+        popOutAnimation(() => {
+          isAnimationRunning = false;
+        });
+      },
+    }
+  );
+
+  // INITIAL SETUP
+  timerAnimation.pause();
+  gsap.set(messageBox, {
+    display: "flex",
+    filter: "blur(10px)",
+    opacity: 0.3,
+    scale: 0.9,
+    top: "-30%",
+  });
+
+  // POPUP ANIMATION
+  gsap.to(messageBox, {
+    filter: "blur(0px)",
+    opacity: 1,
+    top: "-100%",
+    duration: 0.5,
+    scale: 1,
+    ease: "power4.out",
+    onComplete() {
+      timerAnimation.play();
+    },
+  });
+
+  // CONTROL MESSAGE WITH **HOVER TO STOP** || **CLICK TO POPOUT** || **UNHOVER TO PLAY TIMER**
+  timer.addEventListener("click", () => {
+    popOutAnimation(() => {
+      isAnimationRunning = false;
+      timerCircle(0);
+    });
+    timerAnimation.kill();
+  });
+
+  messageBox.addEventListener("mouseenter", () => {
+    timerAnimation.pause();
+  });
+
+  messageBox.addEventListener("mouseleave", () => {
+    timerAnimation.play();
+  });
 }
 
 /**
@@ -447,6 +574,7 @@ export function addInYoursTodo(
           </header>
           <section
             id="${userLatestTodo.id}"
+            data-localTodoVarName="${localTodoVarName}"
             class="todo-card bg-[#1A1A1A] relative border max-h-max rounded-2xl p-2 flex-1 w-full cursor-grab ${addCrossMarker}"
           >
             ${todoHTML}
@@ -457,6 +585,7 @@ export function addInYoursTodo(
   }
 
   downloadTodos([document.querySelector(`[todoid="${userLatestTodo.id}"]`)]);
+  clickToCrudOperation(document.getElementById(userLatestTodo.id));
 }
 
 /**
@@ -746,7 +875,7 @@ export function dragAndDropTodos(getLocalTodoVarNameObject) {
   const fromDragVarName = getLocalTodoVarNameObject.dragVarName;
   const toDropVarName = getLocalTodoVarNameObject.dropVarName;
   const evt = getLocalTodoVarNameObject.dragedTodo;
-  console.log(evt);
+
   window.getTodoData = pickedTodoData(
     fromDragVarName,
     evt.item.querySelector(".todo-card")
@@ -804,54 +933,14 @@ export function initializeDragBehaviour(getSettings) {
 
           if (elID === "#update") update(getTodoData.matchedId);
           else if (elID === "#read") readTodo(getTodoData.matchedId);
-          else if (elID === "#delete") {
-            const confimationBox = document.querySelector(
-              "#delete-confirmation-box"
-            );
-            const midMain = document.querySelector("#mid-main");
-            if (!confimationBox) return;
-
-            const transitionOptions = {
-              el: confimationBox,
-              duration: 0.5,
-              ease: "power2.out",
-              blur: 20,
-              scale: 1.2,
-            };
-
-            smoothInnOutTransition(
-              {
-                ...transitionOptions,
-                opacity: 1,
-                onCompleteTransition() {
-                  showThis(confimationBox, midMain);
-                },
-              },
-              false
-            );
-
-            function closeConfirmationPage() {
-              smoothInnOutTransition({ ...transitionOptions }, true);
-            }
-
-            // When user DOES**NOT** confirmed to delete to-do
-            const cancleDeleteBtn = document.querySelector("#cancle-delete");
-            cancleDeleteBtn.addEventListener("click", () => {
-              closeConfirmationPage();
-            });
-
-            // When user confirmed to delete to-do
-            const deleteToDoBtn = document.querySelector("#delete-to-do");
-            deleteToDoBtn.addEventListener("click", () => {
+          else if (elID === "#delete")
+            deleteTodoFRONTEND(() =>
               deleteTodo(
                 getSettings.localTodoVarName,
                 getTodoData.localStorageIndex,
                 getTodoData.actualID
-              );
-
-              closeConfirmationPage();
-            });
-          }
+              )
+            );
         });
       },
     });

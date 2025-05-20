@@ -59,160 +59,162 @@
             id="left-main"
             class="overflow-x-hidden h-full w-full max-w-[526px] mt-8 resize-x flex min-w-[100%] flex-col gap-3.5 overflow-y-scroll items-center"
           >
-            <section
-              class="text-center text-xl italic p-2.5 border h-min max-w-[400px] rounded-lg border-white/30 bg-[#1A1A1A] flex flex-col gap-2"
-            >
-              <!-- SEARCH -->
-              <div
-                class="flex bg-[#0F0F0F] px-3 border rounded-lg border-white/30 relative"
+            <section class="border-b pb-4">
+              <article
+                class="text-center text-xl italic p-2.5 border h-min max-w-[400px] rounded-lg border-white/30 bg-[#1A1A1A] flex flex-col gap-2"
               >
-                <button class="cursor-pointer border-r pr-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#FFFFFF"
-                  >
-                    <path
-                      d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"
-                    />
-                  </svg>
-                </button>
-                <div class="relative">
-                  <input
-                    type="text"
-                    name="search"
-                    id="search-input"
-                    class="p-1.5 font-bold w-full outline-none text-xl italic h-min input"
-                  />
-                  <p
-                    class="absolute bottom-[50%] text-nowrap translate-y-[50%] left-1.5 opacity-50 pointer-events-none psuedo-placeholder"
-                  >
-                    <b>Search by - </b>
-                    <i class="font-light" id="search-by">TAG NAME</i>
-                  </p>
-                </div>
-              </div>
-
-              <!-- FILTER -->
-              <div
-                class="flex justify-around items-center bg-[#0F0F0F] px-3 border rounded-lg border-white/30"
-              >
-                <div class="pr-3 border-r py-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#FFFFFF"
-                  >
-                    <path
-                      d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z"
-                    />
-                  </svg>
-                </div>
-
-                <!-- DATE FILTER -->
-                <section
-                  id="priority-section"
-                  class="flex flex-col justify-center items-center"
+                <!-- SEARCH -->
+                <div
+                  class="flex bg-[#0F0F0F] px-3 border rounded-lg border-white/30 relative"
                 >
-                  <div class="relative w-max">
-                    <button
-                      id="date-filter-input"
-                      class="cursor-pointer border-r border-white/30 pr-2 text-white outline-none appearance-none flex justify-start gap-1 items-center"
+                  <button class="cursor-pointer border-r pr-3">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      fill="#FFFFFF"
                     >
-                      <p>Date</p>
-                    </button>
-
-                    <ul
-                      id="date-filter-dropdown"
-                      class="absolute left-[-150%] overflow-hidden z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-max hidden"
-                    ></ul>
+                      <path
+                        d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"
+                      />
+                    </svg>
+                  </button>
+                  <div class="relative">
+                    <input
+                      type="text"
+                      name="search"
+                      id="search-input"
+                      class="p-1.5 font-bold w-full outline-none text-xl italic h-min input"
+                    />
+                    <p
+                      class="absolute bottom-[50%] text-nowrap translate-y-[50%] left-1.5 opacity-50 pointer-events-none psuedo-placeholder"
+                    >
+                      <b>Search by - </b>
+                      <i class="font-light" id="search-by">TAG NAME</i>
+                    </p>
                   </div>
-                </section>
+                </div>
 
                 <!-- FILTER -->
-                <section
-                  id="priority-section"
-                  class="flex flex-col justify-center items-center"
+                <div
+                  class="flex justify-around items-center bg-[#0F0F0F] px-3 border rounded-lg border-white/30"
                 >
-                  <div class="relative w-max">
-                    <button
-                      id="priority-filter-input"
-                      class="cursor-pointer border-r border-white/30 pr-2 text-white outline-none appearance-none flex justify-start items-center"
+                  <div class="pr-3 border-r py-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      fill="#FFFFFF"
                     >
-                      <p>Priority</p>
-                    </button>
-
-                    <ul
-                      id="priority-filter-dropdown"
-                      class="absolute left-[-100%] overflow-hidden z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-max hidden"
-                    >
-                      <li
-                        data-value="low"
-                        class="text-start pl-2 py-1 cursor-pointer hover:bg-[#2ecc71]"
-                      >
-                        🟦 Low - Do whenever
-                      </li>
-                      <li
-                        data-value="medium"
-                        class="text-start pl-2 py-1 cursor-pointer hover:bg-[#f1c40f]"
-                      >
-                        🟨 Medium - Soon
-                      </li>
-                      <li
-                        data-value="high"
-                        class="text-start pl-2 py-1 cursor-pointer hover:bg-[#e67e22]"
-                      >
-                        🟥 High - Do ASAP
-                      </li>
-                      <li
-                        data-value="urgent"
-                        class="text-start pl-2 py-1 cursor-pointer hover:bg-[#e74c3c]"
-                      >
-                        🔴 Urgent - Emergency
-                      </li>
-                    </ul>
+                      <path
+                        d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z"
+                      />
+                    </svg>
                   </div>
-                </section>
 
-                <!-- STATUS FILTER -->
-                <section
-                  id="priority-section"
-                  class="flex flex-col justify-center items-center"
-                >
-                  <div class="relative w-max">
-                    <button
-                      id="status-filter-input"
-                      class="cursor-pointer border-white/30 text-white outline-none appearance-none flex justify-start items-center"
-                    >
-                      <p>Status</p>
-                    </button>
+                  <!-- DATE FILTER -->
+                  <section
+                    id="priority-section"
+                    class="flex flex-col justify-center items-center"
+                  >
+                    <div class="relative w-max">
+                      <button
+                        id="date-filter-input"
+                        class="cursor-pointer border-r border-white/30 pr-2 text-white outline-none appearance-none flex justify-start gap-1 items-center"
+                      >
+                        <p>Date</p>
+                      </button>
 
-                    <ul
-                      id="status-filter-dropdown"
-                      class="absolute left-[-50%] overflow-hidden z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-max hidden"
-                    >
-                      <li
-                        data-value="low"
-                        class="text-start px-2 py-1 cursor-pointer flex gap-1.5"
+                      <ul
+                        id="date-filter-dropdown"
+                        class="absolute left-[-150%] overflow-hidden z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-max hidden"
+                      ></ul>
+                    </div>
+                  </section>
+
+                  <!-- FILTER -->
+                  <section
+                    id="priority-section"
+                    class="flex flex-col justify-center items-center"
+                  >
+                    <div class="relative w-max">
+                      <button
+                        id="priority-filter-input"
+                        class="cursor-pointer border-r border-white/30 pr-2 text-white outline-none appearance-none flex justify-start items-center"
                       >
-                        <p><b id="expired-todo-count">0</b></p>
-                        EXPIRED
-                      </li>
-                      <li
-                        data-value="medium"
-                        class="text-start px-2 py-1 cursor-pointer flex gap-1.5"
+                        <p>Priority</p>
+                      </button>
+
+                      <ul
+                        id="priority-filter-dropdown"
+                        class="absolute left-[-100%] overflow-hidden z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-max hidden"
                       >
-                        <p><b id="pending-todo-count">0</b></p>
-                        PENDING
-                      </li>
-                    </ul>
-                  </div>
-                </section>
-              </div>
+                        <li
+                          data-value="low"
+                          class="text-start pl-2 py-1 cursor-pointer hover:bg-[#2ecc71]"
+                        >
+                          🟦 Low - Do whenever
+                        </li>
+                        <li
+                          data-value="medium"
+                          class="text-start pl-2 py-1 cursor-pointer hover:bg-[#f1c40f]"
+                        >
+                          🟨 Medium - Soon
+                        </li>
+                        <li
+                          data-value="high"
+                          class="text-start pl-2 py-1 cursor-pointer hover:bg-[#e67e22]"
+                        >
+                          🟥 High - Do ASAP
+                        </li>
+                        <li
+                          data-value="urgent"
+                          class="text-start pl-2 py-1 cursor-pointer hover:bg-[#e74c3c]"
+                        >
+                          🔴 Urgent - Emergency
+                        </li>
+                      </ul>
+                    </div>
+                  </section>
+
+                  <!-- STATUS FILTER -->
+                  <section
+                    id="priority-section"
+                    class="flex flex-col justify-center items-center"
+                  >
+                    <div class="relative w-max">
+                      <button
+                        id="status-filter-input"
+                        class="cursor-pointer border-white/30 text-white outline-none appearance-none flex justify-start items-center"
+                      >
+                        <p>Status</p>
+                      </button>
+
+                      <ul
+                        id="status-filter-dropdown"
+                        class="absolute left-[-50%] overflow-hidden z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-max hidden"
+                      >
+                        <li
+                          data-value="low"
+                          class="text-start px-2 py-1 cursor-pointer flex gap-1.5"
+                        >
+                          <p><b id="expired-todo-count">0</b></p>
+                          EXPIRED
+                        </li>
+                        <li
+                          data-value="medium"
+                          class="text-start px-2 py-1 cursor-pointer flex gap-1.5"
+                        >
+                          <p><b id="pending-todo-count">0</b></p>
+                          PENDING
+                        </li>
+                      </ul>
+                    </div>
+                  </section>
+                </div>
+              </article>
             </section>
           </main>
         </section>
@@ -639,10 +641,15 @@
               id="quote-box"
               class="w-fit flex flex-col max-w-[70%] gap-3 text-3xl"
             >
-              <h1 id="quotes" class="font-extralight italic"></h1>
+              <h1 id="quotes" class="font-semibold italic">
+                The way to get started is to quit talking and begin doing.
+              </h1>
               <div class="flex gap-1.5 w-full items-center">
-                <span id="dash-author-before" class="bg-white h-[1px]"></span>
-                <h2 id="author" class="font-bold"></h2>
+                <span
+                  id="dash-author-before"
+                  class="bg-white h-[1px] w-[2ch]"
+                ></span>
+                <h2 id="author" class="font-extralight">Walt Disney</h2>
               </div>
             </div>
 
@@ -664,18 +671,20 @@
 
                 <!-- SOME ENGAGING TEXT BUTTONS -->
                 <div
-                  class="font-medium px-7.5 pt-1.5 mt-1.5 pb-1.5 mb-2 flex flex-col gap-2.5"
+                  class="font-medium px-7.5 pt-2 mt-2 pb-2 mb-2 flex flex-col gap-2.5"
                 >
-                  <p class="leading-4">POOF!</p>
-                  <p class="leading-4">This task will be gone forever.</p>
+                  <p class="leading-4 font-bold">POOF!</p>
+                  <p class="leading-4 font-medium">
+                    This task will be gone forever.
+                  </p>
                 </div>
 
                 <!-- ACTION BUTTONS -->
                 <div
-                  class="px-7.5 flex flex-row justify-around items-center pt-1.5 pb-1.5"
+                  class="px-7.5 flex flex-row justify-around items-center pt-2 pb-2"
                 >
                   <button
-                    class="rounded-[5px] bg-[#2CB67D] flex flex-row gap-1 py-1 px-1.5 cursor-pointer hover:scale-110 hover:bg-[#008950] transition-all duration-350"
+                    class="rounded-[5px] bg-[#2CB67D] flex flex-row gap-1 py-1.5 px-2.5 cursor-pointer hover:scale-110 hover:bg-[#008950] transition-all duration-350"
                     id="cancle-delete"
                   >
                     <img
@@ -684,10 +693,11 @@
                       class="scale-110"
                     />
 
-                    <p>CANCLE</p>
+                    <p>CANCEL</p>
                   </button>
+
                   <button
-                    class="rounded-[5px] bg-[#FF3D3D] flex flex-row gap-1 py-1 px-1.5 cursor-pointer hover:scale-110 hover:bg-[#E40000] transition-all duration-350"
+                    class="rounded-[5px] bg-[#FF3D3D] flex flex-row gap-1 py-1.5 px-2.5 cursor-pointer hover:scale-110 hover:bg-[#E40000] transition-all duration-350"
                     id="delete-to-do"
                   >
                     <img
@@ -707,30 +717,38 @@
           <footer class="flex border-t-[1px] pt-1.5 relative">
             <!-- MESSAGE POPUP -->
             <section
-              class="text-3xl rounded-xl border border-[#1EA86F] bg-[#30a57438] px-4 py-2 flex flex-row gap-4 items-center absolute top-[-100%] z-[200] left-[50%] translate-x-[-50%] w-max"
+              class="text-3xl rounded-xl border border-[#1EA86F] bg-[#30a57438] px-4 py-2 flex flex-row gap-4 items-center absolute z-[200] left-[50%] translate-x-[-50%] w-max"
+              style="display: none"
               id="message-popup"
             >
               <article>
-                <p class="font-bold" id="message">
+                <p class="font-bold" id="message-bold">
                   "But grociers" To-Do completed
                 </p>
-                <p class="font-light">SUCESSFULLY</p>
+                <p class="font-light" id="message-light">SUCESSFULLY</p>
               </article>
 
               <article>
                 <button
-                  class="rounded-full bg-[#008950] w-[50px] h-[50px] flex justify-center items-center cursor-pointer"
+                  class="rounded-full w-[50px] h-[50px] flex justify-center items-center cursor-pointer border border-[#00FF96]"
+                  id="timer-message-popup-end"
+                  style="
+                    background: conic-gradient(
+                      transparent 0deg 0deg,
+                      #008950 0deg 360deg
+                    );
+                  "
                   title="close"
                 >
                   <div
-                    class="bg-[#00FF96] w-[80%] h-[80%] rounded-full text-center"
+                    class="bg-[#00FF96] w-[80%] h-[80%] rounded-full text-center flex justify-center items-center"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       height="45px"
                       viewBox="0 -960 960 960"
                       width="45px"
-                      fill="#000000"
+                      fill="#222"
                     >
                       <path
                         d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"
