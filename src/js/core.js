@@ -64,10 +64,12 @@ let timerAnimation = null;
 export function showMessagePopup(messageObject) {
   const messageBold = document.querySelector("#message-bold");
   const messageLight = document.querySelector("#message-light");
+  const emoji = document.querySelector("#emoji");
 
   /**
    * SEND MESSAGE TO USER IN FORMAT.
    */
+  emoji.textContent = messageObject.emoji;
   messageBold.textContent = `"${messageObject.invertedBoldTxt || ""}" ${
     messageObject.boldTxt || ""
   }`;
@@ -888,14 +890,17 @@ export function dragAndDropTodos(getLocalTodoVarNameObject) {
 
   window.getTodoData = pickedTodoData(
     fromDragVarName,
-    evt.item.querySelector(".todo-card")
+    evt.querySelector(".todo-card")
   );
 
   const JSONData = JSON.parse(localStorage.getItem(fromDragVarName)) || [];
-  JSONData.splice(window.getTodoData.localStorageIndex, 1);
+
+  const movedTodo = JSONData.splice(window.getTodoData.localStorageIndex, 1);
 
   localStorage.setItem(fromDragVarName, JSON.stringify(JSONData));
   backend(window.getTodoData.matchedId, toDropVarName);
+
+  return movedTodo;
 }
 
 /**
@@ -925,7 +930,6 @@ export function initializeDragBehaviour(getSettings) {
 
       // fires when droped a todo card.
       onEnd(evt) {
-        let getTodoData = {};
         const { clientX, clientY } = evt.originalEvent;
         const dropTarget = document.elementFromPoint(clientX, clientY);
 
@@ -936,7 +940,7 @@ export function initializeDragBehaviour(getSettings) {
 
           if (!ancestor) return;
 
-          getTodoData = pickedTodoData(
+          window.getTodoData = pickedTodoData(
             getSettings.localTodoVarName,
             evt.item.querySelector("section")
           );

@@ -2,7 +2,7 @@ import { initializeUI, startQuoteRotation } from "./ui.js";
 import { setupEventListeners } from "./event.js";
 import { hoverEffect, clickingLogic, initializeTagInputs } from "./tag.js";
 import { middle } from "./downNavbar.js";
-import { initializeDragBehaviour } from "./core.js";
+import { initializeDragBehaviour, showMessagePopup } from "./core.js";
 import {
   transitionBetweenPages,
   resetTodoPageFunc,
@@ -84,8 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ghostClass: "drag-ghost",
 
     onAdd(evt) {
-      console.log("droped", evt.to);
-      dragAndDropTodos({
+      const movePendingTodo = dragAndDropTodos({
         dragVarName: "todos",
         dropVarName: "completedTodos",
         dragedTodo: evt.item,
@@ -95,6 +94,13 @@ document.addEventListener("DOMContentLoaded", () => {
         allowCRUD: ["#delete"],
         localTodoVarName: "completedTodos",
         todoMainSide: completedTodosSection,
+      });
+
+      showMessagePopup({
+        invertedBoldTxt: movePendingTodo[0].heading || "To-Do",
+        boldTxt: "Moved to Completed Tasks",
+        lightTxt: " ",
+        emoji: "🥳🎊",
       });
     },
   });
@@ -110,9 +116,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ghostClass: "drag-ghost",
 
     onAdd(evt) {
-      console.log("droped", evt.to);
       // Move todo card from 'completedTodos' back to 'todos'
-      dragAndDropTodos({
+      const moveCompletedTodo = dragAndDropTodos({
         dragVarName: "completedTodos", // dragged FROM 'completedTodos'
         dropVarName: "todos", // dropped INTO todos
         dragedTodo: evt.item,
@@ -123,7 +128,14 @@ document.addEventListener("DOMContentLoaded", () => {
         localTodoVarName: "todos",
         todoMainSide: pendingTodosSection,
       });
+
+      showMessagePopup({
+        invertedBoldTxt: moveCompletedTodo[0].heading || "To-Do",
+        boldTxt: "Moved to Pending Tasks",
+        emoji: "🔄",
+      });
     },
   });
+
   console.timeEnd("Performance");
 });

@@ -103,7 +103,8 @@ export function deleteTodoFRONTEND(delTodoFunction) {
     // THEN SHOW MESSAGE.
     showMessagePopup({
       invertedBoldTxt: deletedTodoData.heading,
-      boldTxt: "To-Do deleted",
+      boldTxt: "Task deleted!",
+      emoji: "🗑️",
     });
   });
 }

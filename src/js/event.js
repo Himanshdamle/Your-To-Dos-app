@@ -6,6 +6,7 @@ import {
   smoothInnOutTransition,
   showMessagePopup,
 } from "./core.js";
+
 import {
   backend,
   pickedTodoData,
@@ -116,6 +117,16 @@ export function setupEventListeners() {
     });
 
     if (window.updated) {
+      if (!window.getTodoData) {
+        showMessagePopup({
+          boldTxt: "ERROR FAILED TO UPDATE",
+          lightTxt: " ",
+          emoji: "❗",
+        });
+
+        return;
+      }
+
       backend(
         window.currTodoDetails,
         "todos",
@@ -134,14 +145,16 @@ export function setupEventListeners() {
 
       showMessagePopup({
         invertedBoldTxt: window.currTodoDetails.heading,
-        lightTxt: "To-Do updated succesfully",
+        boldTxt: "Task updated!",
+        emoji: "✏️🛠️",
       });
     } else {
       addTodoInBackend({ todoObject: window.currTodoDetails });
 
       showMessagePopup({
         invertedBoldTxt: window.currTodoDetails.heading,
-        lightTxt: "To-Do created succesfully",
+        boldTxt: "Task added!",
+        emoji: "✨🚀",
       });
     }
   });
