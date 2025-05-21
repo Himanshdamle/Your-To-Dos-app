@@ -352,16 +352,6 @@ export function resize(inputEl) {
 }
 
 /**
- * Toggles CSS classes for tag hover effects.
- */
-export function toggleClasses(methodName, bgEl) {
-  bgEl.classList[methodName]("scale-100", "bg-span-el-tags-hover-effect");
-  bgEl.style.transformOrigin = `${window.hoverObject?.x || 0}px ${
-    window.hoverObject?.y || 0
-  }px`;
-}
-
-/**
  * Determines the date range for a todo item (e.g., "Expired todo's").
  */
 export function getDateRange(date) {
@@ -416,7 +406,7 @@ export function groupTodosWithDate(todoList) {
 
   // This creates an object `range` where the keys are priority numbers (like 0, 1, 2, etc.)
   // and the values are human-readable date range labels (like "Expired todo's", "Due today", etc.)
-  const range = keysNdValues.keys.reduce((acc, curr) => {
+  const range = keysNdValues.keys.reduce((acc, curr, index) => {
     // Call getDateRange() with a date to get back something like { 0: "Expired todo's" }
     const dateRange = getDateRange(curr);
 
@@ -424,7 +414,7 @@ export function groupTodosWithDate(todoList) {
     const key = Number(Object.keys(dateRange)[0]);
 
     // Use the numeric key as the index and store the label in the accumulator object
-    acc[key] = dateRange[key];
+    acc[key] = { dueDate: dateRange[key], index: index };
     return acc;
   }, {}); // Start with an empty object
 
@@ -438,13 +428,13 @@ export function groupTodosWithDate(todoList) {
     // Sort the keys numerically so that they follow urgency order (0 -> expired, 1 -> today, etc.)
     .sort((a, b) => a + b)
     // Finally, map each key back to its human-readable label
-    .map((value) => range[value]);
+    .map((value) => range[value].dueDate);
 
-  // Result: sortedRange now holds the labels in order like:
-  // ["Expired todo's", "Due today", "due in 2 weeks", ..., "over a year"]
+  const getRangeIndex = Object.values(range);
 
   const nlp = sortedRange.reduce((acc, curr, index) => {
-    const todo = keysNdValues.values[index];
+    const todo = keysNdValues.values[getRangeIndex[index].index];
+
     if (!acc[curr]) {
       acc[curr] = [...todo];
     } else {
@@ -520,6 +510,26 @@ export function addInYoursTodo(
         userLatestTodo.priority
       )}] relative -top-2.5 -left-2.5 block rounded-full"></span>
     </span>
+
+    <span
+       class="absolute -top-1 -left-1 bg-[#00FF96] rounded-full z-[500] flex justify-center items-cente border border-[#008950] w-10 h-10 hidden selected-tick-visual"
+     >
+       <div
+         class="bg-[#00FF96] w-[80%] h-[80%] rounded-full text-center flex justify-center items-centerr"
+       >
+         <svg
+           xmlns="http://www.w3.org/2000/svg"
+           height="45px"
+           viewBox="0 -960 960 960"
+           width="45px"
+           fill="#222"
+         >
+           <path
+             d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"
+           ></path>
+         </svg>
+       </div>
+     </span>
 
     ${looksSettings.isExpired ? expiredSticker : ""}
     <header class="flex flex-col pb-2 justify-center items-center border-b">

@@ -55,7 +55,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.body.addEventListener("keydown", (e) => {
-    if (e.key.toLowerCase() === "c") openCreateToDoPage();
+    const tag = e.target.tagName.toLowerCase();
+    if (tag !== "input" && tag !== "textarea" && e.key.toLowerCase() === "c") {
+      openCreateToDoPage();
+    }
   });
 
   const tags = document.querySelectorAll(".tag");

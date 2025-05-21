@@ -132,7 +132,10 @@ export function setupEventListeners() {
         window.getTodoData.actualID
       );
 
-      console.log("update kiya");
+      showMessagePopup({
+        invertedBoldTxt: window.currTodoDetails.heading,
+        lightTxt: "To-Do updated succesfully",
+      });
     } else {
       addTodoInBackend({ todoObject: window.currTodoDetails });
 
@@ -237,20 +240,24 @@ export function downloadTodos(downloadBtns) {
 export function clickToCrudOperation(todoCard) {
   todoCard.setAttribute("tabindex", "0");
 
+  const selectedTick = todoCard.querySelector(".selected-tick-visual");
+
   // FOCUS
   todoCard.addEventListener("click", () => {
     todoCard.classList.add("border-[#2CB67D]");
+    selectedTick.classList.remove("hidden");
   });
 
   todoCard.addEventListener("blur", () => {
     todoCard.classList.remove("border-[#2CB67D]");
+    selectedTick.classList.add("hidden");
   });
 
   // KEY DOWN EVENT
   todoCard.addEventListener("keydown", (e) => {
     const keyPressed = e.key.toLowerCase();
 
-    const getTodoData = pickedTodoData(
+    window.getTodoData = pickedTodoData(
       todoCard.getAttribute("data-localtodovarname"),
       todoCard
     );

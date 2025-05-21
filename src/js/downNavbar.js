@@ -82,7 +82,9 @@ export function middle() {
       });
 
       userNameInput.addEventListener("blur", () => {
-        userNameInput.value = localStorage.getItem("userName") + "." || "";
+        userNameInput.value = (localStorage.getItem("userName") || "") + ".";
+        console.log(userNameInput.value);
+
         fullStop.style.display = "none";
       });
     }

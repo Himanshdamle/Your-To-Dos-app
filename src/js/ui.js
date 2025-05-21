@@ -53,7 +53,6 @@ export function startQuoteRotation() {
         .then((res) => res.json())
         .then((data) => {
           const quoteData = data.data;
-          console.log(quoteData);
 
           if (quoteData) {
             quote.innerText = `" ${quoteData.quote} "`;
@@ -72,7 +71,6 @@ export function startQuoteRotation() {
       fetch("https://api.allorigins.win/raw?url=https://www.affirmations.dev/")
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (quote) quote.innerHTML = `" ${data.affirmation} "`;
           if (author) author.style.display = "none";
           if (dashAuthorBefore) dashAuthorBefore.style.display = "none";

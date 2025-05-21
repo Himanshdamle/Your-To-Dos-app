@@ -26,10 +26,11 @@ export function backend(
 
 export function update(todoData) {
   window.updated = true;
+
   const dataArray = Object.values(todoData);
   const todoKeys = Object.keys(todoData);
 
-  window.currTodoDetails.id = dataArray[dataArray.length - 1];
+  window.currTodoDetails.id = todoData.id;
 
   window.typingInputIds.forEach((inputid, index) => {
     const el = document.getElementById(inputid);
