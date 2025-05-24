@@ -3,8 +3,8 @@ import {
   addInYoursTodo,
   addInHTML,
   resetTodoPageFunc,
-  smoothInnOutTransition,
   showMessagePopup,
+  closeOpenSmoothAnimation,
 } from "./core.js";
 
 import {
@@ -15,6 +15,8 @@ import {
   deleteTodoFRONTEND,
   deleteTodo,
 } from "./todo.js";
+
+import { showLongText } from "./ui.js";
 
 export function setupEventListeners() {
   window.typingInputIds = [
@@ -172,31 +174,18 @@ export function setupEventListeners() {
       ".download-todo-button-parent"
     );
 
+    const aninateTxt = showLongText(todoCard);
+
     // mouseenter event listner code.
     todoCard.addEventListener("mouseenter", () => {
-      smoothInnOutTransition(
-        {
-          el: downloadButton,
-          blur: 10,
-          opacity: 1,
-          scale: 1.5,
-          duration: 0.3,
-        },
-        false // means show
-      );
+      closeOpenSmoothAnimation(downloadButton).open();
+      aninateTxt.run();
     });
 
     // mouseLeave event listner code.
     todoCard.addEventListener("mouseleave", () => {
-      smoothInnOutTransition(
-        {
-          el: downloadButton,
-          blur: 10,
-          scale: 1.5,
-          duration: 0.3,
-        },
-        true // means hide
-      );
+      closeOpenSmoothAnimation(downloadButton).close();
+      aninateTxt.stop();
     });
   });
 }

@@ -1,4 +1,9 @@
-import { addInHTML, smoothInnOutTransition } from "./core.js";
+import {
+  addInHTML,
+  smoothInnOutTransition,
+  getTaskNumber,
+  getPercentageOf,
+} from "./core.js";
 
 /**
  * Initializes the UI, including todo rendering and placeholder effects.
@@ -7,16 +12,50 @@ export function initializeUI() {
   const pendingTodosSection = document.querySelector("#left-main");
   const completedTodosSection = document.querySelector("#right-main");
 
-  addInHTML("todos", pendingTodosSection, {
+  const renderTaskProcess = {
+    pendingTask: 0,
+    completedTask: 0,
+  };
+
+  const renderTotalTask = {
+    pendingTask: 0,
+    completedTask: 0,
+  };
+
+  const addPendingTask = addInHTML("todos", pendingTodosSection, {
     allowCRUD: true,
     localTodoVarName: "todos",
     todoMainSide: pendingTodosSection,
   });
 
-  addInHTML("completedTodos", completedTodosSection, {
+  const getPendingTaskNumInfo = getTaskNumber(addPendingTask, {
+    selectorDate: "Due this day",
+  });
+  renderTaskProcess.pendingTask = getPendingTaskNumInfo.taskNumber;
+  renderTotalTask.pendingTask = getPendingTaskNumInfo.totalTask;
+
+  const addCompletedTask = addInHTML("completedTodos", completedTodosSection, {
     allowCRUD: ["#delete"],
     localTodoVarName: "completedTodos",
     todoMainSide: completedTodosSection,
+  });
+
+  const getCompletedTaskNumInfo = getTaskNumber(addCompletedTask, {
+    selectorDate: "Due this day",
+  });
+  renderTaskProcess.completedTask = getCompletedTaskNumInfo.taskNumber;
+  renderTotalTask.completedTask = getCompletedTaskNumInfo.totalTask;
+
+  // update todays task progress
+  updateTaskProgress(renderTaskProcess, {
+    task: "todays-task",
+    progress: "progress",
+  });
+
+  // update all time task progress
+  updateTaskProgress(renderTotalTask, {
+    task: "all-time-task",
+    progress: "all-time-progress",
   });
 
   // placeholder effect
@@ -81,6 +120,76 @@ export function startQuoteRotation() {
 }
 
 /**
+ * Animates text horizontally to show it.
+ */
+export function showLongText(txtContainer) {
+  if (!txtContainer) return;
+
+  const txt = txtContainer.querySelector(".show-heading");
+
+  if (!txt) return;
+
+  const maxContainerWidth = 185;
+  const textWidth = txt.scrollWidth;
+
+  const isOverflowing = textWidth > maxContainerWidth;
+
+  if (!isOverflowing) return;
+
+  let animation;
+  let currentAnimation = [];
+
+  function clearAllAnimation() {
+    currentAnimation.forEach((tween) => tween.kill());
+    gsap.set(txt, { clearProps: "all" });
+    currentAnimation = [];
+  }
+
+  function runHorizonrally() {
+    const slide = gsap.to(txt, {
+      x: -textWidth,
+      duration: 5,
+      ease: "linear",
+      onComplete() {
+        const fadeOut = gsap.to(txt, {
+          opacity: 0,
+          duration: 0.5,
+          onComplete() {
+            reSet();
+          },
+        });
+
+        currentAnimation.push(fadeOut);
+      },
+    });
+
+    currentAnimation.push(slide);
+  }
+
+  function reSet() {
+    gsap.set(txt, { x: 0 });
+
+    animation = gsap.to(txt, {
+      opacity: 1,
+      duration: 0.5,
+      onComplete: runHorizonrally,
+    });
+
+    currentAnimation.push(animation);
+  }
+
+  return {
+    run() {
+      clearAllAnimation();
+      reSet();
+    },
+    stop() {
+      clearAllAnimation();
+    },
+  };
+}
+
+/**
  * Animates placeholder effects for input fields.
  */
 function placeholderEffect(psuedoPlaceholder, inputBox) {
@@ -100,4 +209,26 @@ function placeholderEffect(psuedoPlaceholder, inputBox) {
       }
     });
   }
+}
+
+/**
+ * Render's the today's task process bar.
+ */
+function updateTaskProgress(
+  taskNumber,
+  processBarId = { task: "", progress: "" }
+) {
+  const task = document.querySelector(`#${processBarId.task}`);
+  const progress = document.querySelector(`#${processBarId.progress}`);
+
+  const completedTask = taskNumber.completedTask;
+  const totalTask = completedTask + taskNumber.pendingTask;
+
+  //update task bar txt content
+  task.textContent = `${completedTask} / ${totalTask}`;
+
+  // update task bar process fill.
+  progress.classList.add(
+    `w-[${getPercentageOf(completedTask, totalTask).decimal}%]`
+  );
 }

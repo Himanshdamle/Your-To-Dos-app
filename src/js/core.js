@@ -57,6 +57,40 @@ export function smoothInnOutTransition(gsapSettings, play, currentDisplay) {
 }
 
 /**
+ * Animates smooth Close and open animation on any element
+ */
+export function closeOpenSmoothAnimation(element) {
+  const commonSettings = {
+    el: element,
+    blur: 10,
+    scale: 1.5,
+    duration: 0.3,
+  };
+
+  const open = () =>
+    smoothInnOutTransition(
+      {
+        opacity: 1,
+        ...commonSettings,
+      },
+      false // means show
+    );
+
+  const close = () =>
+    smoothInnOutTransition(
+      {
+        ...commonSettings,
+      },
+      true // means hide
+    );
+
+  return {
+    open,
+    close,
+  };
+}
+
+/**
  * Show message to user.
  */
 let isAnimationRunning = false;
@@ -354,6 +388,38 @@ export function resize(inputEl) {
 }
 
 /**
+ * returns number of task in each **due date** like "DUE THIS DAY"
+ */
+export function getTaskNumber(
+  dueDateInfo = { todoDates: undefined },
+  targetedDate = { selectAll: false, selectorDate: "" }
+) {
+  if (!dueDateInfo.todoDates) return { totalTask: 0, taskNumber: 0 };
+
+  const taskNumber = {};
+
+  dueDateInfo.todoDates.forEach((date) => {
+    if (!targetedDate.selectAll && date !== targetedDate.selectorDate) return;
+
+    let countToDo = 0;
+
+    dueDateInfo.userAllToDos[date].forEach(() => {
+      countToDo++;
+    });
+
+    taskNumber[date] = countToDo;
+  });
+
+  return {
+    totalTask: JSON.parse(localStorage.getItem(dueDateInfo.localTodoVarName))
+      .length,
+    taskNumber: targetedDate.selectAll
+      ? taskNumber
+      : taskNumber[targetedDate.selectorDate],
+  };
+}
+
+/**
  * Determines the date range for a todo item (e.g., "Expired todo's").
  */
 export function getDateRange(date) {
@@ -472,6 +538,17 @@ export function statusColors(count) {
 }
 
 /**
+ * gets percentage of any value
+ */
+export function getPercentageOf(currValue, maxValue) {
+  const percentage = (currValue / maxValue) * 100;
+  return {
+    decimal: percentage,
+    roundOff: Math.floor(percentage),
+  };
+}
+
+/**
  * Adds a to-do item's HTML representation to the DOM.
  */
 export function addInYoursTodo(
@@ -535,9 +612,18 @@ export function addInYoursTodo(
 
     ${looksSettings.isExpired ? expiredSticker : ""}
     <header class="flex flex-col pb-2 justify-center items-center border-b">
-      <h3 id="show-heading" class="text-center max-w-[185px] truncate  font-bold text-2xl italic">
-        ${userLatestTodo.heading}
-      </h3>
+     <div class="show-heading-container relative max-w-[185px] w-[185px] text-2xl italic overflow-hidden text-center">
+        <h3 class="show-heading whitespace-nowrap font-bold relative z-10">
+           ${userLatestTodo.heading}
+        </h3>
+
+        <!-- Left gradient -->
+        <div class="absolute left-0 top-0 h-full w-3 bg-gradient-to-r from-[#1A1A1A] to-transparent z-20 pointer-events-none"></div>
+
+        <!-- Right gradient -->
+        <div class="absolute right-0 top-0 h-full w-3 bg-gradient-to-l from-[#1A1A1A] to-transparent z-20 pointer-events-none">
+        </div>       
+     </div>
 
       <div class="absolute z-50 right-1.5 top-1 opacity-0 download-todo-button-parent">
         <button 
@@ -546,7 +632,7 @@ export function addInYoursTodo(
               todoid="${userLatestTodo.id}"
         localTodoVarName="${localTodoVarName}"
       >
-            <svg
+      <svg
         xmlns="http://www.w3.org/2000/svg"
         height="24px"
         viewBox="0 -960 960 960"
@@ -579,7 +665,7 @@ export function addInYoursTodo(
     const addCrossMarker = looksSettings.isExpired ? crossMarkerClassTw : "";
 
     mainDirection.innerHTML += `
-      <article class="grid gap-3 relative z-50 max-w-[300px] w-full overflow-hidden" title="${userLatestTodo.heading}">
+      <article class="grid todo-item gap-3 relative z-50 max-w-[300px] w-full overflow-hidden" title="${userLatestTodo.heading}">
         <div class="grid place-items-end">
           <header class="relative z-10 w-full text-sm font-medium pl-8 before:pl-3 mb-1.5 before:content-[''] before:absolute before:w-full before:h-[1px] before:left-4 before:bottom-0 before:bg-white">
             ${localeDateString}
@@ -603,6 +689,24 @@ export function addInYoursTodo(
 /**
  * Adds all to-do items from localStorage to the DOM, grouped by date range.
  */
+function countTask(JSONData, expiredTodoCount) {
+  const pendingTodoCountPtag = document.querySelector("#pending-todo-count");
+  const expiredTodoCountPtag = document.querySelector("#expired-todo-count");
+
+  const pendingTodoCount = JSONData.length - expiredTodoCount;
+
+  function updateTodoCount(element, count) {
+    if (!element) return;
+
+    element.innerText = count;
+    element.style.color = statusColors(count);
+  }
+
+  // Update the UI
+  updateTodoCount(pendingTodoCountPtag, pendingTodoCount);
+  updateTodoCount(expiredTodoCountPtag, expiredTodoCount);
+}
+
 export function addInHTML(
   localTodoVarName,
   main,
@@ -626,8 +730,10 @@ export function addInHTML(
 
     if (!isDueDateSectionPresent) {
       const wordArray = todoDate.toUpperCase().split(" ");
+
       const first = wordArray[0];
-      const last = wordArray.slice(1, 3).join(" ");
+      const last = wordArray.slice(1, todoDate.length - 1).join(" ");
+
       main.innerHTML += `
       <div id="${noSpaceID}" class="grid cards-wrapper place-items-center gap-2.5 w-full">
         <span
@@ -641,6 +747,7 @@ export function addInHTML(
     }
 
     const dateFilterDropdown = document.querySelector("#date-filter-dropdown");
+
     dateFilterDropdown.innerHTML += `
     <li data-value="${todoDate}" class="text-start px-2 py-1 cursor-pointer">
       Due on <b class="underline"><i>${todoDate}</i></b>
@@ -675,23 +782,14 @@ export function addInHTML(
     });
   });
 
-  const pendingTodoCountPtag = document.querySelector("#pending-todo-count");
-  const expiredTodoCountPtag = document.querySelector("#expired-todo-count");
-
+  countTask(JSONData, expiredTodoCount);
   initializeDragBehaviour(initializeDragBehaviourParams);
 
-  const pendingTodoCount = JSONData.length - expiredTodoCount;
-
-  function updateTodoCount(element, count) {
-    if (!element) return;
-
-    element.innerText = count;
-    element.style.color = statusColors(count);
-  }
-
-  // Update the UI
-  updateTodoCount(pendingTodoCountPtag, pendingTodoCount);
-  updateTodoCount(expiredTodoCountPtag, expiredTodoCount);
+  return {
+    todoDates: Object.keys(groupedData),
+    userAllToDos: groupedData,
+    localTodoVarName,
+  };
 }
 
 /**

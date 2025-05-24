@@ -83,6 +83,8 @@ document.addEventListener("DOMContentLoaded", () => {
     animation: 300,
     ghostClass: "drag-ghost",
 
+    draggable: ".todo-item",
+
     onAdd(evt) {
       const movePendingTodo = dragAndDropTodos({
         dragVarName: "todos",
@@ -114,6 +116,8 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     animation: 300,
     ghostClass: "drag-ghost",
+
+    draggable: ".todo-item",
 
     onAdd(evt) {
       // Move todo card from 'completedTodos' back to 'todos'

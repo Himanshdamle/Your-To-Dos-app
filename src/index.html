@@ -59,7 +59,7 @@
             id="left-main"
             class="overflow-x-hidden h-full w-full max-w-[526px] mt-8 resize-x flex min-w-[100%] flex-col gap-3.5 overflow-y-scroll items-center"
           >
-            <section class="border-b pb-4">
+            <section class="border-b pb-4" id="search-bar">
               <article
                 class="text-center text-xl italic p-2.5 border h-min max-w-[400px] rounded-lg border-white/30 bg-[#1A1A1A] flex flex-col gap-2"
               >
@@ -374,7 +374,7 @@
                     name="heading"
                     id="heading-input"
                     wrap="soft"
-                    class="crud-input capitalize resize-none text-center p-1.5 w-96 font-bold outline-none text-2xl italic border h-min rounded-lg border-white/30 input"
+                    class="crud-input resize-none text-center p-1.5 w-96 font-bold outline-none text-2xl italic border h-min rounded-lg border-white/30 input"
                     maxlength="50"
                   ></textarea>
                   <p
@@ -407,7 +407,7 @@
                   <textarea
                     name="description"
                     id="description-input"
-                    class="crud-input capitalize mx-7 p-1.5 text-xl border w-full h-full resize-none outline-none rounded-lg border-white/30 input"
+                    class="crud-input mx-7 p-1.5 text-xl border w-full h-full resize-none outline-none rounded-lg border-white/30 input"
                     maxlength="250"
                   ></textarea>
                   <p
@@ -728,9 +728,7 @@
                   class="text-4xl w-min flex flex-row justify-center items-center"
                   id="emoji"
                 ></div>
-                <div
-                  class="wrap-normal flex flex-col justify-center items-center"
-                >
+                <div class="wrap-normal flex flex-col justify-end items-center">
                   <p class="font-bold" id="message-bold"></p>
                   <p class="font-light" id="message-light">SUCESSFULLY</p>
                 </div>
@@ -789,11 +787,13 @@
                     class="w-full h-[17px] bg-[#1A1A1A] relative left-0 border rounded-2xl border-white/30"
                   >
                     <div
-                      class="progress-bar-bg-color h-full w-[50%] rounded-2xl hover-animation"
+                      class="progress-bar-bg-color h-full w-[0%] rounded-2xl hover-animation"
+                      id="progress"
                     ></div>
                     <span
                       class="absolute top-0.5 right-2 leading-3 text-sm text-white"
-                      >25 / 50</span
+                      id="todays-task"
+                      >0 / 0</span
                     >
                   </section>
                 </div>
@@ -811,12 +811,13 @@
                     class="w-full flex relative h-[17px] bg-[#1A1A1A] border rounded-2xl border-white/30"
                   >
                     <div
-                      class="progress-bar-bg-color h-full w-[97%] rounded-2xl"
+                      class="progress-bar-bg-color h-full w-[0%] rounded-2xl"
+                      id="all-time-progress"
                     ></div>
                     <span
-                      id="all-time-todo"
                       class="absolute top-0.5 right-2 leading-3 text-sm text-white"
-                      >48 / 50</span
+                      id="all-time-task"
+                      >0 / 0</span
                     >
                   </section>
                 </div>
