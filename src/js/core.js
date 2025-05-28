@@ -9,6 +9,8 @@ import {
 
 import { downloadTodos, clickToCrudOperation } from "./event.js";
 
+import { toggleClasses } from "./tag.js";
+
 /**
  * Animates smooth in/out transitions for elements using GSAP.
  */
@@ -88,6 +90,68 @@ export function closeOpenSmoothAnimation(element) {
     open,
     close,
   };
+}
+
+/**
+ * Animates smooth **Slide in** and **slide out** animation on any element
+ */
+export function slideAnimation(gsapSettings, play) {
+  const element =
+    typeof gsapSettings.el === "string"
+      ? document.querySelector(gsapSettings.el)
+      : gsapSettings.el;
+
+  const slideInDirection = gsapSettings.direction;
+  const slideInValue = gsapSettings.directionValue;
+
+  function onCompleteGsap() {
+    if (gsapSettings.onAnimationComplete) {
+      gsapSettings.onAnimationComplete();
+    }
+  }
+
+  if (play) {
+    // 👉 SLIDE OUT (hide element)
+    gsap.set(element, { display: gsapSettings.display || "block", opacity: 1 });
+
+    const animationConfig = {
+      filter: `blur(${gsapSettings.blur || 10}px)`,
+      opacity: gsapSettings.opacity || 0,
+      duration: gsapSettings.duration || 1,
+      ease: gsapSettings.ease || "none",
+      onComplete() {
+        gsap.set(element, { display: "none" });
+        onCompleteGsap();
+      },
+    };
+
+    if (slideInDirection && slideInValue) {
+      animationConfig[slideInDirection] = slideInValue;
+    }
+
+    gsap.to(element, animationConfig);
+  } else {
+    gsap.set(element, { display: gsapSettings.display || "block" });
+
+    const fromVars = {
+      opacity: 0,
+      filter: `blur(${gsapSettings.blur || 10}px)`,
+    };
+    const toVars = {
+      opacity: 1,
+      filter: "blur(0px)",
+      duration: gsapSettings.duration || 1,
+      ease: gsapSettings.ease || "none",
+      onComplete: onCompleteGsap(),
+    };
+
+    if (slideInDirection && slideInValue !== undefined) {
+      // fromVars[slideInDirection] = slideInValue;
+      toVars[slideInDirection] = "0%";
+    }
+
+    gsap.fromTo(element, fromVars, toVars);
+  }
 }
 
 /**
@@ -411,8 +475,9 @@ export function getTaskNumber(
   });
 
   return {
-    totalTask: JSON.parse(localStorage.getItem(dueDateInfo.localTodoVarName))
-      .length,
+    totalTask:
+      JSON.parse(localStorage.getItem(dueDateInfo.localTodoVarName)).length ||
+      0,
     taskNumber: targetedDate.selectAll
       ? taskNumber
       : taskNumber[targetedDate.selectorDate],
@@ -625,25 +690,27 @@ export function addInYoursTodo(
         </div>       
      </div>
 
-      <div class="absolute z-50 right-1.5 top-1 opacity-0 download-todo-button-parent">
+      <div class="absolute z-50 right-3 top-1 opacity-0 download-todo-button-parent">
         <button 
-              class="cursor-pointer download-todo"
-        title="download todo as notepad format"
-              todoid="${userLatestTodo.id}"
-        localTodoVarName="${localTodoVarName}"
-      >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="24px"
-        viewBox="0 -960 960 960"
-        width="24px"
-        fill="#FFFFFF"
-      >
-        <path
-          d="m720-120 160-160-56-56-64 64v-167h-80v167l-64-64-56 56 160 160ZM560 0v-80h320V0H560ZM240-160q-33 0-56.5-23.5T160-240v-560q0-33 23.5-56.5T240-880h280l240 240v121h-80v-81H480v-200H240v560h240v80H240Zm0-80v-560 560Z"
-        />
-      </svg>
-      </button>
+            class="cursor-pointer download-todo"
+            title="Controls"
+            todoid="${userLatestTodo.id}"
+            localTodoVarName="${localTodoVarName}"
+        >
+          <span
+            class="flex flex-col gap-0.5 hover:scale-115 transition-[scale] duration-300"
+          >
+            <div
+              class="w-1.5 h-1.5 bg-white rounded-full"
+            ></div>
+            <div
+              class="w-1.5 h-1.5 bg-white rounded-full"
+            ></div>
+            <div
+              class="w-1.5 h-1.5 bg-white rounded-full"
+            ></div>
+          </span>
+        </button>
       </div>
     </header>
 
@@ -667,7 +734,7 @@ export function addInYoursTodo(
     mainDirection.innerHTML += `
       <article class="grid todo-item gap-3 relative z-50 max-w-[300px] w-full overflow-hidden" title="${userLatestTodo.heading}">
         <div class="grid place-items-end">
-          <header class="relative z-10 w-full text-sm font-medium pl-8 before:pl-3 mb-1.5 before:content-[''] before:absolute before:w-full before:h-[1px] before:left-4 before:bottom-0 before:bg-white">
+          <header class="relative z-10 w-full text-sm font-medium pl-8 before:pl-3 mb-1.5 ">
             ${localeDateString}
           </header>
           <section
@@ -735,9 +802,9 @@ export function addInHTML(
       const last = wordArray.slice(1, todoDate.length - 1).join(" ");
 
       main.innerHTML += `
-      <div id="${noSpaceID}" class="grid cards-wrapper place-items-center gap-2.5 w-full">
+      <div id="${noSpaceID}" class="grid cards-wrapper place-items-start gap-1.5 w-full">
         <span
-          class="relative z-10 text-xl px-3 tracking-wide bg-none before:content-[''] before:absolute before:w-full before:h-[1px] before:bg-gradient-to-l before:from-white before:to-transparent before:-left-full before:top-1/2 before:-translate-y-1/2 after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-gradient-to-r after:from-white after:to-transparent after:left-full after:top-1/2 after:-translate-y-1/2 flex gap-2"
+          class="relative z-10 text-xl pl-4 pr-1 tracking-wide bg-none  after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-white/50 after:to-transparent after:left-full after:top-1/2 after:-translate-y-1/2 flex gap-2"
         >
           <p class="font-light">${first}</p>
           <p class="italic font-bold tracking-wider">${last}</p>
@@ -760,7 +827,8 @@ export function addInHTML(
       "grid",
       "grid-cols-[repeat(auto-fit,minmax(250px,1fr))]",
       "w-full",
-      "place-items-center",
+      "pl-3",
+      "place-items-start",
       "gap-2.5",
       "selectable-item"
     );
@@ -813,6 +881,17 @@ export function showToDoPage() {
     ".psuedo-placeholder-curd"
   );
   const crudInput = document.querySelectorAll(".crud-input");
+
+  slideAnimation(
+    {
+      el: "#down-nav-bar",
+      direction: "bottom",
+      directionValue: "-100%",
+      duration: 0.5,
+      display: "flex",
+    },
+    true
+  );
 
   if (todoPage && midMain) {
     smoothInnOutTransition(

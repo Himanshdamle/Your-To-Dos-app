@@ -9,6 +9,7 @@ import {
   resetTodoPageUI,
   showToDoPage,
   dragAndDropTodos,
+  slideAnimation,
 } from "./core.js";
 
 // Global variables
@@ -33,6 +34,17 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => {
       const todoPage = document.querySelector("#todo-page");
       const quoteBox = document.querySelector("#quote-box");
+
+      slideAnimation(
+        {
+          el: "#down-nav-bar",
+          direction: "bottom",
+          directionValue: "0%",
+          display: "flex",
+          duration: 0.5,
+        },
+        false
+      );
 
       if (todoPage && quoteBox) {
         transitionBetweenPages({ pageCloseEl: todoPage, pageOpenEl: quoteBox });

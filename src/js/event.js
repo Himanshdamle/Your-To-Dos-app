@@ -5,6 +5,7 @@ import {
   resetTodoPageFunc,
   showMessagePopup,
   closeOpenSmoothAnimation,
+  slideAnimation,
 } from "./core.js";
 
 import {
@@ -118,13 +119,15 @@ export function setupEventListeners() {
       pageOpenEl: "#quote-box",
     });
 
+    let messageInfo;
+
     if (window.updated) {
       if (!window.getTodoData) {
-        showMessagePopup({
+        messageInfo = {
           boldTxt: "ERROR FAILED TO UPDATE",
           lightTxt: " ",
           emoji: "❗",
-        });
+        };
 
         return;
       }
@@ -145,20 +148,34 @@ export function setupEventListeners() {
         window.getTodoData.actualID
       );
 
-      showMessagePopup({
+      messageInfo = {
         invertedBoldTxt: window.currTodoDetails.heading,
         boldTxt: "Task updated!",
         emoji: "✏️🛠️",
-      });
+      };
     } else {
       addTodoInBackend({ todoObject: window.currTodoDetails });
 
-      showMessagePopup({
+      messageInfo = {
         invertedBoldTxt: window.currTodoDetails.heading,
         boldTxt: "Task added!",
         emoji: "✨🚀",
-      });
+      };
     }
+
+    slideAnimation(
+      {
+        el: "#down-nav-bar",
+        direction: "bottom",
+        directionValue: "0%",
+        display: "flex",
+        duration: 0.5,
+        onAnimationComplete() {
+          showMessagePopup(messageInfo);
+        },
+      },
+      false
+    );
   });
 
   // reset input fields

@@ -9,7 +9,7 @@ import {
  * Initializes the UI, including todo rendering and placeholder effects.
  */
 export function initializeUI() {
-  const pendingTodosSection = document.querySelector("#left-main");
+  const pendingTodosSection = document.querySelector("#pending-todo");
   const completedTodosSection = document.querySelector("#right-main");
 
   const renderTaskProcess = {
@@ -31,8 +31,8 @@ export function initializeUI() {
   const getPendingTaskNumInfo = getTaskNumber(addPendingTask, {
     selectorDate: "Due this day",
   });
-  renderTaskProcess.pendingTask = getPendingTaskNumInfo.taskNumber;
-  renderTotalTask.pendingTask = getPendingTaskNumInfo.totalTask;
+  renderTaskProcess.pendingTask = getPendingTaskNumInfo.taskNumber || 0;
+  renderTotalTask.pendingTask = getPendingTaskNumInfo.totalTask || 0;
 
   const addCompletedTask = addInHTML("completedTodos", completedTodosSection, {
     allowCRUD: ["#delete"],
@@ -43,8 +43,8 @@ export function initializeUI() {
   const getCompletedTaskNumInfo = getTaskNumber(addCompletedTask, {
     selectorDate: "Due this day",
   });
-  renderTaskProcess.completedTask = getCompletedTaskNumInfo.taskNumber;
-  renderTotalTask.completedTask = getCompletedTaskNumInfo.totalTask;
+  renderTaskProcess.completedTask = getCompletedTaskNumInfo.taskNumber || 0;
+  renderTotalTask.completedTask = getCompletedTaskNumInfo.totalTask || 0;
 
   // update todays task progress
   updateTaskProgress(renderTaskProcess, {
@@ -215,7 +215,7 @@ function placeholderEffect(psuedoPlaceholder, inputBox) {
  * Render's the today's task process bar.
  */
 function updateTaskProgress(
-  taskNumber,
+  taskNumber = { pendingTask: "", completedTask: "" },
   processBarId = { task: "", progress: "" }
 ) {
   const task = document.querySelector(`#${processBarId.task}`);
