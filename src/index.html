@@ -57,8 +57,9 @@
 
           <main
             id="left-main"
-            class="overflow-x-hidden h-full w-full max-w-[526px] mt-8 resize-x flex min-w-[100%] flex-col gap-10 overflow-y-scroll items-center"
+            class="overflow-x-hidden h-full w-full max-w-[526px] mt-8 resize-x flex min-w-[100%] flex-col gap-10 overflow-y-scroll items-center relative"
           >
+            <!-- SEARCH BAR -->
             <section id="search-bar">
               <article
                 class="text-center text-xl italic p-2.5 border h-min max-w-[400px] rounded-lg border-white/30 bg-[#1A1A1A] flex flex-col gap-2"
@@ -217,11 +218,170 @@
               </article>
             </section>
 
+            <!-- PENDING TODO SECTION -->
             <section
               id="pending-todo"
-              class="flex flex-col gap-8 w-full"
+              class="flex flex-col gap-10 w-full"
             ></section>
           </main>
+        </section>
+
+        <!-- TO-DO CARD MENU -->
+        <section id="menu-todoCard" class="hidden fixed z-500">
+          <article
+            class="border overflow-hidden h-full border-white/50 text-xl bg-[#1A1A1A]/65 backdrop-blur-2xl rounded-xl w-[290px] pl-9 pr-4 flex flex-row gap-4 shadow-[0px_0px_2px_0px_rgba(255,255,255,255.25)] relative"
+          >
+            <span
+              class="font-bold text-xl flex items-center fixed top-0 -left-5 h-full w-18"
+            >
+              <p
+                class="rotate-90 rotate-z-180 tracking-widest text-nowrap truncate"
+                id="task-name"
+                title=""
+              >
+                " "
+              </p>
+            </span>
+
+            <div class="w-[1.5px] bg-white/30">
+              <div
+                id="hover-navigator"
+                class="h-8 bg-white w-[200%] rounded-[1px]"
+              ></div>
+            </div>
+
+            <div class="flex-[1] flex flex-col gap-4 py-4">
+              <!-- Operations -->
+              <section class="menu-option-box">
+                <article
+                  class="w-full flex flex-row gap-2 items-center justify-start"
+                >
+                  <p class="font-extralight">Operations</p>
+                  <div class="w-full h-[0.5px] bg-white/50 mt-1"></div>
+                </article>
+
+                <main
+                  class="font-semibold text-2xl pl-2 flex flex-col items-start"
+                >
+                  <button
+                    class="menu-buttons w-full text-start cursor-pointer text-[#14d585] flex flex-row gap-1.5"
+                    data-color="#14d585"
+                  >
+                    <img
+                      src="assets/done_all_24dp_14D585_FILL0_wght400_GRAD0_opsz24.svg"
+                      alt="completed/seen svg"
+                    />
+                    Completed
+                  </button>
+                  <button
+                    class="menu-buttons w-full text-start cursor-pointer flex flex-row gap-1.5"
+                  >
+                    <img
+                      src="assets/chrome_reader_mode_24dp_FFF_FILL0_wght400_GRAD0_opsz24.svg"
+                      alt="read svg"
+                    />
+                    Read
+                  </button>
+                  <button
+                    class="menu-buttons w-full text-start cursor-pointer flex flex-row gap-1.5"
+                  >
+                    <img
+                      src="assets/edit_24dp_FFF_FILL0_wght400_GRAD0_opsz24.svg"
+                      alt="edit task svg"
+                    />
+                    Update
+                  </button>
+                  <button
+                    class="menu-buttons w-full text-start cursor-pointer text-[#FF3D3D] flex flex-row gap-1.5"
+                    data-color="#FF3D3D"
+                  >
+                    <img src="assets/red-trash-2.svg" alt="delete svg.svg" />
+                    Delete
+                  </button>
+                </main>
+              </section>
+
+              <!-- Organize -->
+              <section class="menu-option-box">
+                <article
+                  class="w-full flex flex-row gap-2 items-center justify-start"
+                >
+                  <p class="font-extralight">Organize</p>
+                  <div class="w-full h-[0.5px] bg-white/50 mt-1"></div>
+                </article>
+
+                <main
+                  class="font-semibold text-2xl pl-2 flex flex-col items-start"
+                >
+                  <button
+                    class="menu-buttons w-full text-start cursor-pointer text-[#00BFFF] flex flex-row gap-1.5"
+                    data-color="#00BFFF"
+                  >
+                    <img
+                      src="assets/keep_24dp_00BFFF_FILL0_wght400_GRAD0_opsz24.svg"
+                      alt="pin svg"
+                    />
+                    Pin
+                  </button>
+                  <button
+                    class="menu-buttons w-full text-start cursor-pointer flex flex-row gap-1.5 items-center"
+                  >
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="icon-md"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M4.82918 4.10557C5.16796 3.428 5.86049 3 6.61803 3H17.382C18.1395 3 18.832 3.428 19.1708 4.10557L20.7889 7.34164C20.9277 7.61935 21 7.92558 21 8.23607V18C21 19.6569 19.6569 21 18 21H6C4.34315 21 3 19.6569 3 18V8.23607C3 7.92558 3.07229 7.61935 3.21115 7.34164L4.82918 4.10557ZM17.382 5H6.61803L5.61803 7H18.382L17.382 5ZM19 9H5V18C5 18.5523 5.44772 19 6 19H18C18.5523 19 19 18.5523 19 18V9ZM9 12C9 11.4477 9.44772 11 10 11H14C14.5523 11 15 11.4477 15 12C15 12.5523 14.5523 13 14 13H10C9.44772 13 9 12.5523 9 12Z"
+                        fill="currentColor"
+                      ></path>
+                    </svg>
+                    Archive
+                  </button>
+                </main>
+              </section>
+
+              <!-- Export -->
+              <section class="menu-option-box">
+                <article
+                  class="w-full flex flex-row gap-2 items-center justify-start"
+                >
+                  <p class="font-extralight">Export</p>
+                  <div class="w-full h-[0.5px] bg-white/50 mt-1"></div>
+                </article>
+
+                <main
+                  class="font-semibold text-2xl pl-2 flex flex-col items-start"
+                >
+                  <button
+                    class="menu-buttons w-full text-start cursor-pointer text-[#4B7BEC] flex flex-row gap-1.5 items-center"
+                    data-color="#4B7BEC"
+                  >
+                    <img
+                      src="assets/download_24dp_4B7BEC_FILL0_wght400_GRAD0_opsz24.svg"
+                      alt="download"
+                    />
+                    Download
+                  </button>
+                  <button
+                    class="menu-buttons w-full text-start cursor-pointer flex flex-row gap-1.5 items-center"
+                  >
+                    <img
+                      src="assets/content_copy_24dp_FFF_FILL0_wght400_GRAD0_opsz24.svg"
+                      alt="content_copy"
+                    />
+                    Copy Task
+                  </button>
+                </main>
+              </section>
+            </div>
+          </article>
         </section>
 
         <!-- LINES -->
@@ -852,7 +1012,7 @@
             <section
               class="flex items-center px-1 max-w-[430px] gap-1 justify-around w-full"
             >
-              <div class="flex items-center gap-1">
+              <div class="flex items-center gap-2">
                 <input
                   type="file"
                   id="fileInput"

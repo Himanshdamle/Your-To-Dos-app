@@ -68,8 +68,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.body.addEventListener("keydown", (e) => {
     const tag = e.target.tagName.toLowerCase();
-    if (tag !== "input" && tag !== "textarea" && e.key.toLowerCase() === "c") {
+
+    if (tag === "input" || tag === "textarea") return;
+
+    if (e.key.toLowerCase() === "c") {
       openCreateToDoPage();
+    } else if (e.key.toLowerCase() === "f") {
+      const elem = document.documentElement;
+
+      // Check if not already fullscreen
+      if (!document.fullscreenElement) {
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else {
+          console.warn("Fullscreen not supported on this browser.");
+        }
+      } else {
+        // Exit fullscreen if already in it
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
     }
   });
 

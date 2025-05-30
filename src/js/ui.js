@@ -232,3 +232,52 @@ function updateTaskProgress(
     `w-[${getPercentageOf(completedTask, totalTask).decimal}%]`
   );
 }
+
+/**
+ * Animates the side bar of todo menu.
+ */
+const menuOptionBox = document.querySelectorAll(".menu-option-box");
+
+const todoCardMenu = document.querySelector("#menu-todoCard");
+
+menuOptionBox.forEach((box) => {
+  box.addEventListener(
+    "mouseenter",
+    (e) => {
+      if (e.target !== box && e.target.classList.contains("menu-buttons")) {
+        const option = e.target;
+        const color = option.getAttribute("data-color");
+        const offsetTop = option.offsetTop;
+
+        gsap.to("#hover-navigator", {
+          y: offsetTop,
+          duration: 0.6,
+          backgroundColor: color || "white",
+          ease: "back.out(1.2)",
+        });
+      }
+    },
+    true
+  );
+});
+
+document.addEventListener("click", (e) => {
+  if (
+    !todoCardMenu.contains(e.target) && // Is the click not inside the dropdown menu?
+    !e.target.closest(".menu-button-box") // And also not on the button that opened it?
+  ) {
+    gsap.fromTo(
+      todoCardMenu,
+      { y: 0 },
+      {
+        y: -10,
+        duration: 0.3,
+        opacity: 0,
+        ease: "power2.out",
+        onComplete() {
+          todoCardMenu.classList.add("hidden");
+        },
+      }
+    );
+  }
+});

@@ -184,25 +184,160 @@ export function setupEventListeners() {
   });
 
   // MouseEnter && MouseLeave ---> todo card
-  const todoCardList = document.querySelectorAll(".todo-card");
+  const todoCardBox = document.querySelectorAll(".todo-card-box");
+  const menu = document.querySelector("#menu-todoCard");
 
-  todoCardList.forEach((todoCard) => {
-    const downloadButton = todoCard.querySelector(
-      ".download-todo-button-parent"
+  let aninateTxt;
+
+  todoCardBox.forEach((box) => {
+    box.setAttribute("tabindex", "0");
+
+    // dont accept the default focus border and outline.
+    box.classList.add("outline-none", "border-none");
+
+    // MOUSE **ENTER**
+    box.addEventListener(
+      "mouseenter",
+      (e) => {
+        if (e.target === box || !e.target.classList.contains("todo-card"))
+          return;
+
+        const todoCard = e.target;
+
+        aninateTxt = showLongText(todoCard);
+
+        const menuBtn = todoCard.querySelector(".menu-button-box");
+
+        closeOpenSmoothAnimation(menuBtn).open();
+        if (aninateTxt) aninateTxt.run();
+      },
+      true
     );
 
-    const aninateTxt = showLongText(todoCard);
+    // MOUSE **LEAVE**
+    box.addEventListener(
+      "mouseleave",
+      (e) => {
+        if (e.target === box || !e.target.classList.contains("todo-card"))
+          return;
 
-    // mouseenter event listner code.
-    todoCard.addEventListener("mouseenter", () => {
-      closeOpenSmoothAnimation(downloadButton).open();
-      aninateTxt.run();
+        const todoCard = e.target;
+
+        const menuBtn = todoCard.querySelector(".menu-button-box");
+
+        closeOpenSmoothAnimation(menuBtn).close();
+        if (aninateTxt) aninateTxt.stop();
+      },
+      true
+    );
+
+    // **CLICK**
+    box.addEventListener(
+      "click",
+      (e) => {
+        const menuBtn = e.target.closest(".menu-button-box");
+        const todoCard = e.target.closest(".todo-card");
+
+        if (menuBtn !== null) {
+          const todoCardPosition = menuBtn.getBoundingClientRect();
+
+          // means its opened so now we have to hide it.
+          if (!menu.classList.contains("hidden")) {
+            gsap.fromTo(
+              menu,
+              { y: 0 },
+              {
+                y: -10,
+                duration: 0.3,
+                opacity: 0,
+                ease: "power2.out",
+                onComplete() {
+                  menu.classList.toggle("hidden");
+                },
+              }
+            );
+
+            return;
+          }
+
+          menu.classList.toggle("hidden");
+
+          // ADD TASK NAME TO MENU
+          const taskName = todoCard
+            .querySelector(".show-heading")
+            .innerText.toUpperCase();
+
+          const taskNameMenu = menu.querySelector("#task-name");
+          taskNameMenu.textContent = taskName;
+          taskNameMenu.title = taskName;
+
+          // check if its not overflowing
+          let top = todoCardPosition.top;
+          if (Math.abs(top - window.innerHeight) <= 400) {
+            top = menu.getBoundingClientRect().width;
+          }
+
+          // animate it.
+          gsap.set(menu, {
+            left: todoCardPosition.left + 20,
+            top,
+          });
+          gsap.fromTo(
+            menu,
+            { y: -10, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }
+          );
+        } else if (todoCard !== null) {
+          // select todo card
+          const selectedTick = todoCard.querySelector(".selected-tick-visual");
+
+          todoCard.classList.add("border-[#2CB67D]");
+          selectedTick.classList.remove("hidden");
+        }
+      },
+      true
+    );
+
+    // **BLUR**
+    box.addEventListener("blur", (e) => {
+      // unSelect todo card
+      const todoCard = e.target.querySelector(".todo-card");
+
+      if (todoCard === null) return;
+
+      const selectedTick = todoCard.querySelector(".selected-tick-visual");
+
+      todoCard.classList.remove("border-[#2CB67D]");
+      selectedTick.classList.add("hidden");
     });
 
-    // mouseLeave event listner code.
-    todoCard.addEventListener("mouseleave", () => {
-      closeOpenSmoothAnimation(downloadButton).close();
-      aninateTxt.stop();
+    // KEY **DOWN**
+    box.addEventListener("keydown", (e) => {
+      // hot keys for todo card
+
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      const todoCard = e.target.querySelector(".todo-card");
+
+      if (todoCard === null) return;
+
+      const keyPressed = e.key.toLowerCase();
+
+      window.getTodoData = pickedTodoData(
+        todoCard.getAttribute("data-localtodovarname"),
+        todoCard
+      );
+
+      if (keyPressed === "r") readTodo(getTodoData.matchedId);
+      else if (keyPressed === "u") update(getTodoData.matchedId);
+      else if (keyPressed === "d")
+        deleteTodoFRONTEND(() =>
+          deleteTodo(
+            todoCard.getAttribute("data-localtodovarname"),
+            getTodoData.localStorageIndex,
+            getTodoData.actualID
+          )
+        );
     });
   });
 }
@@ -253,43 +388,5 @@ export function downloadTodos(downloadBtns) {
       document.body.removeChild(a);
       URL.revokeObjectURL(a.href);
     });
-  });
-}
-
-export function clickToCrudOperation(todoCard) {
-  todoCard.setAttribute("tabindex", "0");
-
-  const selectedTick = todoCard.querySelector(".selected-tick-visual");
-
-  // FOCUS
-  todoCard.addEventListener("click", () => {
-    todoCard.classList.add("border-[#2CB67D]");
-    selectedTick.classList.remove("hidden");
-  });
-
-  todoCard.addEventListener("blur", () => {
-    todoCard.classList.remove("border-[#2CB67D]");
-    selectedTick.classList.add("hidden");
-  });
-
-  // KEY DOWN EVENT
-  todoCard.addEventListener("keydown", (e) => {
-    const keyPressed = e.key.toLowerCase();
-
-    window.getTodoData = pickedTodoData(
-      todoCard.getAttribute("data-localtodovarname"),
-      todoCard
-    );
-
-    if (keyPressed === "r") readTodo(getTodoData.matchedId);
-    else if (keyPressed === "u") update(getTodoData.matchedId);
-    else if (keyPressed === "d")
-      deleteTodoFRONTEND(() =>
-        deleteTodo(
-          todoCard.getAttribute("data-localtodovarname"),
-          getTodoData.localStorageIndex,
-          getTodoData.actualID
-        )
-      );
   });
 }

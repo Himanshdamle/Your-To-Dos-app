@@ -7,7 +7,7 @@ import {
   deleteTodoFRONTEND,
 } from "./todo.js";
 
-import { downloadTodos, clickToCrudOperation } from "./event.js";
+import { downloadTodos } from "./event.js";
 
 import { toggleClasses } from "./tag.js";
 
@@ -690,9 +690,9 @@ export function addInYoursTodo(
         </div>       
      </div>
 
-      <div class="absolute z-50 right-3 top-1 opacity-0 download-todo-button-parent">
+      <div class="absolute z-50 right-3 top-1 opacity-0 menu-button-box">
         <button 
-            class="cursor-pointer download-todo"
+            class="cursor-pointer menu-button"
             title="Controls"
             todoid="${userLatestTodo.id}"
             localTodoVarName="${localTodoVarName}"
@@ -734,7 +734,7 @@ export function addInYoursTodo(
     mainDirection.innerHTML += `
       <article class="grid todo-item gap-3 relative z-50 max-w-[300px] w-full overflow-hidden" title="${userLatestTodo.heading}">
         <div class="grid place-items-end">
-          <header class="relative z-10 w-full text-sm font-medium pl-8 before:pl-3 mb-1.5 ">
+          <header class="relative z-10 w-full text-sm font-medium pl-4">
             ${localeDateString}
           </header>
           <section
@@ -749,8 +749,7 @@ export function addInYoursTodo(
     `;
   }
 
-  downloadTodos([document.querySelector(`[todoid="${userLatestTodo.id}"]`)]);
-  clickToCrudOperation(document.getElementById(userLatestTodo.id));
+  // downloadTodos([document.querySelector(`[todoid="${userLatestTodo.id}"]`)]);
 }
 
 /**
@@ -802,13 +801,17 @@ export function addInHTML(
       const last = wordArray.slice(1, todoDate.length - 1).join(" ");
 
       main.innerHTML += `
-      <div id="${noSpaceID}" class="grid cards-wrapper place-items-start gap-1.5 w-full">
-        <span
-          class="relative z-10 text-xl pl-4 pr-1 tracking-wide bg-none  after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-white/50 after:to-transparent after:left-full after:top-1/2 after:-translate-y-1/2 flex gap-2"
+      <div id="${noSpaceID}" class="grid cards-wrapper place-items-start gap-2 w-full pl-2">
+       <div class="relative w-full flex flex-row justify-start items-center">
+         <span
+          class="z-10 text-xl pr-1 tracking-wide bg-non flex gap-2"
         >
           <p class="font-light">${first}</p>
-          <p class="italic font-bold tracking-wider">${last}</p>
+          <p class="italic font-bold tracking-wider text-nowrap">${last}</p>
         </span>
+
+        <div class="w-full h-[1px] bg-white/30"></div>
+       </div>
       </div>
     `;
     }
@@ -823,13 +826,14 @@ export function addInHTML(
 
     let articleWrapper = document.createElement("div");
     articleWrapper.classList.add(
+      "todo-card-box",
       "article-wrappers",
       "grid",
       "grid-cols-[repeat(auto-fit,minmax(250px,1fr))]",
       "w-full",
-      "pl-3",
+      "pl-3.5",
       "place-items-start",
-      "gap-2.5",
+      "gap-3.5",
       "selectable-item"
     );
     main.querySelector(`#${noSpaceID}`).append(articleWrapper);
