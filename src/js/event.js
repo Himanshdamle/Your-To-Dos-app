@@ -45,11 +45,11 @@ export function setupEventListeners() {
     backend(newTodo, "todos");
     addInHTML(
       [newTodo],
-      document.querySelector("#left-main"),
+      document.querySelector("#pending-todo"),
       {
         allowCRUD: true,
         localTodoVarName: "todos",
-        todoMainSide: document.querySelector("#left-main"),
+        todoMainSide: document.querySelector("#pending-todo"),
       },
       true // add only new todo to the 'pendingTodosSection'.
     );
@@ -99,7 +99,7 @@ export function setupEventListeners() {
     window.currTodoDetails.time = formattedTime;
   });
 
-  // reset add new todo
+  // add new todo
   document.querySelector("#add-todo").addEventListener("click", () => {
     if (
       window.currTodoDetails.heading === "" ||
@@ -122,15 +122,7 @@ export function setupEventListeners() {
     let messageInfo;
 
     if (window.updated) {
-      if (!window.getTodoData) {
-        messageInfo = {
-          boldTxt: "ERROR FAILED TO UPDATE",
-          lightTxt: " ",
-          emoji: "❗",
-        };
-
-        return;
-      }
+      if (!window.getTodoData) return;
 
       backend(
         window.currTodoDetails,

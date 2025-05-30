@@ -1,4 +1,4 @@
-import { initializeUI, startQuoteRotation } from "./ui.js";
+import { initializeUI, startQuoteRotation, searchByRotation } from "./ui.js";
 import { setupEventListeners } from "./event.js";
 import { hoverEffect, clickingLogic, initializeTagInputs } from "./tag.js";
 import { middle } from "./downNavbar.js";
@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   startQuoteRotation();
   initializeTagInputs();
   middle();
+  searchByRotation();
 
   const closeTodoButtons = document.querySelectorAll(".close-todo-page");
 
@@ -104,7 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const completedTodosSection = document.querySelector("#right-main");
-
   Sortable.create(completedTodosSection, {
     group: {
       name: "shared",
@@ -117,18 +117,21 @@ document.addEventListener("DOMContentLoaded", () => {
     draggable: ".todo-item",
 
     onAdd(evt) {
+      console.log(evt);
+
       const movePendingTodo = dragAndDropTodos({
         dragVarName: "todos",
         dropVarName: "completedTodos",
         dragedTodo: evt.item,
       });
 
+      if (movePendingTodo === undefined) return;
+
       initializeDragBehaviour({
         allowCRUD: ["#delete"],
         localTodoVarName: "completedTodos",
         todoMainSide: completedTodosSection,
       });
-
       showMessagePopup({
         invertedBoldTxt: movePendingTodo[0].heading || "To-Do",
         boldTxt: "Moved to Completed Tasks",
@@ -157,6 +160,8 @@ document.addEventListener("DOMContentLoaded", () => {
         dropVarName: "todos", // dropped INTO todos
         dragedTodo: evt.item,
       });
+
+      if (moveCompletedTodo === undefined) return;
 
       initializeDragBehaviour({
         allowCRUD: true, // means allow all the crud functions.

@@ -1,6 +1,7 @@
 import {
   addInHTML,
   smoothInnOutTransition,
+  transitionBetweenPages,
   getTaskNumber,
   getPercentageOf,
 } from "./core.js";
@@ -117,6 +118,36 @@ export function startQuoteRotation() {
         .catch((err) => console.error("Error fetching affirmation:", err));
     }
   }, 30 * 1000);
+}
+
+export function searchByRotation() {
+  const searchBy = ["TASK NAME", "DUE DATE", "TAG NAME"];
+
+  const searchByEl = document.querySelector("#search-by");
+
+  let countIndex = 0;
+
+  setInterval(() => {
+    if (countIndex === 3) countIndex = 0;
+
+    smoothInnOutTransition(
+      {
+        el: searchByEl,
+        scale: 1.1,
+        blur: 10,
+        duration: 0.5,
+        onCompleteTransition() {
+          searchByEl.textContent = searchBy[countIndex++ || 0];
+
+          smoothInnOutTransition(
+            { el: searchByEl, blur: 10, duration: 0.5, opacity: 1 },
+            false
+          );
+        },
+      },
+      true
+    );
+  }, 10 * 1000);
 }
 
 /**

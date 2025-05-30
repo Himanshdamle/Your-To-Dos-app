@@ -25,6 +25,7 @@ export function smoothInnOutTransition(gsapSettings, play, currentDisplay) {
       filter: `blur(${gsapSettings.blur || 10}px)`,
       scale: gsapSettings.scale || 1.1,
       opacity: 0,
+      delay: gsapSettings.delay || 0,
       duration: gsapSettings.duration || 0.3,
       ease: gsapSettings.ease || "none",
       onComplete() {
@@ -146,7 +147,6 @@ export function slideAnimation(gsapSettings, play) {
     };
 
     if (slideInDirection && slideInValue !== undefined) {
-      // fromVars[slideInDirection] = slideInValue;
       toVars[slideInDirection] = "0%";
     }
 
@@ -1074,7 +1074,9 @@ export function dragAndDropTodos(getLocalTodoVarNameObject) {
     evt.querySelector(".todo-card")
   );
 
-  const JSONData = JSON.parse(localStorage.getItem(fromDragVarName)) || [];
+  const JSONData = JSON.parse(localStorage.getItem(fromDragVarName)) || null;
+
+  if (JSONData === null) return undefined;
 
   const movedTodo = JSONData.splice(window.getTodoData.localStorageIndex, 1);
 
