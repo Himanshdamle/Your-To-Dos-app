@@ -104,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.tagStates.push(state);
   });
 
+  //DRAG AND DROP TODO...
   const completedTodosSection = document.querySelector("#right-main");
   Sortable.create(completedTodosSection, {
     group: {
@@ -117,13 +118,13 @@ document.addEventListener("DOMContentLoaded", () => {
     draggable: ".todo-item",
 
     onAdd(evt) {
-      console.log(evt);
-
       const movePendingTodo = dragAndDropTodos({
         dragVarName: "todos",
         dropVarName: "completedTodos",
         dragedTodo: evt.item,
       });
+
+      // console.log(movePendingTodo);
 
       if (movePendingTodo === undefined) return;
 
@@ -132,6 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localTodoVarName: "completedTodos",
         todoMainSide: completedTodosSection,
       });
+
       showMessagePopup({
         invertedBoldTxt: movePendingTodo[0].heading || "To-Do",
         boldTxt: "Moved to Completed Tasks",

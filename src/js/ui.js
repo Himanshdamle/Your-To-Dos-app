@@ -1,7 +1,6 @@
 import {
   addInHTML,
   smoothInnOutTransition,
-  transitionBetweenPages,
   getTaskNumber,
   getPercentageOf,
 } from "./core.js";
@@ -120,6 +119,9 @@ export function startQuoteRotation() {
   }, 30 * 1000);
 }
 
+/**
+ * SEARCH BY CHANGES every 10 seconds.
+ */
 export function searchByRotation() {
   const searchBy = ["TASK NAME", "DUE DATE", "TAG NAME"];
 
@@ -135,12 +137,12 @@ export function searchByRotation() {
         el: searchByEl,
         scale: 1.1,
         blur: 10,
-        duration: 0.5,
+        duration: 0.35,
         onCompleteTransition() {
           searchByEl.textContent = searchBy[countIndex++ || 0];
 
           smoothInnOutTransition(
-            { el: searchByEl, blur: 10, duration: 0.5, opacity: 1 },
+            { el: searchByEl, blur: 10, duration: 0.35, opacity: 1 },
             false
           );
         },
@@ -301,10 +303,11 @@ document.addEventListener("click", (e) => {
       todoCardMenu,
       { y: 0 },
       {
-        y: -10,
-        duration: 0.3,
+        y: -20,
+        duration: 0.4,
         opacity: 0,
-        ease: "power2.out",
+        filter: "blur(5px)",
+        ease: "power4.out",
         onComplete() {
           todoCardMenu.classList.add("hidden");
         },

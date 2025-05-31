@@ -134,7 +134,10 @@ export function pickedTodoData(
   pickedItemHTML,
   pickedItemHTMLID
 ) {
-  const JSONData = JSON.parse(localStorage.getItem(localTodoVarName)) || [];
+  const JSONData = JSON.parse(localStorage.getItem(localTodoVarName)) || null;
+
+  if (JSONData === null) return undefined;
+
   const actualID = pickedItemHTMLID || pickedItemHTML.id;
   const matchedId = JSONData.find((arr) => arr.id === actualID);
 

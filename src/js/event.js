@@ -276,8 +276,17 @@ export function setupEventListeners() {
           });
           gsap.fromTo(
             menu,
-            { y: -10, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }
+            { y: -10, opacity: 0, filter: "blur(5px)" },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.4,
+              filter: "blur(0px)",
+              onComplete() {
+                gsap.set(menu, { backdropFilter: "blur(15px)" });
+              },
+              ease: "power4.out",
+            }
           );
         } else if (todoCard !== null) {
           // select todo card

@@ -523,12 +523,19 @@ export function getDateRange(date) {
  */
 export function groupTodosWithDate(todoList) {
   const result = todoList.reduce((acc, curr) => {
+    if (!curr) {
+      console.error("null value found in the todo storage");
+      return acc;
+    }
+
     const date = curr.date;
+
     if (!acc[date]) {
       acc[date] = [curr];
     } else {
       acc[date].push(curr);
     }
+
     return acc;
   }, {});
 
@@ -732,7 +739,7 @@ export function addInYoursTodo(
     const addCrossMarker = looksSettings.isExpired ? crossMarkerClassTw : "";
 
     mainDirection.innerHTML += `
-      <article class="grid todo-item gap-3 relative z-50 max-w-[300px] w-full overflow-hidden" title="${userLatestTodo.heading}">
+      <article class="grid todo-item gap-3 relative z-50 max-w-[300px] w-full" title="${userLatestTodo.heading}">
         <div class="grid place-items-end">
           <header class="relative z-10 w-full text-sm font-medium pl-4">
             ${localeDateString}
@@ -1069,14 +1076,31 @@ export function dragAndDropTodos(getLocalTodoVarNameObject) {
   const toDropVarName = getLocalTodoVarNameObject.dropVarName;
   const evt = getLocalTodoVarNameObject.dragedTodo;
 
+  // CHECK IF USER DRAG THE TODO AND DROP IT IN THE SAME CONTAINER WHERE IT WAS DRAGED BEFORE.
+  const dropedTodoData = pickedTodoData(
+    toDropVarName,
+    evt,
+    evt.querySelector("section").id
+  );
+
+  let JSONData = JSON.parse(localStorage.getItem(toDropVarName))[
+    dropedTodoData.localStorageIndex
+  ];
+
+  if (
+    dropedTodoData !== undefined &&
+    JSON.stringify(JSONData) === JSON.stringify(dropedTodoData.matchedId)
+  )
+    return;
+
   window.getTodoData = pickedTodoData(
     fromDragVarName,
     evt.querySelector(".todo-card")
   );
 
-  const JSONData = JSON.parse(localStorage.getItem(fromDragVarName)) || null;
+  JSONData = JSON.parse(localStorage.getItem(fromDragVarName)) || null;
 
-  if (JSONData === null) return undefined;
+  if (JSONData === null || !JSONData[0]) return undefined;
 
   const movedTodo = JSONData.splice(window.getTodoData.localStorageIndex, 1);
 
@@ -1127,6 +1151,8 @@ export function initializeDragBehaviour(getSettings) {
             getSettings.localTodoVarName,
             evt.item.querySelector("section")
           );
+
+          if (window.getTodoData === undefined) return;
 
           if (elID === "#update") update(getTodoData.matchedId);
           else if (elID === "#read") readTodo(getTodoData.matchedId);
