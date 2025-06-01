@@ -11,6 +11,7 @@ import {
   dragAndDropTodos,
   slideAnimation,
 } from "./core.js";
+import { getUserSearchResult } from "./search.js";
 
 // Global variables
 window.typingInputIds = [];
@@ -22,12 +23,15 @@ window.hoverObject = {};
 
 document.addEventListener("DOMContentLoaded", () => {
   console.time("Performance");
+
   initializeUI();
   setupEventListeners();
   startQuoteRotation();
   initializeTagInputs();
   middle();
   searchByRotation();
+
+  getUserSearchResult();
 
   const closeTodoButtons = document.querySelectorAll(".close-todo-page");
 

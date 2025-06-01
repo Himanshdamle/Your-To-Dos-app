@@ -22,11 +22,15 @@ export function initializeUI() {
     completedTask: 0,
   };
 
-  const addPendingTask = addInHTML("todos", pendingTodosSection, {
-    allowCRUD: true,
-    localTodoVarName: "todos",
-    todoMainSide: pendingTodosSection,
-  });
+  const addPendingTask = addInHTML(
+    { localTodoVarName: "todos" },
+    pendingTodosSection,
+    {
+      allowCRUD: true,
+      localTodoVarName: "todos",
+      todoMainSide: pendingTodosSection,
+    }
+  );
 
   const getPendingTaskNumInfo = getTaskNumber(addPendingTask, {
     selectorDate: "Due this day",
@@ -34,11 +38,15 @@ export function initializeUI() {
   renderTaskProcess.pendingTask = getPendingTaskNumInfo.taskNumber || 0;
   renderTotalTask.pendingTask = getPendingTaskNumInfo.totalTask || 0;
 
-  const addCompletedTask = addInHTML("completedTodos", completedTodosSection, {
-    allowCRUD: ["#delete"],
-    localTodoVarName: "completedTodos",
-    todoMainSide: completedTodosSection,
-  });
+  const addCompletedTask = addInHTML(
+    { localTodoVarName: "completedTodos" },
+    completedTodosSection,
+    {
+      allowCRUD: ["#delete"],
+      localTodoVarName: "completedTodos",
+      todoMainSide: completedTodosSection,
+    }
+  );
 
   const getCompletedTaskNumInfo = getTaskNumber(addCompletedTask, {
     selectorDate: "Due this day",

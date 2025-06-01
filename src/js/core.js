@@ -781,15 +781,24 @@ function countTask(JSONData, expiredTodoCount) {
 }
 
 export function addInHTML(
-  localTodoVarName,
+  getData = { localTodoVarName: "", data: [] },
   main,
   initializeDragBehaviourParams,
   addNewTodo = false
 ) {
-  const data = localStorage.getItem(localTodoVarName);
+  if (!getData.data) getData.data = [];
+
+  const data = getData.data[0]
+    ? getData.data
+    : localStorage.getItem(getData.localTodoVarName);
+
   if (!data && !addNewTodo) return;
 
-  const JSONData = addNewTodo ? localTodoVarName : JSON.parse(data) || [];
+  let JSONData = [];
+
+  if (addNewTodo) JSONData = getData.localTodoVarName;
+  else if (typeof data === "string") JSONData = JSON.parse(data);
+  else JSONData = getData.data;
 
   if (!JSONData.length && !addNewTodo) return;
 
@@ -867,7 +876,7 @@ export function addInHTML(
   return {
     todoDates: Object.keys(groupedData),
     userAllToDos: groupedData,
-    localTodoVarName,
+    localTodoVarName: getData.localTodoVarName,
   };
 }
 

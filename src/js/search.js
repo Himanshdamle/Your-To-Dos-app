@@ -1,40 +1,48 @@
-import Fuse from "fuse.js";
+import { addInHTML } from "./core.js";
 
-const todoData = [
-  {
-    heading: "gdsd",
-    description: "sdg",
-    date: "2025-05-30",
-    time: "15:32",
-    priority: "high",
-    tags: [],
-    id: "e6a72572-ee8a-44dd-970d-78c376f54093",
-  },
-  {
-    heading: "Task 2",
-    description: "",
-    date: "2025-05-30",
-    time: "15:37",
-    priority: "high",
-    tags: ["Work", "Personal", "Study"],
-    id: "c71617bf-c3b4-4001-8b48-8ec8bcbb0429",
-  },
-  {
-    heading: "Task 2 taskinng",
-    description: "",
-    date: "2025-05-30",
-    time: "15:38",
-    priority: "medium",
-    tags: ["Work", "GYM", "Health"],
-    id: "908b0c8d-e94c-491d-a9c2-df76f2ff2b20",
-  },
-];
+function search(searchingStr) {
+  const data = JSON.parse(localStorage.getItem("todos"));
 
-const options = {
-  keys: ["heading"],
-};
+  const options = {
+    keys: ["priority", "heading", "tags"],
+  };
 
-const fuse = new Fuse(todoData, options);
-const result = fuse.search("ask 2");
+  const fuse = new Fuse(data, options);
+  const result = fuse.search(searchingStr);
 
-console.log(result);
+  return result;
+}
+
+export function getUserSearchResult() {
+  const searchInput = document.querySelector("#search-input");
+
+  searchInput.addEventListener("input", () => {
+    const userSearchedStr = searchInput.value.trim();
+    const searchResult = search(userSearchedStr);
+
+    const pendingTodosSection = document.querySelector("#pending-todo");
+
+    if (searchResult[0] === undefined) {
+      if (userSearchedStr !== "") return;
+
+      pendingTodosSection.innerHTML = "";
+      addInHTML({ localTodoVarName: "todos" }, pendingTodosSection, {
+        allowCRUD: true,
+        localTodoVarName: "todos",
+        todoMainSide: pendingTodosSection,
+      });
+
+      return;
+    }
+
+    pendingTodosSection.innerHTML = "";
+
+    searchResult.forEach((todoData) => {
+      addInHTML({ data: [todoData.item] }, pendingTodosSection, {
+        allowCRUD: true,
+        localTodoVarName: "todos",
+        todoMainSide: pendingTodosSection,
+      });
+    });
+  });
+}

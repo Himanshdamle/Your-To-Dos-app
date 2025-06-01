@@ -44,7 +44,7 @@ export function setupEventListeners() {
     };
     backend(newTodo, "todos");
     addInHTML(
-      [newTodo],
+      { localTodoVarName: [newTodo] },
       document.querySelector("#pending-todo"),
       {
         allowCRUD: true,

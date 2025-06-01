@@ -35,10 +35,12 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+    <!-- FUSE JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
 
     <!-- <script src="dist/bundle.js" defer></script> -->
     <script src="dropdown.js" defer></script>
-    <script src="js/main.js" type="module" defer></script>
+    <script type="module" src="js/main.js"></script>
     <!-- <script src="dragRectangle.js" defer></script> -->
   </head>
   <body
@@ -46,7 +48,15 @@
     class="bg-[#0F0F0F] text-white font-medium overflow-hidden h-screen"
   >
     <div class="h-full">
-      <main class="flex justify-between items-start relative h-full mx-1">
+      <!-- LINES -->
+      <img
+        src="assets/Line 1.svg"
+        alt="Line"
+        class="absolute w-[200%] top-[80px]"
+      />
+      <main
+        class="flex justify-between items-start relative h-full max-w-[1820px] mx-auto"
+      >
         <!-- SHOW-PENDING-TO-DOS -->
         <section class="flex-[1] flex flex-col h-full">
           <header
@@ -383,13 +393,6 @@
             </div>
           </article>
         </section>
-
-        <!-- LINES -->
-        <img
-          src="assets/Line 1.svg"
-          alt="Line"
-          class="absolute w-full top-[80px]"
-        />
 
         <!-- SHOW CRUD OPRATIONS -->
         <section
@@ -879,7 +882,10 @@
           </main>
 
           <!-- DOWN NAV BAR CHILD -->
-          <footer id="down-nav-bar" class="flex border-t-[1px] pt-1.5 relative">
+          <footer
+            id="down-nav-bar"
+            class="flex flex-row border-t-[1px] relative"
+          >
             <!-- MESSAGE POPUP -->
             <section
               class="text-3xl rounded-xl border border-[#1EA86F] bg-[#30a57438] px-4 py-2 flex flex-row gap-4 items-center absolute z-[200] left-[50%] translate-x-[-50%] w-max backdrop-blur-2xl"
@@ -931,7 +937,7 @@
             </section>
 
             <!-- PROGRESS SECTION -->
-            <section class="w-full border-r-[1px]">
+            <section class="border-r-[1px] px-1 flex-[1]">
               <h1
                 class="border-b-[1px] pb-1.5 text-center tracking-wide font-light italic text-xl"
               >
@@ -1010,60 +1016,59 @@
 
             <!-- USER ACCOUNT SHOW -->
             <section
-              class="flex items-center px-1 max-w-[430px] gap-1 justify-around w-full"
+              class="flex items-center px-1 gap-1 justify-around w-full flex-[1]"
             >
-              <div class="flex items-center gap-2">
-                <input
-                  type="file"
-                  id="fileInput"
-                  accept="image/*"
-                  style="display: none"
+              <input
+                type="file"
+                id="fileInput"
+                accept="image/*"
+                style="display: none"
+              />
+              <button
+                id="select-user-photo"
+                class="h-full items-center cursor-pointer"
+              >
+                <img
+                  class="w-14 h-14 border border-white/30 object-cover rounded-full scale-120 hover:scale-130 transition-transform duration-300 ease-in-out"
+                  src=""
+                  alt="user_profile_picture"
                 />
-                <button
-                  id="select-user-photo"
-                  class="h-full items-center cursor-pointer"
+              </button>
+              <div class="flex text-2xl max-w-[15ch] text-center flex-col">
+                <p
+                  id="greeting"
+                  class="font-extralight leading-5.5 gap-4 tracking-wide"
                 >
-                  <img
-                    class="w-14 h-14 border border-white/30 object-cover rounded-full scale-120 hover:scale-130 transition-transform duration-300 ease-in-out"
-                    src=""
-                    alt="user_profile_picture"
-                  />
-                </button>
-                <div class="flex text-2xl max-w-[15ch] text-center flex-col">
-                  <p
-                    id="greeting"
-                    class="font-extralight leading-5.5 gap-4 tracking-wide"
+                  Good Morning
+                </p>
+                <div class="relative w-[175px]">
+                  <span
+                    id="full-stop"
+                    class="absolute left-[50%] justify-end bottom-0 mb-[5.5px] text-2xl font-bold select-none pointer-events-none"
+                    style="display: none"
+                    >.</span
                   >
-                    Good Morning
+                  <span
+                    class="absolute invisible whitespace-pre"
+                    id="measure-span"
+                  ></span>
+                  <input
+                    type="text"
+                    name="user_name"
+                    id="user-name"
+                    class="font-medium italic input outline-none focus:border focus:border-white/30 rounded-lg text-center text-2xl leading-5.5 tracking-wide w-full"
+                    maxlength="12"
+                    autocomplete="off"
+                  />
+                  <p
+                    class="absolute bottom-[50%] left-[50%] translate-x-[-50%] text-nowrap translate-y-[50%] opacity-50 pointer-events-none psuedo-placeholder"
+                    id="psuedo-placeholder-user-name"
+                  >
+                    <i class="font-medium">Drop your name.</i>
                   </p>
-                  <div class="relative w-[175px]">
-                    <span
-                      id="full-stop"
-                      class="absolute left-[50%] justify-end bottom-0 mb-[5.5px] text-2xl font-bold select-none pointer-events-none"
-                      style="display: none"
-                      >.</span
-                    >
-                    <span
-                      class="absolute invisible whitespace-pre"
-                      id="measure-span"
-                    ></span>
-                    <input
-                      type="text"
-                      name="user_name"
-                      id="user-name"
-                      class="font-medium italic input outline-none focus:border focus:border-white/30 rounded-lg text-center text-2xl leading-5.5 tracking-wide w-full"
-                      maxlength="12"
-                      autocomplete="off"
-                    />
-                    <p
-                      class="absolute bottom-[50%] left-[50%] translate-x-[-50%] text-nowrap translate-y-[50%] opacity-50 pointer-events-none psuedo-placeholder"
-                      id="psuedo-placeholder-user-name"
-                    >
-                      <i class="font-medium">Drop your name.</i>
-                    </p>
-                  </div>
                 </div>
               </div>
+
               <div
                 class="flex bg-[#1A1A1A] rounded-2xl justify-center items-center gap-2 border border-white/30] px-1.5"
                 title="Steak 🔥"
@@ -1091,7 +1096,7 @@
           <header
             class="text-[1.9rem] w-full pt-5 pb-2 grid place-items-center text-center font-bold"
           >
-            COMPLETED TO-DOs
+            DONE TO-DOs
           </header>
 
           <main
