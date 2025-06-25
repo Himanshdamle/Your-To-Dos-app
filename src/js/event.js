@@ -230,6 +230,8 @@ export function setupEventListeners() {
         const menuBtn = e.target.closest(".menu-button-box");
         const todoCard = e.target.closest(".todo-card");
 
+        window.clickedTodoHTML = todoCard;
+
         if (menuBtn !== null) {
           const todoCardPosition = menuBtn.getBoundingClientRect();
 

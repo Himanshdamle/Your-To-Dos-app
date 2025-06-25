@@ -139,6 +139,7 @@ export function pickedTodoData(
   if (JSONData === null) return undefined;
 
   const actualID = pickedItemHTMLID || pickedItemHTML.id;
+
   const matchedId = JSONData.find((arr) => arr.id === actualID);
 
   return {

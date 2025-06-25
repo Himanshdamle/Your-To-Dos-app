@@ -1,4 +1,4 @@
-import { initializeUI, startQuoteRotation, searchByRotation } from "./ui.js";
+import { initializeUI, searchByRotation } from "./ui.js";
 import { setupEventListeners } from "./event.js";
 import { hoverEffect, clickingLogic, initializeTagInputs } from "./tag.js";
 import { middle } from "./downNavbar.js";
@@ -13,6 +13,8 @@ import {
 } from "./core.js";
 import { getUserSearchResult } from "./search.js";
 
+import { startQuoteRotation } from "./quote.js";
+
 // Global variables
 window.typingInputIds = [];
 window.currTodoDetails = {};
@@ -20,6 +22,7 @@ window.countTags = 0;
 window.tagStates = [];
 window.updated = false;
 window.hoverObject = {};
+window.clickedTodoHTML;
 
 document.addEventListener("DOMContentLoaded", () => {
   console.time("Performance");
@@ -74,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.addEventListener("keydown", (e) => {
     const tag = e.target.tagName.toLowerCase();
 
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
     if (tag === "input" || tag === "textarea") return;
 
     if (e.key.toLowerCase() === "c") {
@@ -128,8 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
         dragedTodo: evt.item,
       });
 
-      // console.log(movePendingTodo);
-
       if (movePendingTodo === undefined) return;
 
       initializeDragBehaviour({
@@ -160,10 +162,9 @@ document.addEventListener("DOMContentLoaded", () => {
     draggable: ".todo-item",
 
     onAdd(evt) {
-      // Move todo card from 'completedTodos' back to 'todos'
       const moveCompletedTodo = dragAndDropTodos({
-        dragVarName: "completedTodos", // dragged FROM 'completedTodos'
-        dropVarName: "todos", // dropped INTO todos
+        dragVarName: "completedTodos",
+        dropVarName: "todos",
         dragedTodo: evt.item,
       });
 

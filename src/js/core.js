@@ -1089,32 +1089,26 @@ export function dragAndDropTodos(getLocalTodoVarNameObject) {
   const dropedTodoData = pickedTodoData(
     toDropVarName,
     evt,
-    evt.querySelector("section").id
+    evt.closest("section").id || evt.id
   );
 
-  let JSONData = JSON.parse(localStorage.getItem(toDropVarName))[
-    dropedTodoData.localStorageIndex
-  ];
-
-  if (
-    dropedTodoData !== undefined &&
-    JSON.stringify(JSONData) === JSON.stringify(dropedTodoData.matchedId)
-  )
+  // if the picked todo data is present in the same  toDropVarName then return
+  if (dropedTodoData !== undefined && dropedTodoData.matchedId !== undefined)
     return;
 
-  window.getTodoData = pickedTodoData(
+  const getTodoData = pickedTodoData(
     fromDragVarName,
-    evt.querySelector(".todo-card")
+    evt.querySelector(".todo-card") || evt
   );
 
-  JSONData = JSON.parse(localStorage.getItem(fromDragVarName)) || null;
+  const JSONData = JSON.parse(localStorage.getItem(fromDragVarName)) || null;
 
   if (JSONData === null || !JSONData[0]) return undefined;
 
-  const movedTodo = JSONData.splice(window.getTodoData.localStorageIndex, 1);
+  const movedTodo = JSONData.splice(getTodoData.localStorageIndex, 1);
 
   localStorage.setItem(fromDragVarName, JSON.stringify(JSONData));
-  backend(window.getTodoData.matchedId, toDropVarName);
+  backend(getTodoData.matchedId, toDropVarName);
 
   return movedTodo;
 }
@@ -1196,4 +1190,54 @@ export function initializeDragBehaviour(getSettings) {
       });
     }
   });
+}
+
+export function operations(infoObject = {}, operationName) {
+  const todoCardHTML = infoObject.todoCard;
+
+  if (operationName.toLowerCase() === "completed") {
+    const completedTodosSection = document.querySelector("#right-main");
+
+    const movePendingTodo = dragAndDropTodos({
+      dragVarName: "todos",
+      dropVarName: "completedTodos",
+      dragedTodo: todoCardHTML,
+    });
+
+    if (movePendingTodo === undefined) return;
+
+    initializeDragBehaviour({
+      allowCRUD: ["#delete"],
+      localTodoVarName: "completedTodos",
+      todoMainSide: completedTodosSection,
+    });
+
+    completedTodosSection.append(todoCardHTML);
+
+    showMessagePopup({
+      invertedBoldTxt: movePendingTodo[0].heading || "To-Do",
+      boldTxt: "Moved to Completed Tasks",
+      lightTxt: " ",
+      emoji: "🥳🎊",
+    });
+
+    return;
+  }
+
+  window.getTodoData = pickedTodoData(
+    todoCardHTML.getAttribute("data-localtodovarname"),
+    todoCardHTML
+  );
+
+  if (operationName.toLowerCase() === "read") readTodo(getTodoData.matchedId);
+  else if (operationName.toLowerCase() === "update")
+    update(getTodoData.matchedId);
+  else if (operationName.toLowerCase() === "delete")
+    deleteTodoFRONTEND(() =>
+      deleteTodo(
+        todoCard.getAttribute("data-localtodovarname"),
+        getTodoData.localStorageIndex,
+        getTodoData.actualID
+      )
+    );
 }

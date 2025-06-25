@@ -25,9 +25,11 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/selectable.js@latest/selectable.min.css"
     />
+
     <!-- SORTABLE JS -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/selectable.js@latest/selectable.min.js"></script>
+
     <!-- GSAP ANIMATIONS -->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/gsap.min.js"
@@ -35,12 +37,14 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+
     <!-- FUSE JS -->
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
 
+    <!-- JAVASCRIPT - LOCAL FILES -->
     <!-- <script src="dist/bundle.js" defer></script> -->
     <script src="dropdown.js" defer></script>
-    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/main.js" defer></script>
     <!-- <script src="dragRectangle.js" defer></script> -->
   </head>
   <body
@@ -155,7 +159,7 @@
                         id="priority-filter-input"
                         class="cursor-pointer border-r border-white/30 pr-2 text-white outline-none appearance-none flex justify-start items-center"
                       >
-                        <p>Priority</p>
+                        <p class="max-w-[65px] truncate">Priority</p>
                       </button>
 
                       <ul
@@ -276,6 +280,7 @@
                   <button
                     class="menu-buttons w-full text-start cursor-pointer text-[#14d585] flex flex-row gap-1.5"
                     data-color="#14d585"
+                    data-function="Completed"
                   >
                     <img
                       src="assets/done_all_24dp_14D585_FILL0_wght400_GRAD0_opsz24.svg"
@@ -285,6 +290,7 @@
                   </button>
                   <button
                     class="menu-buttons w-full text-start cursor-pointer flex flex-row gap-1.5"
+                    data-function="Read"
                   >
                     <img
                       src="assets/chrome_reader_mode_24dp_FFF_FILL0_wght400_GRAD0_opsz24.svg"
@@ -294,6 +300,7 @@
                   </button>
                   <button
                     class="menu-buttons w-full text-start cursor-pointer flex flex-row gap-1.5"
+                    data-function="Update"
                   >
                     <img
                       src="assets/edit_24dp_FFF_FILL0_wght400_GRAD0_opsz24.svg"
@@ -304,6 +311,7 @@
                   <button
                     class="menu-buttons w-full text-start cursor-pointer text-[#FF3D3D] flex flex-row gap-1.5"
                     data-color="#FF3D3D"
+                    data-function="Delete"
                   >
                     <img src="assets/red-trash-2.svg" alt="delete svg.svg" />
                     Delete
@@ -326,6 +334,7 @@
                   <button
                     class="menu-buttons w-full text-start cursor-pointer text-[#00BFFF] flex flex-row gap-1.5"
                     data-color="#00BFFF"
+                    data-function="Pin"
                   >
                     <img
                       src="assets/keep_24dp_00BFFF_FILL0_wght400_GRAD0_opsz24.svg"
@@ -335,6 +344,7 @@
                   </button>
                   <button
                     class="menu-buttons w-full text-start cursor-pointer flex flex-row gap-1.5 items-center"
+                    data-function="Archive"
                   >
                     <svg
                       width="24"
@@ -372,6 +382,7 @@
                   <button
                     class="menu-buttons w-full text-start cursor-pointer text-[#4B7BEC] flex flex-row gap-1.5 items-center"
                     data-color="#4B7BEC"
+                    data-function="Download"
                   >
                     <img
                       src="assets/download_24dp_4B7BEC_FILL0_wght400_GRAD0_opsz24.svg"
@@ -381,6 +392,7 @@
                   </button>
                   <button
                     class="menu-buttons w-full text-start cursor-pointer flex flex-row gap-1.5 items-center"
+                    data-function="copyTask"
                   >
                     <img
                       src="assets/content_copy_24dp_FFF_FILL0_wght400_GRAD0_opsz24.svg"
@@ -939,7 +951,7 @@
             <!-- PROGRESS SECTION -->
             <section class="border-r-[1px] px-1 flex-[1]">
               <h1
-                class="border-b-[1px] pb-1.5 text-center tracking-wide font-light italic text-xl"
+                class="border-b-[1px] text-center tracking-wide font-light italic text-xl"
               >
                 PROGRESS
               </h1>
@@ -1101,7 +1113,7 @@
 
           <main
             id="right-main"
-            class="h-full w-full mt-8 flex flex-col pl-2 items-center gap-3.5 overflow-y-scroll overflow-x-hidden"
+            class="h-full w-full mt-8 flex flex-col items-center gap-3.5 overflow-y-scroll overflow-x-hidden"
           ></main>
         </section>
       </main>

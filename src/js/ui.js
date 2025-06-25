@@ -3,6 +3,7 @@ import {
   smoothInnOutTransition,
   getTaskNumber,
   getPercentageOf,
+  operations,
 } from "./core.js";
 
 /**
@@ -85,49 +86,6 @@ export function initializeUI() {
 }
 
 /**
- * Fetches and displays quotes or affirmations every 30 seconds.
- */
-export function startQuoteRotation() {
-  const quote = document.querySelector("#quotes");
-  const author = document.querySelector("#author");
-  const dashAuthorBefore = document.querySelector("#dash-author-before");
-
-  setInterval(() => {
-    if (Math.random() > 0.5) {
-      fetch(
-        "https://api.allorigins.win/raw?url=https://stoic.tekloon.net/stoic-quote"
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          const quoteData = data.data;
-
-          if (quoteData) {
-            quote.innerText = `" ${quoteData.quote} "`;
-
-            author.style.display = "block";
-            author.innerText = quoteData.author;
-
-            dashAuthorBefore.style.width = `${
-              (25 / 100) * (author?.innerText.length || 0)
-            }ch`;
-            dashAuthorBefore.style.display = "block";
-          }
-        })
-        .catch((err) => console.error("Error fetching stoic quote:", err));
-    } else {
-      fetch("https://api.allorigins.win/raw?url=https://www.affirmations.dev/")
-        .then((res) => res.json())
-        .then((data) => {
-          if (quote) quote.innerHTML = `" ${data.affirmation} "`;
-          if (author) author.style.display = "none";
-          if (dashAuthorBefore) dashAuthorBefore.style.display = "none";
-        })
-        .catch((err) => console.error("Error fetching affirmation:", err));
-    }
-  }, 30 * 1000);
-}
-
-/**
  * SEARCH BY CHANGES every 10 seconds.
  */
 export function searchByRotation() {
@@ -137,7 +95,7 @@ export function searchByRotation() {
 
   let countIndex = 0;
 
-  setInterval(() => {
+  function change() {
     if (countIndex === 3) countIndex = 0;
 
     smoothInnOutTransition(
@@ -157,7 +115,9 @@ export function searchByRotation() {
       },
       true
     );
-  }, 10 * 1000);
+  }
+
+  setInterval(change, 10 * 1000);
 }
 
 /**
@@ -296,6 +256,21 @@ menuOptionBox.forEach((box) => {
           backgroundColor: color || "white",
           ease: "back.out(1.2)",
         });
+      }
+    },
+    true
+  );
+
+  box.addEventListener(
+    "click",
+    (e) => {
+      const target = e.target;
+
+      if (target !== box && target.classList.contains("menu-buttons")) {
+        operations(
+          { todoCard: window.clickedTodoHTML },
+          target.getAttribute("data-function")
+        );
       }
     },
     true
