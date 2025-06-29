@@ -539,51 +539,49 @@ export function groupTodosWithDate(todoList) {
     return acc;
   }, {});
 
-  const keysNdValues = {
+  const dateAndTodo = {
     keys: Object.keys(result),
     values: Object.values(result),
   };
 
-  // This creates an object `range` where the keys are priority numbers (like 0, 1, 2, etc.)
-  // and the values are human-readable date range labels (like "Expired todo's", "Due today", etc.)
-  const range = keysNdValues.keys.reduce((acc, curr, index) => {
-    // Call getDateRange() with a date to get back something like { 0: "Expired todo's" }
+  const range = dateAndTodo.keys.reduce((acc, curr, index) => {
     const dateRange = getDateRange(curr);
 
-    // Extract the numeric key from the returned object (e.g., 0)
     const key = Number(Object.keys(dateRange)[0]);
 
-    // Use the numeric key as the index and store the label in the accumulator object
-    acc[key] = { dueDate: dateRange[key], index: index };
-    return acc;
-  }, {}); // Start with an empty object
+    if (acc[key]) acc[key].index.push(index);
+    else {
+      // Use the numeric key as the index and store the label in the accumulator object
+      acc[key] = { dueDate: dateRange[key], index: [index] };
+    }
 
-  // Get all the numeric keys (as strings) from the `range` object
+    return acc;
+  }, {});
+
   const getValues = Object.keys(range);
 
   // Sort the keys in ascending order and then use them to get the corresponding labels
   const sortedRange = getValues
-    // First map the string keys back to their numeric form (if needed)
-    .map((range) => range)
-    // Sort the keys numerically so that they follow urgency order (0 -> expired, 1 -> today, etc.)
     .sort((a, b) => a + b)
     // Finally, map each key back to its human-readable label
     .map((value) => range[value].dueDate);
 
   const getRangeIndex = Object.values(range);
 
-  const nlp = sortedRange.reduce((acc, curr, index) => {
-    const todo = keysNdValues.values[getRangeIndex[index].index];
+  const groupedTodosByRange = sortedRange.reduce((acc, curr, index) => {
+    getRangeIndex[index].index.forEach((JsonTodoLocation) => {
+      const todo = dateAndTodo.values[JsonTodoLocation];
 
-    if (!acc[curr]) {
-      acc[curr] = [...todo];
-    } else {
-      acc[curr].push(...todo);
-    }
+      if (!acc[curr]) {
+        acc[curr] = [...todo];
+      } else {
+        acc[curr].push(...todo);
+      }
+    });
     return acc;
   }, {});
 
-  return nlp;
+  return groupedTodosByRange;
 }
 
 /**
@@ -634,17 +632,6 @@ export function addInYoursTodo(
 
   const localeDateString = getLocaleDateString(userLatestTodo.date);
 
-  const expiredSticker = `
-    <span class="absolute right-2 bottom-2 z-10 w-[100px] h-[100px]">
-      <span class="relative">
-        <img class="w-full h-full" src="assets/Group 16.svg" alt="red-sticker" />
-        <p class="text-sm text-nowrap absolute left-[50%] top-[50%] translate-x-[-50%] px-2">
-          <i><b>${localeDateString}</b></i>
-        </p>
-      </span>
-    </span>
-  `;
-
   let tagsHTMLPresentation = "";
   userLatestTodo.tags.forEach((tag) => {
     tagsHTMLPresentation += `
@@ -682,7 +669,6 @@ export function addInYoursTodo(
        </div>
      </span>
 
-    ${looksSettings.isExpired ? expiredSticker : ""}
     <header class="flex flex-col pb-2 justify-center items-center border-b">
      <div class="show-heading-container relative max-w-[185px] w-[185px] text-2xl italic overflow-hidden text-center">
         <h3 class="show-heading whitespace-nowrap font-bold relative z-10">
@@ -735,14 +721,14 @@ export function addInYoursTodo(
     element.innerHTML = todoHTML;
   } else {
     const crossMarkerClassTw =
-      "before:content-[''] before:absolute before:w-[200%] before:h-[1px] before:bg-white before:block z-[100] before:rotate-30 before:-left-[75%] before:translate-y-10 overflow-hidden";
+      "before:content-[''] before:absolute before:w-[200%] before:h-[1px] before:bg-white before:block before:left-1/2 before:-translate-x-1/2 before:top-1/2 before:-translate-y-1/2 before:rotate-20 before:z-[100] overflow-hidden";
     const addCrossMarker = looksSettings.isExpired ? crossMarkerClassTw : "";
 
     mainDirection.innerHTML += `
       <article class="grid todo-item gap-3 relative z-50 max-w-[300px] w-full" title="${userLatestTodo.heading}">
         <div class="grid place-items-end">
-          <header class="relative z-10 w-full text-sm font-medium pl-4">
-            ${localeDateString}
+          <header class="relative z-10 w-full text-sm font-light pl-4 flex flex-row gap-1.5">
+           On, <p class="font-medium ">${localeDateString}
           </header>
           <section
             id="${userLatestTodo.id}"
@@ -755,6 +741,8 @@ export function addInYoursTodo(
       </article>
     `;
   }
+
+  // console.log(userLatestTodo);
 
   // downloadTodos([document.querySelector(`[todoid="${userLatestTodo.id}"]`)]);
 }
@@ -836,7 +824,7 @@ export function addInHTML(
 
     dateFilterDropdown.innerHTML += `
     <li data-value="${todoDate}" class="text-start px-2 py-1 cursor-pointer">
-      Due on <b class="underline"><i>${todoDate}</i></b>
+       <b><i>${todoDate}</i></b>
     </li>
   `;
 
@@ -858,6 +846,7 @@ export function addInHTML(
 
     groupedData[todoDate].forEach((json) => {
       if (isExpired) expiredTodoCount++;
+
       addInYoursTodo(
         {
           isExpired,
