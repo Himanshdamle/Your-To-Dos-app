@@ -365,54 +365,6 @@ export function transitionBetweenPages(settings = {}) {
 }
 
 /**
- * Transitions between two pages using smoothInnOutTransition.
- * 
- * HTML STRUC. REQ. :
- * 
- * <section class="toggle_wrapper">
-    <div class="slider"></div>
-    <div class="toggle_btn active">TASK CATEGORY</div>
-    <div class="toggle_btn">TASK</div>
-  </section>
- */
-export function initToggleSlider(wrapperSelector) {
-  const wrapper = wrapperSelector || document.querySelector(wrapperSelector);
-  if (!wrapper) return;
-
-  const buttons = wrapper.querySelectorAll(".toggle_btn");
-  const slider = wrapper.querySelector(".slider");
-
-  if (!buttons.length || !slider) return;
-
-  let activeBtn = wrapper.querySelector(".toggle_btn.active") || buttons[0];
-  buttons.forEach((btn) => btn.classList.remove("active"));
-  activeBtn.classList.add("active");
-
-  // Initial position of slider
-  gsap.set(slider, {
-    width: activeBtn.offsetWidth + 10,
-    height: activeBtn.offsetHeight,
-    left: activeBtn.offsetLeft - 10 / 2,
-  });
-
-  buttons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      if (btn.classList.contains("active")) return;
-
-      buttons.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      gsap.to(slider, {
-        width: btn.offsetWidth + 10,
-        left: btn.offsetLeft - 10 / 2,
-        duration: 0.4,
-        ease: "power2.out",
-      });
-    });
-  });
-}
-
-/**
  * Gets the locale date string for a given date (e.g., "1st Jan, 2025").
  */
 export function getLocaleDateString(date) {
@@ -487,7 +439,7 @@ export function getTaskNumber(
 /**
  * Determines the date range for a todo item (e.g., "Expired todo's").
  */
-export function getDateRange(date) {
+export function getDateRange(date, preWord) {
   const today = new Date();
   const todoDate = new Date(date);
 
@@ -495,33 +447,37 @@ export function getDateRange(date) {
   todoDate.setHours(0, 0, 0, 0);
 
   const diffTime = todoDate.getTime() - today.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-  if (diffDays < 0) return { 0: "Expired todos" };
-  if (diffDays === 0) return { 1: "Due this day" };
+  if (diffDays < 0) {
+    if (preWord.toLowerCase() == "completed") diffDays = Math.abs(diffDays);
+    else return { 0: "Expired todos" };
+  }
+
+  if (diffDays === 0) return { 1: `${preWord} this day` };
 
   if (diffDays <= 28) {
     for (let i = 1; i <= 4; i++) {
       if (diffDays <= 7 * i) {
         return i === 1
-          ? { 2: "due this week" }
-          : { [i + 1]: `due over ${i} weeks` };
+          ? { 2: `${preWord} this week` }
+          : { [i + 1]: `${preWord} over ${i} weeks` };
       }
     }
   }
 
   if (diffDays <= 365) {
     const months = Math.floor(diffDays / 30);
-    return { [months * 5]: `due over ${months} months` };
+    return { [months * 5]: `${preWord} over ${months} months` };
   }
 
-  return { 100: "over a year" };
+  return { 100: `over a year` };
 }
 
 /**
  * Groups todos by date range for display.
  */
-export function groupTodosWithDate(todoList) {
+export function groupTodosWithDate(todoList, preWord = "") {
   const result = todoList.reduce((acc, curr) => {
     if (!curr) {
       console.error("null value found in the todo storage");
@@ -545,7 +501,7 @@ export function groupTodosWithDate(todoList) {
   };
 
   const range = dateAndTodo.keys.reduce((acc, curr, index) => {
-    const dateRange = getDateRange(curr);
+    const dateRange = getDateRange(curr, preWord);
 
     const key = Number(Object.keys(dateRange)[0]);
 
@@ -741,10 +697,6 @@ export function addInYoursTodo(
       </article>
     `;
   }
-
-  // console.log(userLatestTodo);
-
-  // downloadTodos([document.querySelector(`[todoid="${userLatestTodo.id}"]`)]);
 }
 
 /**
@@ -790,7 +742,8 @@ export function addInHTML(
 
   if (!JSONData.length && !addNewTodo) return;
 
-  const groupedData = groupTodosWithDate(JSONData);
+  const preWord = main.getAttribute("data-preWord");
+  const groupedData = groupTodosWithDate(JSONData, preWord);
 
   let expiredTodoCount = 0;
 
@@ -1096,8 +1049,15 @@ export function dragAndDropTodos(getLocalTodoVarNameObject) {
 
   const movedTodo = JSONData.splice(getTodoData.localStorageIndex, 1);
 
+  const currentDate = new Date();
+  movedTodo[0].date = `${currentDate.getFullYear()}-0${
+    currentDate.getMonth() + 1
+  }-${currentDate.getDate()}`;
+
+  console.log(JSONData);
+
   localStorage.setItem(fromDragVarName, JSON.stringify(JSONData));
-  backend(getTodoData.matchedId, toDropVarName);
+  backend(movedTodo[0], toDropVarName);
 
   return movedTodo;
 }

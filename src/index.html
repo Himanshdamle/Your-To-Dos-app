@@ -236,6 +236,7 @@
             <section
               id="pending-todo"
               class="flex flex-col gap-10 w-full"
+              data-preWord="Due"
             ></section>
           </main>
         </section>
@@ -439,11 +440,12 @@
                   TO DO
                 </div>
               </button>
+
               <!-- READ -->
               <button
                 id="read"
                 title="Drag and drop task to read"
-                class="flex flex-col items-center"
+                class="flex flex-col items-center cursor-not-allowed"
               >
                 <div class="flex items-center no-drag">
                   <h1 class="text-2xl font-bold text-[#F4D35E]">R</h1>
@@ -460,7 +462,7 @@
               <button
                 id="update"
                 title="Drag and drop task to update"
-                class="flex flex-col items-center"
+                class="flex flex-col items-center cursor-not-allowed"
               >
                 <div class="flex items-center">
                   <h1 class="text-2xl font-bold text-[#1C52F0]">U</h1>
@@ -479,7 +481,7 @@
               <button
                 id="delete"
                 title="Drag and drop task to delete"
-                class="flex flex-col items-center"
+                class="flex flex-col items-center cursor-not-allowed"
               >
                 <div class="flex items-center">
                   <h1 class="text-2xl font-bold text-[#FF3D3D]">D</h1>
@@ -1114,6 +1116,7 @@
           <main
             id="right-main"
             class="h-full w-full mt-8 flex flex-col items-center gap-3.5 overflow-y-scroll overflow-x-hidden"
+            data-preWord="Completed"
           ></main>
         </section>
       </main>

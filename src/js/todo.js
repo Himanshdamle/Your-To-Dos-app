@@ -21,6 +21,8 @@ export function backend(
     todo.push(todoObject);
   }
 
+  console.log(todoObject);
+
   localStorage.setItem(localTodoVarName, JSON.stringify(todo));
 }
 
