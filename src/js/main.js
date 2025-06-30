@@ -2,7 +2,11 @@ import { initializeUI, searchByRotation } from "./ui.js";
 import { setupEventListeners } from "./event.js";
 import { hoverEffect, clickingLogic, initializeTagInputs } from "./tag.js";
 import { middle } from "./downNavbar.js";
-import { initializeDragBehaviour, showMessagePopup } from "./core.js";
+import {
+  initializeDragBehaviour,
+  operations,
+  showMessagePopup,
+} from "./core.js";
 import {
   transitionBetweenPages,
   resetTodoPageFunc,
@@ -126,26 +130,20 @@ document.addEventListener("DOMContentLoaded", () => {
     draggable: ".todo-item",
 
     onAdd(evt) {
-      const movePendingTodo = dragAndDropTodos({
-        dragVarName: "todos",
-        dropVarName: "completedTodos",
-        dragedTodo: evt.item,
-      });
+      operations(
+        {
+          todoCard: evt.item,
 
-      if (movePendingTodo === undefined) return;
+          dragVarName: "todos",
+          dropVarName: "completedTodos",
+          allowCRUD: ["delete"],
+          todoMainSide: completedTodosSection,
 
-      initializeDragBehaviour({
-        allowCRUD: ["#delete"],
-        localTodoVarName: "completedTodos",
-        todoMainSide: completedTodosSection,
-      });
-
-      showMessagePopup({
-        invertedBoldTxt: movePendingTodo[0].heading || "To-Do",
-        boldTxt: "Moved to Completed Tasks",
-        lightTxt: " ",
-        emoji: "🥳🎊",
-      });
+          popupBoldText: "Moved to Completed Tasks",
+          popupEmoji: "🥳🎊",
+        },
+        "dragAndDrop"
+      );
     },
   });
 
@@ -162,25 +160,20 @@ document.addEventListener("DOMContentLoaded", () => {
     draggable: ".todo-item",
 
     onAdd(evt) {
-      const moveCompletedTodo = dragAndDropTodos({
-        dragVarName: "completedTodos",
-        dropVarName: "todos",
-        dragedTodo: evt.item,
-      });
+      operations(
+        {
+          todoCard: evt.item,
 
-      if (moveCompletedTodo === undefined) return;
+          dragVarName: "completedTodos",
+          dropVarName: "todos",
+          allowCRUD: true, // means allow all the crud functions.
+          todoMainSide: pendingTodosSection,
 
-      initializeDragBehaviour({
-        allowCRUD: true, // means allow all the crud functions.
-        localTodoVarName: "todos",
-        todoMainSide: pendingTodosSection,
-      });
-
-      showMessagePopup({
-        invertedBoldTxt: moveCompletedTodo[0].heading || "To-Do",
-        boldTxt: "Moved to Pending Tasks",
-        emoji: "🔄",
-      });
+          popupBoldText: "Moved to Pending Tasks",
+          popupEmoji: "🔄",
+        },
+        "dragAndDrop"
+      );
     },
   });
 

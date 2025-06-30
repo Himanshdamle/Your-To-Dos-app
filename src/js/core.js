@@ -12,6 +12,74 @@ import { downloadTodos } from "./event.js";
 import { toggleClasses } from "./tag.js";
 
 /**
+ * Control all the ***CRUD and Drag and Drop operation.***
+ */
+export function operations(
+  taskInfo = {
+    todoCard,
+
+    dragVarName,
+    dropVarName,
+    allowCRUD,
+    todoMainSide,
+    popupBoldText,
+    popupEmoji,
+  },
+  operationName
+) {
+  const todoCardHTML = taskInfo.todoCard;
+
+  /**
+   *  Drag and Drop operation.
+   */
+  if (operationName === "dragAndDrop") {
+    const movedTodo = dragAndDropTodos({
+      dragVarName: taskInfo.dragVarName,
+      dropVarName: taskInfo.dropVarName,
+      dragedTodo: todoCardHTML,
+    });
+
+    if (movedTodo === undefined) return;
+
+    initializeDragBehaviour({
+      allowCRUD: taskInfo.allowCRUD,
+      localTodoVarName: taskInfo.dropVarName,
+      todoMainSide: taskInfo.todoMainSide,
+    });
+
+    showMessagePopup({
+      invertedBoldTxt: movedTodo[0].heading || "To-Do",
+      boldTxt: taskInfo.popupBoldText,
+      emoji: taskInfo.popupEmoji,
+    });
+
+    return;
+  }
+
+  /**
+   * CRUD operation.
+   */
+  window.getTodoData = pickedTodoData(
+    todoCardHTML.getAttribute("data-localtodovarname"),
+    todoCardHTML
+  );
+
+  if (window.getTodoData === undefined) return;
+
+  if (operationName.toLowerCase() === "read") readTodo(getTodoData.matchedId);
+  else if (operationName.toLowerCase() === "update")
+    update(getTodoData.matchedId);
+  else if (operationName.toLowerCase() === "delete")
+    deleteTodoFRONTEND(() =>
+      deleteTodo(
+        todoCard.getAttribute("data-localtodovarname"),
+        getTodoData.localStorageIndex,
+        getTodoData.actualID
+      )
+    );
+}
+
+/**
  * Animates smooth in/out transitions for elements using GSAP.
  */
 export function smoothInnOutTransition(gsapSettings, play, currentDisplay) {
@@ -1054,8 +1122,6 @@ export function dragAndDropTodos(getLocalTodoVarNameObject) {
     currentDate.getMonth() + 1
   }-${currentDate.getDate()}`;
 
-  console.log(JSONData);
-
   localStorage.setItem(fromDragVarName, JSON.stringify(JSONData));
   backend(movedTodo[0], toDropVarName);
 
@@ -1099,23 +1165,11 @@ export function initializeDragBehaviour(getSettings) {
 
           if (!ancestor) return;
 
-          window.getTodoData = pickedTodoData(
-            getSettings.localTodoVarName,
-            evt.item.querySelector("section")
-          );
+          const todoCard = evt.item.querySelector("section");
 
-          if (window.getTodoData === undefined) return;
-
-          if (elID === "#update") update(getTodoData.matchedId);
-          else if (elID === "#read") readTodo(getTodoData.matchedId);
-          else if (elID === "#delete")
-            deleteTodoFRONTEND(() =>
-              deleteTodo(
-                getSettings.localTodoVarName,
-                getTodoData.localStorageIndex,
-                getTodoData.actualID
-              )
-            );
+          if (elID === "#update") operations({ todoCard }, "update");
+          else if (elID === "#read") operations({ todoCard }, "read");
+          else if (elID === "#delete") operations({ todoCard }, "delete");
         });
       },
     });
@@ -1139,54 +1193,4 @@ export function initializeDragBehaviour(getSettings) {
       });
     }
   });
-}
-
-export function operations(infoObject = {}, operationName) {
-  const todoCardHTML = infoObject.todoCard;
-
-  if (operationName.toLowerCase() === "completed") {
-    const completedTodosSection = document.querySelector("#right-main");
-
-    const movePendingTodo = dragAndDropTodos({
-      dragVarName: "todos",
-      dropVarName: "completedTodos",
-      dragedTodo: todoCardHTML,
-    });
-
-    if (movePendingTodo === undefined) return;
-
-    initializeDragBehaviour({
-      allowCRUD: ["#delete"],
-      localTodoVarName: "completedTodos",
-      todoMainSide: completedTodosSection,
-    });
-
-    completedTodosSection.append(todoCardHTML);
-
-    showMessagePopup({
-      invertedBoldTxt: movePendingTodo[0].heading || "To-Do",
-      boldTxt: "Moved to Completed Tasks",
-      lightTxt: " ",
-      emoji: "🥳🎊",
-    });
-
-    return;
-  }
-
-  window.getTodoData = pickedTodoData(
-    todoCardHTML.getAttribute("data-localtodovarname"),
-    todoCardHTML
-  );
-
-  if (operationName.toLowerCase() === "read") readTodo(getTodoData.matchedId);
-  else if (operationName.toLowerCase() === "update")
-    update(getTodoData.matchedId);
-  else if (operationName.toLowerCase() === "delete")
-    deleteTodoFRONTEND(() =>
-      deleteTodo(
-        todoCard.getAttribute("data-localtodovarname"),
-        getTodoData.localStorageIndex,
-        getTodoData.actualID
-      )
-    );
 }

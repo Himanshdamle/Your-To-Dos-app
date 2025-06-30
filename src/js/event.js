@@ -6,6 +6,7 @@ import {
   showMessagePopup,
   closeOpenSmoothAnimation,
   slideAnimation,
+  operations,
 } from "./core.js";
 
 import {
@@ -315,32 +316,17 @@ export function setupEventListeners() {
     });
 
     // KEY **DOWN**
+    // hot keys for todo card
     box.addEventListener("keydown", (e) => {
-      // hot keys for todo card
-
       if (e.ctrlKey || e.metaKey || e.altKey) return;
 
       const todoCard = e.target.querySelector(".todo-card");
-
       if (todoCard === null) return;
-
       const keyPressed = e.key.toLowerCase();
 
-      window.getTodoData = pickedTodoData(
-        todoCard.getAttribute("data-localtodovarname"),
-        todoCard
-      );
-
-      if (keyPressed === "r") readTodo(getTodoData.matchedId);
-      else if (keyPressed === "u") update(getTodoData.matchedId);
-      else if (keyPressed === "d")
-        deleteTodoFRONTEND(() =>
-          deleteTodo(
-            todoCard.getAttribute("data-localtodovarname"),
-            getTodoData.localStorageIndex,
-            getTodoData.actualID
-          )
-        );
+      if (keyPressed === "r") operations({ todoCard }, "read");
+      else if (keyPressed === "u") operations({ todoCard }, "update");
+      else if (keyPressed === "d") operations({ todoCard }, "delete");
     });
   });
 }

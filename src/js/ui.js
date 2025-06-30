@@ -267,10 +267,30 @@ menuOptionBox.forEach((box) => {
       const target = e.target;
 
       if (target !== box && target.classList.contains("menu-buttons")) {
-        operations(
-          { todoCard: window.clickedTodoHTML },
-          target.getAttribute("data-function")
-        );
+        const operationName = target.getAttribute("data-function");
+
+        const completedTodosSection = document.querySelector("#right-main");
+
+        if (operationName === "dragAndDrop") {
+          completedTodosSection.append(window.clickedTodoHTML);
+
+          operations(
+            {
+              todoCard: window.clickedTodoHTML,
+
+              dragVarName: "todos",
+              dropVarName: "completedTodos",
+              allowCRUD: ["delete"],
+              todoMainSide: completedTodosSection,
+
+              popupBoldText: "Moved to Completed Tasks",
+              popupEmoji: "🥳🎊",
+            },
+            "dragAndDrop"
+          );
+        } else {
+          operations({ todoCard: window.clickedTodoHTML }, operationName);
+        }
       }
     },
     true
