@@ -29,6 +29,8 @@ export function operations(
 ) {
   const todoCardHTML = taskInfo.todoCard;
 
+  if (!todoCardHTML) return;
+
   /**
    *  Drag and Drop operation.
    */
@@ -72,7 +74,7 @@ export function operations(
   else if (operationName.toLowerCase() === "delete")
     deleteTodoFRONTEND(() =>
       deleteTodo(
-        todoCard.getAttribute("data-localtodovarname"),
+        todoCardHTML.getAttribute("data-localtodovarname"),
         getTodoData.localStorageIndex,
         getTodoData.actualID
       )
@@ -841,14 +843,6 @@ export function addInHTML(
     `;
     }
 
-    const dateFilterDropdown = document.querySelector("#date-filter-dropdown");
-
-    dateFilterDropdown.innerHTML += `
-    <li data-value="${todoDate}" class="text-start px-2 py-1 cursor-pointer">
-       <b><i>${todoDate}</i></b>
-    </li>
-  `;
-
     let articleWrapper = document.createElement("div");
     articleWrapper.classList.add(
       "todo-card-box",
@@ -1095,21 +1089,12 @@ export function dragAndDropTodos(getLocalTodoVarNameObject) {
   const toDropVarName = getLocalTodoVarNameObject.dropVarName;
   const evt = getLocalTodoVarNameObject.dragedTodo;
 
-  // CHECK IF USER DRAG THE TODO AND DROP IT IN THE SAME CONTAINER WHERE IT WAS DRAGED BEFORE.
-  const dropedTodoData = pickedTodoData(
-    toDropVarName,
-    evt,
-    evt.closest("section").id || evt.id
-  );
-
-  // if the picked todo data is present in the same  toDropVarName then return
-  if (dropedTodoData !== undefined && dropedTodoData.matchedId !== undefined)
-    return;
-
   const getTodoData = pickedTodoData(
     fromDragVarName,
     evt.querySelector(".todo-card") || evt
   );
+
+  if (getTodoData.matchedId === undefined) return;
 
   const JSONData = JSON.parse(localStorage.getItem(fromDragVarName)) || null;
 

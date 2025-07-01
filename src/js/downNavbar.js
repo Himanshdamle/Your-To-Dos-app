@@ -43,48 +43,17 @@ export function middle() {
   function getUserDetails() {
     function getUserName() {
       const userNameInput = document.querySelector("#user-name");
-      const placeholderUserName = document.querySelector(
-        "#psuedo-placeholder-user-name"
-      );
-      const userName = localStorage.getItem("userName");
-      const fullStop = document.querySelector("#full-stop");
+
+      const userName = localStorage.getItem("userName") || null;
 
       if (userName) {
-        userNameInput.value = userName + ".";
-        placeholderUserName.style.display = "none";
-        fullStop.style.display = "none";
-      } else {
-        userNameInput.value = "";
-        placeholderUserName.style.display = "block";
-        fullStop.style.display = "block";
+        userNameInput.value = userName;
+        document.querySelector("#psuedo-placeholder-user-name").style.display =
+          "none";
       }
 
-      const measureSpan = document.querySelector("#measure-span");
-
-      measureSpan.style.font = getComputedStyle(userNameInput).font;
-      fullStop.style.font = getComputedStyle(userNameInput).font;
       userNameInput.addEventListener("input", () => {
-        measureSpan.textContent = userNameInput.value || " ";
-        const textWidth = measureSpan.offsetWidth;
-
-        fullStop.style.display = "block";
-        gsap.to("#full-stop", {
-          width: textWidth + 10,
-          duration: 0.2,
-          ease: "power2.out",
-        });
-        localStorage.setItem("userName", userNameInput.value || "");
-      });
-
-      userNameInput.addEventListener("focus", () => {
-        userNameInput.value = "";
-        fullStop.style.display = "block";
-      });
-
-      userNameInput.addEventListener("blur", () => {
-        userNameInput.value = (localStorage.getItem("userName") || "") + ".";
-
-        fullStop.style.display = "none";
+        localStorage.setItem("userName", userNameInput.value);
       });
     }
     getUserName();

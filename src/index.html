@@ -113,8 +113,9 @@
 
                 <!-- FILTER -->
                 <div
-                  class="flex justify-around items-center bg-[#0F0F0F] px-3 border rounded-lg border-white/30"
+                  class="flex justify-around items-center bg-[#0F0F0F] pl-3 border rounded-lg border-white/30"
                 >
+                  <!-- FILTER SVG -->
                   <div class="pr-3 border-r py-1">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -129,105 +130,42 @@
                     </svg>
                   </div>
 
-                  <!-- DATE FILTER -->
-                  <section
-                    id="priority-section"
-                    class="flex flex-col justify-center items-center"
+                  <ul
+                    class="w-full flex flex-row justify-center overflow-hidden rounded-lg"
                   >
-                    <div class="relative w-max">
-                      <button
-                        id="date-filter-input"
-                        class="cursor-pointer border-r border-white/30 pr-2 text-white outline-none appearance-none flex justify-start gap-1 items-center"
-                      >
-                        <p>Date</p>
+                    <!-- PRIORITY Search -->
+                    <li
+                      class="border-r px-3 hover:bg-[#008950] w-full transition-colors duration-200 priorities-search-btn"
+                      id="priority-priority-btn"
+                      data-priority-name="priority"
+                    >
+                      <button>
+                        <span>Priority</span>
                       </button>
+                    </li>
 
-                      <ul
-                        id="date-filter-dropdown"
-                        class="absolute left-[-150%] overflow-hidden z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-max hidden"
-                      ></ul>
-                    </div>
-                  </section>
-
-                  <!-- FILTER -->
-                  <section
-                    id="priority-section"
-                    class="flex flex-col justify-center items-center"
-                  >
-                    <div class="relative w-max">
-                      <button
-                        id="priority-filter-input"
-                        class="cursor-pointer border-r border-white/30 pr-2 text-white outline-none appearance-none flex justify-start items-center"
-                      >
-                        <p class="max-w-[65px] truncate">Priority</p>
+                    <!-- HEADING Search -->
+                    <li
+                      class="border-r px-3 hover:bg-[#008950] w-full transition-colors duration-200 priorities-search-btn"
+                      id="heading-priority-btn"
+                      data-priority-name="heading"
+                    >
+                      <button>
+                        <span>Heading</span>
                       </button>
+                    </li>
 
-                      <ul
-                        id="priority-filter-dropdown"
-                        class="absolute left-[-100%] overflow-hidden z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-max hidden"
-                      >
-                        <li
-                          data-value="low"
-                          class="text-start pl-2 py-1 cursor-pointer hover:bg-[#2ecc71]"
-                        >
-                          🟦 Low - Do whenever
-                        </li>
-                        <li
-                          data-value="medium"
-                          class="text-start pl-2 py-1 cursor-pointer hover:bg-[#f1c40f]"
-                        >
-                          🟨 Medium - Soon
-                        </li>
-                        <li
-                          data-value="high"
-                          class="text-start pl-2 py-1 cursor-pointer hover:bg-[#e67e22]"
-                        >
-                          🟥 High - Do ASAP
-                        </li>
-                        <li
-                          data-value="urgent"
-                          class="text-start pl-2 py-1 cursor-pointer hover:bg-[#e74c3c]"
-                        >
-                          🔴 Urgent - Emergency
-                        </li>
-                      </ul>
-                    </div>
-                  </section>
-
-                  <!-- STATUS FILTER -->
-                  <section
-                    id="priority-section"
-                    class="flex flex-col justify-center items-center"
-                  >
-                    <div class="relative w-max">
-                      <button
-                        id="status-filter-input"
-                        class="cursor-pointer border-white/30 text-white outline-none appearance-none flex justify-start items-center"
-                      >
-                        <p>Status</p>
+                    <!-- TAGS Search -->
+                    <li
+                      class="hover:bg-[#008950] px-3 w-full transition-colors duration-200 priorities-search-btn"
+                      id="tags-priority-btn"
+                      data-priority-name="tags"
+                    >
+                      <button>
+                        <span>Tags</span>
                       </button>
-
-                      <ul
-                        id="status-filter-dropdown"
-                        class="absolute left-[-50%] overflow-hidden z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-max hidden"
-                      >
-                        <li
-                          data-value="low"
-                          class="text-start px-2 py-1 cursor-pointer flex gap-1.5"
-                        >
-                          <p><b id="expired-todo-count">0</b></p>
-                          EXPIRED
-                        </li>
-                        <li
-                          data-value="medium"
-                          class="text-start px-2 py-1 cursor-pointer flex gap-1.5"
-                        >
-                          <p><b id="pending-todo-count">0</b></p>
-                          PENDING
-                        </li>
-                      </ul>
-                    </div>
-                  </section>
+                    </li>
+                  </ul>
                 </div>
               </article>
             </section>
@@ -1070,7 +1008,7 @@
                     type="text"
                     name="user_name"
                     id="user-name"
-                    class="font-medium italic input outline-none focus:border focus:border-white/30 rounded-lg text-center text-2xl leading-5.5 tracking-wide w-full"
+                    class="font-medium input outline-none focus:border focus:border-white/30 rounded-lg text-center text-2xl leading-5.5 tracking-wide w-full"
                     maxlength="12"
                     autocomplete="off"
                   />

@@ -94,30 +94,3 @@ const priorityDropdown = createAnimatedDropdown({
     currTodoDetails.priority = value;
   },
 });
-
-const dateFilterDropdown = createAnimatedDropdown({
-  buttonId: "date-filter-input",
-  menuId: "date-filter-dropdown",
-  onSelect: (value) => {
-    console.log("Selected priority:", value);
-    // Do something with value here
-  },
-});
-
-const priorityFilterDropdown = createAnimatedDropdown({
-  buttonId: "priority-filter-input",
-  menuId: "priority-filter-dropdown",
-  onSelect: (value) => {
-    console.log("Selected priority:", value);
-    // Do something with value here
-  },
-});
-
-const statusFilterDropdown = createAnimatedDropdown({
-  buttonId: "status-filter-input",
-  menuId: "status-filter-dropdown",
-  onSelect: (value) => {
-    console.log("Selected priority:", value);
-    // Do something with value here
-  },
-});
