@@ -524,7 +524,7 @@ export function getDateRange(date, preWord) {
     else return { 0: "Expired todos" };
   }
 
-  if (diffDays === 0) return { 1: `${preWord} this day` };
+  if (diffDays === 0) return { 1: `${preWord} today` };
 
   if (diffDays <= 28) {
     for (let i = 1; i <= 4; i++) {
@@ -659,6 +659,7 @@ export function addInYoursTodo(
   const localeDateString = getLocaleDateString(userLatestTodo.date);
 
   let tagsHTMLPresentation = "";
+
   userLatestTodo.tags.forEach((tag) => {
     tagsHTMLPresentation += `
         <p title="#${tag}" class="font-light">
@@ -737,7 +738,13 @@ export function addInYoursTodo(
       <span
         class="flex text-xl gap-2 w-full justify-center items-center font-light"
       >
-        ${tagsHTMLPresentation || "No tags provided."}
+        ${
+          tagsHTMLPresentation ||
+          `
+        <p title="#general" class="font-light">
+          <b class="font-bold">#</b>general
+        </p> `
+        }
       </span>
     </div>
   `;
@@ -749,9 +756,10 @@ export function addInYoursTodo(
     const crossMarkerClassTw =
       "before:content-[''] before:absolute before:w-[200%] before:h-[1px] before:bg-white before:block before:left-1/2 before:-translate-x-1/2 before:top-1/2 before:-translate-y-1/2 before:rotate-20 before:z-[100] overflow-hidden";
     const addCrossMarker = looksSettings.isExpired ? crossMarkerClassTw : "";
+    const reduceOpacity = looksSettings.isExpired ? "opacity-50" : "";
 
     mainDirection.innerHTML += `
-      <article class="grid todo-item gap-3 relative z-50 max-w-[300px] w-full" title="${userLatestTodo.heading}">
+      <article class="grid todo-item gap-3 relative z-50 max-w-[300px] w-full ${reduceOpacity}" title="${userLatestTodo.heading}">
         <div class="grid place-items-end">
           <header class="relative z-10 w-full text-sm font-light pl-4 flex flex-row gap-1.5">
            On, <p class="font-medium ">${localeDateString}

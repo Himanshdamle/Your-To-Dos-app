@@ -35,7 +35,7 @@ export function setupEventListeners() {
     date: "",
     time: "",
     priority: "",
-    tags: [],
+    tags: ["#general"],
   };
 
   function addTodoInBackend(todoDetailsObject) {

@@ -3,55 +3,67 @@ import { resize } from "./core.js";
 /**
  * Toggles CSS classes for tag hover effects.
  */
-export function toggleClasses(methodName, bgEl) {
+export function toggleClasses(methodName, bgEl, el) {
   bgEl.classList[methodName]("scale-100", "bg-span-el-tags-hover-effect");
   bgEl.style.transformOrigin = `${window.hoverObject?.x || 0}px ${
     window.hoverObject?.y || 0
   }px`;
 }
 
-export function hoverEffect(el, bgEl, state) {
+function removeThisTag(tagName) {
+  window.currTodoDetails.tags = window.currTodoDetails.tags.filter(
+    (tag) => tag !== tagName
+  );
+  window.countTags--;
+}
+
+export function hoverEffect(el, bgEl) {
   el.addEventListener("mousemove", (e) => {
     const rect = el.getBoundingClientRect();
     window.hoverObject = { x: e.clientX - rect.left, y: e.clientY - rect.top };
   });
 
   el.addEventListener("mouseenter", () => {
-    toggleClasses("add", bgEl);
+    toggleClasses("add", bgEl, el);
   });
 
   el.addEventListener("mouseleave", () => {
-    if (!state.isClicked || window.countTags > 3) toggleClasses("remove", bgEl);
+    const isTagSelected = el.querySelector("input").getAttribute("data-active");
+
+    if (isTagSelected === "false" || window.countTags > 3) {
+      toggleClasses("remove", bgEl, el);
+    }
   });
 }
 
 export function clickingLogic(el, bgEl, state) {
   const tagsCounter = document.querySelector("#current-len-tags-input");
+  const enterTagName = el.querySelector("input");
 
   el.addEventListener("click", () => {
     setTimeout(() => {
-      if (state.isDblClick) return;
+      if (enterTagName === document.activeElement) {
+        state.isClicked = true;
+        return;
+      }
 
       state.isClicked = !state.isClicked;
 
       if (state.isClicked) {
         window.countTags++;
       } else {
-        window.countTags--;
-        toggleClasses("remove", bgEl);
+        enterTagName.setAttribute("data-active", false);
 
-        const enterTagName = el.querySelector("input");
-        window.currTodoDetails.tags = window.currTodoDetails.tags.filter(
-          (tag) => tag !== enterTagName.value
-        );
+        toggleClasses("remove", bgEl, el);
+        removeThisTag(enterTagName.value);
       }
 
-      if (window.countTags <= 3 && tagsCounter) {
-        tagsCounter.innerText = window.countTags;
+      if (window.countTags <= 3) {
+        tagsCounter.textContent = window.countTags;
 
         if (state.isClicked) {
-          const enterTagName = el.querySelector("input");
           window.currTodoDetails.tags.push(enterTagName.value);
+          enterTagName.setAttribute("data-active", true);
         }
       }
     }, 250);
@@ -59,6 +71,11 @@ export function clickingLogic(el, bgEl, state) {
 
   el.addEventListener("dblclick", () => {
     const enterTagName = el.querySelector("input");
+    if (
+      (window.countTags >= 3 && !el.querySelector("input")) ||
+      enterTagName === document.activeElement
+    )
+      return;
 
     function toggleClassesAndAttribute(
       methodNameClasses,
@@ -74,18 +91,40 @@ export function clickingLogic(el, bgEl, state) {
 
     toggleClassesAndAttribute("remove", "removeAttribute");
 
+    // if user selected and again want to edit the tag then remove the selected tag
+    removeThisTag(enterTagName.value);
+
+    // as user dbl click focus input
+    enterTagName.focus();
+
     enterTagName.addEventListener(
       "blur",
       () => {
         toggleClassesAndAttribute("add", "setAttribute", true);
-        toggleClasses("remove", bgEl);
 
         if (enterTagName.value.length <= 1) {
           enterTagName.value = enterTagName.getAttribute("value");
           enterTagName.setAttribute("value", enterTagName.value);
+
+          toggleClasses("remove", bgEl, el);
         } else {
-          toggleClasses("add", bgEl);
+          if (enterTagName.getAttribute("data-active") === "true") {
+            window.currTodoDetails.tags.push(enterTagName.value);
+            return;
+          }
+
+          enterTagName.setAttribute("data-active", true);
+          toggleClasses("add", bgEl, el);
+
+          removeThisTag(enterTagName.value);
+          window.countTags += 1;
+
           window.currTodoDetails.tags.push(enterTagName.value);
+
+          window.countTags += 2;
+
+          document.querySelector("#current-len-tags-input").textContent =
+            window.countTags;
         }
       },
       { once: true }

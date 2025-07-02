@@ -259,7 +259,7 @@
               </section>
 
               <!-- Organize -->
-              <section class="menu-option-box">
+              <section class="menu-option-box opacity-50" title="comming soon!">
                 <article
                   class="w-full flex flex-row gap-2 items-center justify-start"
                 >
@@ -271,7 +271,7 @@
                   class="font-semibold text-2xl pl-2 flex flex-col items-start"
                 >
                   <button
-                    class="menu-buttons w-full text-start cursor-pointer text-[#00BFFF] flex flex-row gap-1.5"
+                    class="menu-buttons w-full text-start cursor-not-allowed text-[#00BFFF] flex flex-row gap-1.5"
                     data-color="#00BFFF"
                     data-function="Pin"
                   >
@@ -282,7 +282,7 @@
                     Pin
                   </button>
                   <button
-                    class="menu-buttons w-full text-start cursor-pointer flex flex-row gap-1.5 items-center"
+                    class="menu-buttons w-full text-start cursor-not-allowed flex flex-row gap-1.5 items-center"
                     data-function="Archive"
                   >
                     <svg
@@ -673,6 +673,7 @@
                     <input
                       class="tag-name bg-transparent text-white min-w-[4ch] z-10 border-none cursor-pointer rounded-sm focus:border pointer-events-none"
                       type="text"
+                      data-active="false"
                       id="tag-input-1"
                       name="tag"
                       value="Study"
@@ -695,6 +696,7 @@
                       name="tag"
                       value="Work"
                       disabled
+                      data-active="false"
                       maxlength="10"
                     />
                   </div>
@@ -713,6 +715,7 @@
                       name="tag"
                       value="Personal"
                       disabled
+                      data-active="false"
                       maxlength="10"
                     />
                   </div>
@@ -731,6 +734,7 @@
                       name="tag"
                       value="GYM"
                       disabled
+                      data-active="false"
                       maxlength="10"
                     />
                   </div>
@@ -749,6 +753,7 @@
                       name="tag"
                       value="Health"
                       disabled
+                      data-active="false"
                       maxlength="10"
                     />
                   </div>
@@ -968,24 +973,28 @@
 
             <!-- USER ACCOUNT SHOW -->
             <section
-              class="flex items-center px-1 gap-1 justify-around w-full flex-[1]"
+              class="flex items-center px-1 gap-1 justify-center w-full flex-[1]"
             >
-              <input
-                type="file"
-                id="fileInput"
-                accept="image/*"
-                style="display: none"
-              />
-              <button
-                id="select-user-photo"
-                class="h-full items-center cursor-pointer"
-              >
-                <img
-                  class="w-14 h-14 border border-white/30 object-cover rounded-full scale-120 hover:scale-130 transition-transform duration-300 ease-in-out"
-                  src=""
-                  alt="user_profile_picture"
+              <div>
+                <input
+                  type="file"
+                  id="fileInput"
+                  accept="image/*"
+                  style="display: none"
                 />
-              </button>
+                <button
+                  id="select-user-photo"
+                  class="h-full items-center cursor-pointer"
+                >
+                  <img
+                    class="w-14 h-14 border border-white/30 object-cover rounded-full scale-120 hover:scale-130 transition-transform duration-300 ease-in-out"
+                    src=""
+                    alt="user_profile_picture"
+                  />
+                </button>
+              </div>
+
+              <!-- Name -->
               <div class="flex text-2xl max-w-[15ch] text-center flex-col">
                 <p
                   id="greeting"
@@ -1019,25 +1028,6 @@
                     <i class="font-medium">Drop your name.</i>
                   </p>
                 </div>
-              </div>
-
-              <div
-                class="flex bg-[#1A1A1A] rounded-2xl justify-center items-center gap-2 border border-white/30] px-1.5"
-                title="Steak 🔥"
-              >
-                <!-- Wrapper with gradient -->
-                <div
-                  class="p-[2px] rounded-full flex justify-center items-center fire-gradient my-1"
-                >
-                  <!-- Inner span with neutral background -->
-                  <span
-                    class="rounded-full bg-[#1A1A1A] p-1 text-white text-sm"
-                  >
-                    🔥
-                  </span>
-                </div>
-
-                <p class="text-lg">20</p>
               </div>
             </section>
           </footer>

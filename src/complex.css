@@ -58,7 +58,3 @@ select {
 .active {
   color: #0f0f0f;
 }
-
-button {
-  cursor: pointer;
-}
