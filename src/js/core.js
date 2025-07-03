@@ -7,8 +7,6 @@ import {
   deleteTodoFRONTEND,
 } from "./todo.js";
 
-import { downloadTodos } from "./event.js";
-
 import { toggleClasses } from "./tag.js";
 
 /**
@@ -662,7 +660,7 @@ export function addInYoursTodo(
 
   userLatestTodo.tags.forEach((tag) => {
     tagsHTMLPresentation += `
-        <p title="#${tag}" class="font-light">
+        <p title="#${tag}" class="font-light text-nowrap truncate max-w-[80px]">
           <b class="font-bold">#</b>${tag}
         </p> `;
   });
@@ -1170,6 +1168,7 @@ export function initializeDragBehaviour(getSettings) {
 
   allowCRUDArray.forEach((elID) => {
     const target = document.querySelector(elID);
+
     if (target) {
       target.addEventListener("dragover", (e) => {
         e.preventDefault();
@@ -1182,7 +1181,7 @@ export function initializeDragBehaviour(getSettings) {
 
       target.addEventListener("drop", (e) => {
         e.preventDefault();
-        target.style.cursor = "default";
+        target.style.cursor = "not-allowed";
       });
     }
   });

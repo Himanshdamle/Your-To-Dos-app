@@ -9,14 +9,7 @@ import {
   operations,
 } from "./core.js";
 
-import {
-  backend,
-  pickedTodoData,
-  update,
-  readTodo,
-  deleteTodoFRONTEND,
-  deleteTodo,
-} from "./todo.js";
+import { backend, pickedTodoData } from "./todo.js";
 
 import { showLongText } from "./ui.js";
 
@@ -314,20 +307,6 @@ export function setupEventListeners() {
       todoCard.classList.remove("border-[#2CB67D]");
       selectedTick.classList.add("hidden");
     });
-
-    // KEY **DOWN**
-    // hot keys for todo card
-    box.addEventListener("keydown", (e) => {
-      if (e.ctrlKey || e.metaKey || e.altKey) return;
-
-      const todoCard = e.target.querySelector(".todo-card");
-      if (todoCard === null) return;
-      const keyPressed = e.key.toLowerCase();
-
-      if (keyPressed === "r") operations({ todoCard }, "read");
-      else if (keyPressed === "u") operations({ todoCard }, "update");
-      else if (keyPressed === "d") operations({ todoCard }, "delete");
-    });
   });
 }
 
@@ -376,6 +355,28 @@ export function downloadTodos(downloadBtns) {
       // Cleanup
       document.body.removeChild(a);
       URL.revokeObjectURL(a.href);
+    });
+  });
+}
+
+export function hotKeysFunction(allowCRUDArray, todoMainSide) {
+  const todoCardBox = todoMainSide.querySelectorAll(".todo-card-box");
+
+  todoCardBox.forEach((box) => {
+    box.addEventListener("keydown", (e) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      const todoCard = e.target.querySelector(".todo-card");
+      if (todoCard === null) return;
+
+      const keyPressed = e.key.toLowerCase();
+
+      const isAllowed = allowCRUDArray.includes(keyPressed);
+      if (keyPressed === "r" && isAllowed) operations({ todoCard }, "read");
+      else if (keyPressed === "u" && isAllowed)
+        operations({ todoCard }, "update");
+      else if (keyPressed === "d" && isAllowed)
+        operations({ todoCard }, "delete");
     });
   });
 }

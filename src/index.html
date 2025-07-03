@@ -182,36 +182,37 @@
         <!-- TO-DO CARD MENU -->
         <section id="menu-todoCard" class="hidden fixed z-500">
           <article
-            class="border overflow-hidden h-full border-white/50 text-xl bg-[#1A1A1A]/65 backdrop-blur-2xl rounded-xl w-[290px] pl-9 pr-4 flex flex-row gap-4 shadow-[0px_0px_2px_0px_rgba(255,255,255,255.25)] relative"
+            class="border overflow-hidden h-full border-white/50 text-xl bg-[#1A1A1A]/65 backdrop-blur-2xl rounded-xl w-[290px] pr-4 flex flex-row gap-4 relative"
           >
-            <span
-              class="font-bold text-xl flex items-center fixed top-0 -left-5 h-full w-18"
-            >
-              <p
-                class="rotate-90 rotate-z-180 tracking-widest text-nowrap truncate"
-                id="task-name"
-                title=""
-              >
-                " "
-              </p>
-            </span>
+            <div class="flex">
+              <span class="font-bold text-xl grid place-items-center w-7">
+                <p
+                  class="rotate-90 rotate-z-180 tracking-widest text-nowrap max-w-40 truncate"
+                  id="task-name"
+                  title=""
+                >
+                  " - "
+                </p>
+              </span>
 
-            <div class="w-[1.5px] bg-white/30">
-              <div
-                id="hover-navigator"
-                class="h-8 bg-white w-[200%] rounded-[1px]"
-              ></div>
+              <div class="w-[1.5px] bg-white/30">
+                <div
+                  id="hover-navigator"
+                  class="h-8 bg-white w-[200%] rounded-[1px]"
+                ></div>
+              </div>
             </div>
 
+            <!-- MAIN -->
             <div class="flex-[1] flex flex-col gap-4 py-4">
               <!-- Operations -->
               <section class="menu-option-box">
-                <article
+                <header
                   class="w-full flex flex-row gap-2 items-center justify-start"
                 >
                   <p class="font-extralight">Operations</p>
                   <div class="w-full h-[0.5px] bg-white/50 mt-1"></div>
-                </article>
+                </header>
 
                 <main
                   class="font-semibold text-2xl pl-2 flex flex-col items-start"
@@ -260,12 +261,12 @@
 
               <!-- Organize -->
               <section class="menu-option-box opacity-50" title="comming soon!">
-                <article
+                <header
                   class="w-full flex flex-row gap-2 items-center justify-start"
                 >
                   <p class="font-extralight">Organize</p>
                   <div class="w-full h-[0.5px] bg-white/50 mt-1"></div>
-                </article>
+                </header>
 
                 <main
                   class="font-semibold text-2xl pl-2 flex flex-col items-start"
@@ -308,12 +309,12 @@
 
               <!-- Export -->
               <section class="menu-option-box">
-                <article
+                <header
                   class="w-full flex flex-row gap-2 items-center justify-start"
                 >
                   <p class="font-extralight">Export</p>
                   <div class="w-full h-[0.5px] bg-white/50 mt-1"></div>
-                </article>
+                </header>
 
                 <main
                   class="font-semibold text-2xl pl-2 flex flex-col items-start"
@@ -1043,7 +1044,7 @@
 
           <main
             id="right-main"
-            class="h-full w-full mt-8 flex flex-col items-center gap-3.5 overflow-y-scroll overflow-x-hidden"
+            class="h-full w-full mt-8 flex flex-col items-center gap-10 overflow-y-scroll overflow-x-hidden"
             data-preWord="Completed"
           ></main>
         </section>

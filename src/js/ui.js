@@ -6,6 +6,8 @@ import {
   operations,
 } from "./core.js";
 
+import { hotKeysFunction } from "./event.js";
+
 /**
  * Initializes the UI, including todo rendering and placeholder effects.
  */
@@ -32,9 +34,10 @@ export function initializeUI() {
       todoMainSide: pendingTodosSection,
     }
   );
+  hotKeysFunction(["r", "u", "d"], pendingTodosSection);
 
   const getPendingTaskNumInfo = getTaskNumber(addPendingTask, {
-    selectorDate: "Due this day",
+    selectorDate: "Due today",
   });
   renderTaskProcess.pendingTask = getPendingTaskNumInfo.taskNumber || 0;
   renderTotalTask.pendingTask = getPendingTaskNumInfo.totalTask || 0;
@@ -48,9 +51,10 @@ export function initializeUI() {
       todoMainSide: completedTodosSection,
     }
   );
+  hotKeysFunction(["d"], completedTodosSection);
 
   const getCompletedTaskNumInfo = getTaskNumber(addCompletedTask, {
-    selectorDate: "Due this day",
+    selectorDate: "Completed today",
   });
   renderTaskProcess.completedTask = getCompletedTaskNumInfo.taskNumber || 0;
   renderTotalTask.completedTask = getCompletedTaskNumInfo.totalTask || 0;
@@ -86,7 +90,7 @@ export function initializeUI() {
 }
 
 /**
- * SEARCH BY CHANGES every 10 seconds.
+ * "SEARCH BY" changes every 10 seconds.
  */
 export function searchByRotation() {
   const searchBy = ["TASK NAME", "DUE DATE", "TAG NAME"];
