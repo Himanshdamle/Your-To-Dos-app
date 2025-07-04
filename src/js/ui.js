@@ -6,7 +6,7 @@ import {
   operations,
 } from "./core.js";
 
-import { hotKeysFunction } from "./event.js";
+import { hotKeysFunction, downloadTodos, copyTaskName } from "./event.js";
 
 /**
  * Initializes the UI, including todo rendering and placeholder effects.
@@ -113,7 +113,8 @@ export function searchByRotation() {
 
           smoothInnOutTransition(
             { el: searchByEl, blur: 10, duration: 0.35, opacity: 1 },
-            false
+            false,
+            "flex"
           );
         },
       },
@@ -210,7 +211,7 @@ function placeholderEffect(psuedoPlaceholder, inputBox) {
       if (inputBox.value) {
         smoothInnOutTransition(settings, true);
       } else {
-        smoothInnOutTransition(settings, false);
+        smoothInnOutTransition(settings, false, "flex");
       }
     });
   }
@@ -272,28 +273,40 @@ menuOptionBox.forEach((box) => {
 
       if (target !== box && target.classList.contains("menu-buttons")) {
         const operationName = target.getAttribute("data-function");
-
         const completedTodosSection = document.querySelector("#right-main");
+        const clickedTodoHTML = window.clickedTodoHTML;
 
-        if (operationName === "dragAndDrop") {
-          completedTodosSection.append(window.clickedTodoHTML);
+        switch (operationName) {
+          case "dragAndDrop":
+            completedTodosSection.append(window.clickedTodoHTML);
 
-          operations(
-            {
-              todoCard: window.clickedTodoHTML,
+            operations(
+              {
+                todoCard: window.clickedTodoHTML,
 
-              dragVarName: "todos",
-              dropVarName: "completedTodos",
-              allowCRUD: ["delete"],
-              todoMainSide: completedTodosSection,
+                dragVarName: "todos",
+                dropVarName: "completedTodos",
+                allowCRUD: ["delete"],
+                todoMainSide: completedTodosSection,
 
-              popupBoldText: "Moved to Completed Tasks",
-              popupEmoji: "🥳🎊",
-            },
-            "dragAndDrop"
-          );
-        } else {
-          operations({ todoCard: window.clickedTodoHTML }, operationName);
+                popupBoldText: "Moved to Completed Tasks",
+                popupEmoji: "🥳🎊",
+              },
+              "dragAndDrop"
+            );
+            break;
+
+          case "Download":
+            downloadTodos(clickedTodoHTML);
+            break;
+
+          case "copyTask":
+            copyTaskName(clickedTodoHTML);
+            break;
+
+          default:
+            operations({ todoCard: clickedTodoHTML }, operationName);
+            break;
         }
       }
     },

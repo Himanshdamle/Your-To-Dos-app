@@ -311,50 +311,72 @@ export function setupEventListeners() {
 }
 
 // download todo as notepad.
-export function downloadTodos(downloadBtns) {
-  downloadBtns.forEach((button) => {
-    button.addEventListener("click", () => {
-      const storageKey = button.getAttribute("localtodovarname");
-      const todoID = button.getAttribute("todoid");
-      const todoDetails = pickedTodoData(storageKey, null, todoID).matchedId;
+export function downloadTodos(todoHTML) {
+  const storageKey = todoHTML.getAttribute("data-localtodovarname");
+  const todoID = todoHTML.id;
 
-      const formatted = [todoDetails]
-        .map((todo) => {
-          return `
-  ==================== 📌 TODO ====================
-            
-  📝 Title     : ${todo.heading}
-  🗓️  Due Date  : ${todo.date}
-  ⏰ Time      : ${todo.time}
-  🎯 Priority  : ${todo.priority.toUpperCase()}
-  🏷️  Tags      : ${todo.tags.length ? "#" + todo.tags.join(", #") : "None"}
-  📝 Description:\n
-           ${todo.description}
-  
-  ======================================================
-            
-              `;
-        })
-        .join("\n\n");
+  if (!storageKey || !todoID) return;
 
-      const blob = new Blob([formatted], { type: "text/plain" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      const safeTitle = todoDetails.heading
-        .replace(/[^a-z0-9]/gi, "_")
-        .toLowerCase();
+  const todoDetails = pickedTodoData(storageKey, null, todoID).matchedId;
 
-      // Then use it as the file name
-      a.download = `todo_${safeTitle}.txt`;
+  const formatted = [todoDetails]
+    .map((todo) => {
+      return `
+==================== 📌 TODO ====================
+        
+📝 Title     : ${todo.heading}
+🗓️  Due Date  : ${todo.date}
+⏰ Time      : ${todo.time}
+🎯 Priority  : ${todo.priority.toUpperCase()}
+🏷️  Tags      : ${todo.tags.length ? "#" + todo.tags.join(", #") : "None"}
+📝 Description:\n
+       ${todo.description}
 
-      // Simulate click
-      a.style.display = "none";
-      document.body.appendChild(a);
-      a.click();
+======================================================
+        
+          `;
+    })
+    .join("\n\n");
 
-      // Cleanup
-      document.body.removeChild(a);
-      URL.revokeObjectURL(a.href);
+  const blob = new Blob([formatted], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  const safeTitle = todoDetails.heading
+    .replace(/[^a-z0-9]/gi, "_")
+    .toLowerCase();
+
+  // Then use it as the file name
+  a.download = `todo_${safeTitle}.txt`;
+
+  // Simulate click
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+
+  // Cleanup
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+
+  showMessagePopup({
+    invertedBoldTxt: todoDetails.heading,
+    boldTxt: "Task downloaded!",
+    emoji: "✅📥",
+  });
+}
+export function copyTaskName(todoHTML) {
+  const storageKey = todoHTML.getAttribute("data-localtodovarname");
+  const todoID = todoHTML.id;
+
+  if (!storageKey || !todoID) return;
+
+  const todoDetails = pickedTodoData(storageKey, null, todoID).matchedId;
+
+  const taskName = todoDetails.heading;
+  navigator.clipboard.writeText(taskName).then(() => {
+    showMessagePopup({
+      boldTxt: taskName,
+      boldTxt: "Copied",
+      emoji: "📄✨",
     });
   });
 }

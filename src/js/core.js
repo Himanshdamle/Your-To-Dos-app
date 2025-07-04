@@ -228,6 +228,7 @@ export function slideAnimation(gsapSettings, play) {
 let isAnimationRunning = false;
 let timerAnimation = null;
 export function showMessagePopup(messageObject) {
+  const messageInvertedBold = document.querySelector("#message-bold-inverted");
   const messageBold = document.querySelector("#message-bold");
   const messageLight = document.querySelector("#message-light");
   const emoji = document.querySelector("#emoji");
@@ -236,9 +237,8 @@ export function showMessagePopup(messageObject) {
    * SEND MESSAGE TO USER IN FORMAT.
    */
   emoji.textContent = messageObject.emoji;
-  messageBold.textContent = `"${messageObject.invertedBoldTxt || ""}" ${
-    messageObject.boldTxt || ""
-  }`;
+  messageInvertedBold.textContent = `${messageObject.invertedBoldTxt || ""}`;
+  messageBold.textContent = `${messageObject.boldTxt || ""}`;
   messageLight.textContent = messageObject.lightTxt || "SUCESSFULLY";
 
   const messageBox = document.querySelector("#message-popup");
@@ -247,7 +247,7 @@ export function showMessagePopup(messageObject) {
 
   //POPOUT GSAP SETTINGS.
   const popOut = {
-    top: "-130%",
+    top: `-170%`,
     opacity: 0,
     filter: "blur(10px)",
     duration: 0.5,
@@ -319,11 +319,15 @@ export function showMessagePopup(messageObject) {
     top: "-30%",
   });
 
+  const popUpPosition = -(
+    (messageBox.getBoundingClientRect().width / 400) *
+    100
+  );
   // POPUP ANIMATION
   gsap.to(messageBox, {
     filter: "blur(0px)",
     opacity: 1,
-    top: "-100%",
+    top: popUpPosition,
     duration: 0.5,
     scale: 1,
     ease: "power4.out",
@@ -757,7 +761,7 @@ export function addInYoursTodo(
     const reduceOpacity = looksSettings.isExpired ? "opacity-50" : "";
 
     mainDirection.innerHTML += `
-      <article class="grid todo-item gap-3 relative z-50 max-w-[300px] w-full ${reduceOpacity}" title="${userLatestTodo.heading}">
+      <article class="grid todo-item gap-3 relative z-50 max-w-[270px] w-full ${reduceOpacity}" title="${userLatestTodo.heading}">
         <div class="grid place-items-end">
           <header class="relative z-10 w-full text-sm font-light pl-4 flex flex-row gap-1.5">
            On, <p class="font-medium ">${localeDateString}
@@ -854,7 +858,7 @@ export function addInHTML(
       "todo-card-box",
       "article-wrappers",
       "grid",
-      "grid-cols-[repeat(auto-fit,minmax(250px,1fr))]",
+      "grid-cols-[repeat(auto-fit,minmax(238px,1fr))]",
       "w-full",
       "pl-3.5",
       "place-items-start",
