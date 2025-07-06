@@ -23,30 +23,55 @@ export function backend(
   localStorage.setItem(localTodoVarName, JSON.stringify(todo));
 }
 
+export function fillData(idMap = {}, todoData, isForm = false) {
+  const ids = Object.values(idMap);
+  const todoKey = Object.keys(idMap);
+
+  ids.forEach((id, index) => {
+    const el = document.querySelector(id);
+    const key = todoKey[index];
+    const data = todoData[key];
+
+    if (!el) return;
+
+    el[!isForm ? "textContent" : "value"] = data;
+
+    if (key == "priority") {
+      el.textContent = priorityDropdown["preset"][data] || data;
+    }
+  });
+}
+
 export function update(todoData) {
   window.updated = true;
-
-  const dataArray = Object.values(todoData);
-  const todoKeys = Object.keys(todoData);
-
   window.currTodoDetails.id = todoData.id;
 
-  window.typingInputIds.forEach((inputid, index) => {
-    const el = document.getElementById(inputid);
-    const current = dataArray[index] || "";
+  const dataArray = Object.values(todoData);
 
-    el.value = current;
-    if (inputid === "priority-input") {
-      el.innerText = priorityDropdown.preset[current];
-    }
-    window.currTodoDetails[todoKeys[index]] = current;
+  fillData(
+    {
+      heading: "#heading-input",
+      description: "#description-input",
+      date: "#date-input",
+      time: "#time-input",
+      priority: "#priority-input",
+    },
+    todoData,
+    true
+  );
 
-    const pTag = document.getElementById(`current-len-${inputid}`);
-    const dataLen = current.length;
+  window.typingInputIds.forEach((inputId, index) => {
+    const el = document.getElementById(inputId);
+    const value = dataArray[index] || "";
 
-    if (pTag) {
-      pTag.innerText =
-        dataLen >= 1 ? dataLen : "0".repeat(pTag.getAttribute("maxDigit"));
+    if (!el) return;
+
+    // Update character length indicator if exists
+    const lengthTag = document.getElementById(`current-len-${inputId}`);
+    if (lengthTag) {
+      const maxDigits = lengthTag.getAttribute("maxDigit");
+      lengthTag.innerText =
+        value.length >= 1 ? value.length : "0".repeat(maxDigits);
     }
   });
 
@@ -98,21 +123,20 @@ export function deleteTodo(localTodoVarName, todoIndex, getHtmlID) {
 export function readTodo(getTodoData) {
   showThis(document.querySelector("#read-todo-page"), true);
 
-  const header = document.querySelector("#rtd-header");
-  const description = document.querySelector("#rtd-description");
-  const date = document.querySelector("#rtd-date");
-  const time = document.querySelector("#rtd-time");
-  const priority = document.querySelector("#rtd-priority");
+  fillData(
+    {
+      heading: "#rtd-header",
+      description: "#rtd-description",
+      date: "#rtd-date",
+      time: "#rtd-time",
+      priority: "#rtd-priority",
+    },
+    getTodoData
+  );
+
   const tagsWrapper = document.querySelector("#rtd-tags-wrapper");
 
-  header.textContent = getTodoData.heading;
-  description.textContent = getTodoData.description;
-  date.textContent = getTodoData.date;
-  time.textContent = getTodoData.time;
-  priority.textContent = priorityDropdown["preset"][getTodoData.priority];
-
   if (!getTodoData.tags[0]) return;
-
   const tags = getTodoData.tags
     .map(
       (tag) => `

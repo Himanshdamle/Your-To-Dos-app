@@ -87,7 +87,7 @@ function createAnimatedDropdown({
 }
 
 const priorityDropdown = createAnimatedDropdown({
-  buttonId: "priority-input",
+  buttonId: "priority-input-btn",
   menuId: "priority-dropdown",
   svgId: "dropdown-svg",
   onSelect: (value) => {

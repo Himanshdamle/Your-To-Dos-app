@@ -5,6 +5,7 @@ import {
   readTodo,
   deleteTodo,
   deleteTodoFRONTEND,
+  fillData,
 } from "./todo.js";
 
 import { toggleClasses } from "./tag.js";
@@ -992,9 +993,22 @@ export function resetTodoPageFunc(transitionPlaceholders = true) {
     description: "",
     date: "",
     time: "",
-    priority: "",
+    priority: "Priority",
     tags: [],
   };
+
+  // Reset the form values if user switch from update to create todo page
+  fillData(
+    {
+      heading: "#heading-input",
+      description: "#description-input",
+      date: "#date-input",
+      time: "#time-input",
+      priority: "#priority-input",
+    },
+    window.currTodoDetails,
+    true
+  );
 
   const psuedoPlaceholdersCURD = document.querySelectorAll(
     ".psuedo-placeholder-curd"
@@ -1032,40 +1046,6 @@ export function resetTodoPageFunc(transitionPlaceholders = true) {
   window.tagStates.forEach((state) => {
     state.isClicked = false;
     state.isDblClick = false;
-  });
-
-  const priorityBtnHTML = `<p>Priority [must]</p>
-                    <span id="dropdown-svg" style="transform: rotateZ('-90deg')"
-                      ><svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="20px"
-                        viewBox="0 -960 960 960"
-                        width="20px"
-                        fill="#FFFFFF"
-                      >
-                        <path d="M480-384 288-576h384L480-384Z" />
-                      </svg>
-                    </span>`;
-
-  window.typingInputIds.forEach((inputid) => {
-    const el = document.getElementById(inputid);
-    if (el) {
-      if (inputid === "priority-input") {
-        el.innerHTML = priorityBtnHTML;
-        el.classList.remove("justify-center");
-        el.classList.remove("cursor-text");
-        el.classList.remove("pointer-events-none");
-
-        el.classList.add("cursor-pointer");
-        el.classList.add("justify-start");
-      }
-
-      if (el.value.length >= 1) el.value = "";
-      const pTag = document.getElementById(`current-len-${inputid}`);
-      if (pTag) {
-        pTag.innerText = "0".repeat(pTag.getAttribute("maxDigit") || 2);
-      }
-    }
   });
 }
 

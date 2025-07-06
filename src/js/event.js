@@ -28,7 +28,7 @@ export function setupEventListeners() {
     date: "",
     time: "",
     priority: "",
-    tags: ["#general"],
+    tags: ["general"],
   };
 
   function addTodoInBackend(todoDetailsObject) {
@@ -95,18 +95,9 @@ export function setupEventListeners() {
 
   // add new todo
   document.querySelector("#add-todo").addEventListener("click", () => {
-    if (
-      window.currTodoDetails.heading === "" ||
-      window.currTodoDetails.priority === ""
-    )
-      return;
+    const currTodoDetails = window.currTodoDetails;
 
-    if (window.currTodoDetails.time.length <= 4) {
-      const now = new Date();
-      const hours = now.getHours().toString().padStart(2, "0");
-      const minutes = now.getMinutes().toString().padStart(2, "0");
-      window.currTodoDetails.time = `${hours}:${minutes}`;
-    }
+    if (currTodoDetails.heading === "" || currTodoDetails.date === "") return;
 
     transitionBetweenPages({
       pageCloseEl: "#todo-page",
@@ -119,7 +110,7 @@ export function setupEventListeners() {
       if (!window.getTodoData) return;
 
       backend(
-        window.currTodoDetails,
+        currTodoDetails,
         "todos",
         true,
         window.getTodoData.localStorageIndex
@@ -135,15 +126,16 @@ export function setupEventListeners() {
       );
 
       messageInfo = {
-        invertedBoldTxt: window.currTodoDetails.heading,
+        invertedBoldTxt: currTodoDetails.heading,
         boldTxt: "Task updated!",
         emoji: "✏️🛠️",
       };
+      window.updated = false;
     } else {
-      addTodoInBackend({ todoObject: window.currTodoDetails });
+      addTodoInBackend({ todoObject: currTodoDetails });
 
       messageInfo = {
-        invertedBoldTxt: window.currTodoDetails.heading,
+        invertedBoldTxt: currTodoDetails.heading,
         boldTxt: "Task added!",
         emoji: "✨🚀",
       };

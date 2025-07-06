@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   closeTodoButtons.addEventListener("click", () => {
     const todoPage = document.querySelector("#todo-page");
+    window.updated = false;
     removeThis(todoPage);
     resetTodoPageFunc(false);
   });

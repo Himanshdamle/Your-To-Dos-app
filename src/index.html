@@ -464,7 +464,7 @@
               <section
                 class="flex flex-col pb-4 relative justify-center items-center border-b"
               >
-                <p data-heading="Header">Header</p>
+                <p class="font-light text-lg">Header</p>
                 <div class="relative">
                   <p
                     class="text-center p-1.5 w-96 font-bold outline-none text-2xl italic border h-min rounded-lg border-white/30"
@@ -477,14 +477,14 @@
               <section
                 class="flex flex-col relative py-4 justify-center items-center border-b"
               >
-                <p>Description</p>
+                <p class="font-light text-lg">Description</p>
 
                 <div class="relative w-full h-36 grid place-items-center">
                   <p
                     class="mx-7 p-1.5 text-xl border w-full h-full resize-none outline-none rounded-lg border-white/30"
                     id="rtd-description"
                   >
-                    Psuedo Description data
+                    -
                   </p>
                 </div>
               </section>
@@ -493,18 +493,18 @@
               <section
                 class="flex flex-col py-4 justify-center items-center border-b"
               >
-                <p>Due Date [must]</p>
+                <p class="font-light text-lg">Due Date</p>
                 <section class="flex justify-center w-full">
                   <div
-                    class="borderd-div rounded-lg border border-white/30 px-4 flex row gap-4"
+                    class="borderd-div rounded-lg border border-white/30 px-4 flex row gap-4 text-xl"
                   >
                     <div
                       class="before:content-[''] before:absolute before:-right-2 before:top-0 before:bg-white before:w-[1px] before:h-full relative"
                     >
-                      <span id="rtd-date">25-05-2025</span>
+                      <span id="rtd-date">-</span>
                     </div>
 
-                    <span id="rtd-time">13:56</span>
+                    <span id="rtd-time">-</span>
                   </div>
                 </section>
               </section>
@@ -513,12 +513,12 @@
               <section
                 class="flex flex-col py-4 justify-center items-center border-b"
               >
-                <b>Priority</b>
+                <span class="font-light text-lg">Priority</span>
                 <div class="relative">
                   <div
-                    class="bg-[#1a1a1a] text-white border rounded-lg border-white/30 flex justify-start gap-2.5 items-center py-1 px-4 w-full"
+                    class="bg-[#1a1a1a] text-white border rounded-lg border-white/30 flex justify-start gap-2.5 items-center py-1 px-4 w-full text-xl"
                   >
-                    <span id="rtd-priority">🟧 High - Do ASAP</span>
+                    <span id="rtd-priority">-</span>
                   </div>
                 </div>
               </section>
@@ -527,11 +527,11 @@
               <section
                 class="flex flex-col spany-4 justify-center items-center relative"
               >
-                <p class="text-xl"><b>#</b>Tags</p>
+                <span class="font-light text-lg">Tags</span>
                 <!--  -->
 
                 <section
-                  class="flex items-center gap-3 rounded-lg border border-white/30 overflow-hidden px-3"
+                  class="flex items-center gap-3 rounded-lg border border-white/30 overflow-hidden px-3 text-xl"
                   id="rtd-tags-wrapper"
                 >
                   <div class="flex justify-center items-center">
@@ -566,10 +566,14 @@
                 ></button>
               </div>
 
+              <!-- Header -->
               <section
                 class="flex flex-col pb-4 relative justify-center items-center border-b"
               >
-                <p data-heading="Header [must]" class="must-section">
+                <p
+                  data-heading="Header [must]"
+                  class="must-section font-light text-lg"
+                >
                   Header [must]
                 </p>
                 <div class="relative">
@@ -577,7 +581,7 @@
                     name="heading"
                     id="heading-input"
                     wrap="soft"
-                    class="crud-input resize-none text-center p-1.5 w-96 font-bold outline-none text-2xl italic border h-min rounded-lg border-white/30 input"
+                    class="crud-input resize-none text-center p-1.5 w-96 font-bold outline-none text-xl border h-min rounded-lg border-white/30 input"
                     maxlength="50"
                   ></textarea>
                   <p
@@ -595,10 +599,11 @@
                 >
               </section>
 
+              <!-- Description -->
               <section
                 class="flex flex-col relative py-4 justify-center items-center border-b"
               >
-                <p>Description</p>
+                <p class="font-light text-lg">Description</p>
                 <span
                   class="count-limit absolute top-2 right-0 flex text-white/50"
                   >Characters:&nbsp;
@@ -608,6 +613,7 @@
 
                 <div class="relative w-full h-36 grid place-items-center">
                   <textarea
+                    data-isForm="true"
                     name="description"
                     id="description-input"
                     class="crud-input mx-7 p-1.5 text-xl border w-full h-full resize-none outline-none rounded-lg border-white/30 input"
@@ -624,10 +630,14 @@
                 </div>
               </section>
 
+              <!-- Due Date -->
               <section
                 class="flex flex-col py-4 justify-center items-center border-b"
               >
-                <p data-heading="Due Date [must]" class="must-section">
+                <p
+                  data-heading="Due Date [must]"
+                  class="must-section font-light text-lg"
+                >
                   Due Date [must]
                 </p>
                 <section class="flex justify-center ml-11 w-full gap-6">
@@ -661,6 +671,7 @@
                 </section>
               </section>
 
+              <!-- Priority -->
               <section
                 id="priority-section"
                 class="flex flex-col py-4 justify-center items-center border-b"
@@ -670,10 +681,12 @@
                 </p>
                 <div class="relative w-64">
                   <button
-                    id="priority-input"
+                    id="priority-input-btn"
                     class="bg-[#1a1a1a] cursor-pointer pl-4 text-white border rounded-lg outline-none border-white/30 appearance-none flex justify-start gap-2.5 items-center py-1 w-full"
                   >
-                    <p>Priority [must]</p>
+                    <span class="font-light text-lg" id="priority-input"
+                      >Priority [must]</span
+                    >
                     <span id="dropdown-svg" style="transform: rotateZ('-90deg')"
                       ><svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -689,7 +702,7 @@
 
                   <ul
                     id="priority-dropdown"
-                    class="absolute overflow-hidden right-0 z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-full hidden"
+                    class="absolute overflow-hidden right-0 z-[100] bg-[#1a1a1a] text-white border rounded-lg outline-none border-white/30 mt-1 w-full hidden font-bold"
                   >
                     <li
                       data-value="low"
@@ -719,10 +732,11 @@
                 </div>
               </section>
 
+              <!-- #Tags -->
               <section
                 class="flex flex-col py-4 justify-center items-center relative"
               >
-                <p class="text-xl"><b>#</b>Tags</p>
+                <p class="font-light text-lg"><b>#</b>Tags</p>
 
                 <span
                   class="absolute top-1 left-0 flex text-white/50"
@@ -743,7 +757,7 @@
                 >
 
                 <section
-                  class="flex w-[80%] text-lg aspect-square justify-around items-center rounded-lg border border-white/30 overflow-hidden max-h-10"
+                  class="flex w-[80%] text-xl aspect-square justify-around items-center rounded-lg border border-white/30 overflow-hidden max-h-10"
                 >
                   <div
                     class="tag z-50 cursor-pointer relative flex justify-center items-center rounded-full py-4 pl-1"
