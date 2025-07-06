@@ -2,19 +2,8 @@ import { initializeUI, searchByRotation } from "./ui.js";
 import { setupEventListeners } from "./event.js";
 import { hoverEffect, clickingLogic, initializeTagInputs } from "./tag.js";
 import { middle } from "./downNavbar.js";
-import {
-  initializeDragBehaviour,
-  operations,
-  showMessagePopup,
-} from "./core.js";
-import {
-  transitionBetweenPages,
-  resetTodoPageFunc,
-  resetTodoPageUI,
-  showToDoPage,
-  dragAndDropTodos,
-  slideAnimation,
-} from "./core.js";
+import { operations } from "./core.js";
+import { resetTodoPageFunc, showToDoPage, removeThis } from "./core.js";
 import { getUserSearchResult } from "./search.js";
 
 import { startQuoteRotation } from "./quote.js";
@@ -40,36 +29,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   getUserSearchResult();
 
-  const closeTodoButtons = document.querySelectorAll(".close-todo-page");
+  const closeTodoButtons = document.querySelector(".close-todo-page");
+  const closeReadTodoButton = document.querySelector("#close-read-todo-page");
 
-  closeTodoButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const todoPage = document.querySelector("#todo-page");
-      const quoteBox = document.querySelector("#quote-box");
-
-      slideAnimation(
-        {
-          el: "#down-nav-bar",
-          direction: "bottom",
-          directionValue: "0%",
-          display: "flex",
-          duration: 0.5,
-        },
-        false
-      );
-
-      if (todoPage && quoteBox) {
-        transitionBetweenPages({ pageCloseEl: todoPage, pageOpenEl: quoteBox });
-      }
-
-      resetTodoPageFunc(false);
-      resetTodoPageUI(true);
-    });
+  closeReadTodoButton.addEventListener("click", () => {
+    const todoPage = document.querySelector("#read-todo-page");
+    removeThis(todoPage);
+  });
+  closeTodoButtons.addEventListener("click", () => {
+    const todoPage = document.querySelector("#todo-page");
+    removeThis(todoPage);
+    resetTodoPageFunc(false);
   });
 
   function openCreateToDoPage() {
     resetTodoPageFunc(true);
-    resetTodoPageUI(true);
     showToDoPage();
   }
 
@@ -136,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           dragVarName: "todos",
           dropVarName: "completedTodos",
-          allowCRUD: ["delete"],
+          allowCRUD: ["#delete", "#read"],
           todoMainSide: completedTodosSection,
 
           popupBoldText: "Moved to Completed Tasks",

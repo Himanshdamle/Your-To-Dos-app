@@ -272,14 +272,21 @@
                   class="font-semibold text-2xl pl-2 flex flex-col items-start"
                 >
                   <button
-                    class="menu-buttons w-full text-start cursor-not-allowed text-[#00BFFF] flex flex-row gap-1.5"
-                    data-color="#00BFFF"
+                    class="menu-buttons w-full text-start cursor-not-allowed text-[#FFFF00] flex flex-row items-center gap-1.5"
+                    data-color="#FFFF00"
                     data-function="Pin"
                   >
-                    <img
-                      src="assets/keep_24dp_00BFFF_FILL0_wght400_GRAD0_opsz24.svg"
-                      alt="pin svg"
-                    />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      fill="#FFFF00"
+                    >
+                      <path
+                        d="m640-480 80 80v80H520v240l-40 40-40-40v-240H240v-80l80-80v-280h-40v-80h400v80h-40v280Zm-286 80h252l-46-46v-314H400v314l-46 46Zm126 0Z"
+                      />
+                    </svg>
                     Pin
                   </button>
                   <button
@@ -439,6 +446,102 @@
 
           <!-- SPACE FOR CRUD OPERRATIONS -->
           <main id="mid-main" class="h-full flex items-center justify-center">
+            <!-- READ TODO -->
+            <div
+              class="bg-[#1A1A1A] hidden relative border rounded-2xl p-4 w-[80%] max-w-[960px]"
+              id="read-todo-page"
+            >
+              <!-- Close btn -->
+              <div class="absolute top-2 left-2.5 z-10 flex gap-3.5">
+                <button
+                  class="cursor-pointer rounded-full h-[20px] w-[20px] bg-[#FF3D3D]"
+                  title="Close this page?"
+                  id="close-read-todo-page"
+                ></button>
+              </div>
+
+              <!-- Header -->
+              <section
+                class="flex flex-col pb-4 relative justify-center items-center border-b"
+              >
+                <p data-heading="Header">Header</p>
+                <div class="relative">
+                  <p
+                    class="text-center p-1.5 w-96 font-bold outline-none text-2xl italic border h-min rounded-lg border-white/30"
+                    id="rtd-header"
+                  ></p>
+                </div>
+              </section>
+
+              <!-- Description -->
+              <section
+                class="flex flex-col relative py-4 justify-center items-center border-b"
+              >
+                <p>Description</p>
+
+                <div class="relative w-full h-36 grid place-items-center">
+                  <p
+                    class="mx-7 p-1.5 text-xl border w-full h-full resize-none outline-none rounded-lg border-white/30"
+                    id="rtd-description"
+                  >
+                    Psuedo Description data
+                  </p>
+                </div>
+              </section>
+
+              <!-- Due Date -->
+              <section
+                class="flex flex-col py-4 justify-center items-center border-b"
+              >
+                <p>Due Date [must]</p>
+                <section class="flex justify-center w-full">
+                  <div
+                    class="borderd-div rounded-lg border border-white/30 px-4 flex row gap-4"
+                  >
+                    <div
+                      class="before:content-[''] before:absolute before:-right-2 before:top-0 before:bg-white before:w-[1px] before:h-full relative"
+                    >
+                      <span id="rtd-date">25-05-2025</span>
+                    </div>
+
+                    <span id="rtd-time">13:56</span>
+                  </div>
+                </section>
+              </section>
+
+              <!-- Priority -->
+              <section
+                class="flex flex-col py-4 justify-center items-center border-b"
+              >
+                <b>Priority</b>
+                <div class="relative">
+                  <div
+                    class="bg-[#1a1a1a] text-white border rounded-lg border-white/30 flex justify-start gap-2.5 items-center py-1 px-4 w-full"
+                  >
+                    <span id="rtd-priority">🟧 High - Do ASAP</span>
+                  </div>
+                </div>
+              </section>
+
+              <!-- #Tags -->
+              <section
+                class="flex flex-col spany-4 justify-center items-center relative"
+              >
+                <p class="text-xl"><b>#</b>Tags</p>
+                <!--  -->
+
+                <section
+                  class="flex items-center gap-3 rounded-lg border border-white/30 overflow-hidden px-3"
+                  id="rtd-tags-wrapper"
+                >
+                  <div class="flex justify-center items-center">
+                    <b class="z-10" class="z-10">#</b>
+                    <span>general</span>
+                  </div>
+                </section>
+              </section>
+            </div>
+
             <!-- CREATE TODO PAGE -->
             <div
               class="bg-[#1A1A1A] hidden relative border rounded-2xl p-4 w-[80%] max-w-[960px]"
@@ -461,27 +564,6 @@
                   title="Reset form?"
                   id="reset-todo"
                 ></button>
-
-                <section
-                  class="toggle_wrapper flex gap-2.5 w-max bg-[#0F0F0F] rounded-2xl border border-white/30 justify-between items-center py-1 px-2 -translate-y-1 relative hidden"
-                >
-                  <div class="slider absolute bg-white rounded-2xl -z-1"></div>
-                  <button
-                    class="toggle_btn active cursor-pointer"
-                    title="create task folder"
-                    data-isfolderbtn="true"
-                  >
-                    TASK CATEGORY
-                  </button>
-
-                  <button
-                    class="toggle_btn cursor-pointer"
-                    title="Add subtask"
-                    data-isfolderbtn="false"
-                  >
-                    SUB TASK
-                  </button>
-                </section>
               </div>
 
               <section

@@ -46,12 +46,12 @@ export function initializeUI() {
     { localTodoVarName: "completedTodos" },
     completedTodosSection,
     {
-      allowCRUD: ["#delete"],
+      allowCRUD: ["#delete", "#read"],
       localTodoVarName: "completedTodos",
       todoMainSide: completedTodosSection,
     }
   );
-  hotKeysFunction(["d"], completedTodosSection);
+  hotKeysFunction(["d", "r"], completedTodosSection);
 
   const getCompletedTaskNumInfo = getTaskNumber(addCompletedTask, {
     selectorDate: "Completed today",
@@ -286,7 +286,7 @@ menuOptionBox.forEach((box) => {
 
                 dragVarName: "todos",
                 dropVarName: "completedTodos",
-                allowCRUD: ["delete"],
+                allowCRUD: ["#delete", "#read"],
                 todoMainSide: completedTodosSection,
 
                 popupBoldText: "Moved to Completed Tasks",

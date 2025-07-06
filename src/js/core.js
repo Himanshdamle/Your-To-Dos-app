@@ -66,17 +66,25 @@ export function operations(
 
   if (window.getTodoData === undefined) return;
 
-  if (operationName.toLowerCase() === "read") readTodo(getTodoData.matchedId);
-  else if (operationName.toLowerCase() === "update")
-    update(getTodoData.matchedId);
-  else if (operationName.toLowerCase() === "delete")
-    deleteTodoFRONTEND(() =>
-      deleteTodo(
-        todoCardHTML.getAttribute("data-localtodovarname"),
-        getTodoData.localStorageIndex,
-        getTodoData.actualID
-      )
-    );
+  switch (operationName.toLowerCase()) {
+    case "read":
+      readTodo(getTodoData.matchedId);
+      break;
+
+    case "update":
+      update(getTodoData.matchedId);
+      break;
+
+    case "delete":
+      deleteTodoFRONTEND(() =>
+        deleteTodo(
+          todoCardHTML.getAttribute("data-localtodovarname"),
+          getTodoData.localStorageIndex,
+          getTodoData.actualID
+        )
+      );
+      break;
+  }
 }
 
 /**
@@ -660,14 +668,15 @@ export function addInYoursTodo(
 
   const localeDateString = getLocaleDateString(userLatestTodo.date);
 
-  let tagsHTMLPresentation = "";
-
-  userLatestTodo.tags.forEach((tag) => {
-    tagsHTMLPresentation += `
-        <p title="#${tag}" class="font-light text-nowrap truncate max-w-[80px]">
-          <b class="font-bold">#</b>${tag}
-        </p> `;
-  });
+  let tagsHTMLPresentation = userLatestTodo.tags
+    .map(
+      (tag) => `
+             <p title="#${tag}" class="font-light text-nowrap truncate max-w-[80px]">
+               <b class="font-bold">#</b>${tag}
+             </p>
+     `
+    )
+    .join("");
 
   const todoHTML = `
     <span title="Priority - ${
@@ -716,8 +725,6 @@ export function addInYoursTodo(
         <button 
             class="cursor-pointer menu-button"
             title="Controls"
-            todoid="${userLatestTodo.id}"
-            localTodoVarName="${localTodoVarName}"
         >
           <span
             class="flex flex-col gap-0.5 hover:scale-115 transition-[scale] duration-300"
@@ -761,15 +768,15 @@ export function addInYoursTodo(
     const reduceOpacity = looksSettings.isExpired ? "opacity-50" : "";
 
     mainDirection.innerHTML += `
-      <article class="grid todo-item gap-3 relative z-50 max-w-[270px] w-full ${reduceOpacity}" title="${userLatestTodo.heading}">
-        <div class="grid place-items-end">
+      <article class="grid todo-item gap-3 relative z-50 w-full ${reduceOpacity}" title="${userLatestTodo.heading}">
+        <div class="grid place-items-start">
           <header class="relative z-10 w-full text-sm font-light pl-4 flex flex-row gap-1.5">
-           On, <p class="font-medium ">${localeDateString}
+           <span>On, <span class="font-medium ">${localeDateString}</span></span>
           </header>
           <section
             id="${userLatestTodo.id}"
             data-localTodoVarName="${localTodoVarName}"
-            class="todo-card bg-[#1A1A1A] relative border max-h-max rounded-2xl p-2 flex-1 w-full cursor-grab ${addCrossMarker}"
+            class="todo-card max-w-[270px] bg-[#1A1A1A] relative border max-h-max rounded-2xl p-2 flex-1 w-full cursor-grab ${addCrossMarker}"
           >
             ${todoHTML}
           </section>
@@ -895,14 +902,63 @@ export function addInHTML(
 }
 
 /**
- * shows **ONLY** a perticular card(page) at a perticular container at one time.
+ * shows only a perticular page at a perticular container at one time.
  */
-export function showThis(page, atContainer) {
+export function showThis(page, slideDownPanel = true) {
+  const container = document.querySelector("#mid-main");
+
+  if (slideDownPanel) {
+    slideAnimation(
+      {
+        el: "#down-nav-bar",
+        direction: "bottom",
+        directionValue: "-100%",
+        duration: 0.5,
+        display: "flex",
+      },
+      true
+    );
+  }
+
+  smoothInnOutTransition(
+    {
+      el: page,
+      duration: 0.7,
+      ease: "power2.out",
+      opacity: 1,
+      blur: 20,
+      scale: 1.2,
+    },
+    false
+  );
+
   page.classList.toggle("hidden");
 
-  [...atContainer.children].forEach((el) => {
+  [...container.children].forEach((el) => {
     if (el !== page) el.style.display = "none";
   });
+}
+
+/**
+ * remove only a perticular page at a perticular container at one time.
+ */
+export function removeThis(page) {
+  const quoteBox = document.querySelector("#quote-box");
+
+  slideAnimation(
+    {
+      el: "#down-nav-bar",
+      direction: "bottom",
+      directionValue: "0%",
+      display: "flex",
+      duration: 0.5,
+    },
+    false
+  );
+
+  if (page && quoteBox) {
+    transitionBetweenPages({ pageCloseEl: page, pageOpenEl: quoteBox });
+  }
 }
 
 /**
@@ -910,38 +966,12 @@ export function showThis(page, atContainer) {
  */
 export function showToDoPage() {
   const todoPage = document.querySelector("#todo-page");
-  const midMain = document.querySelector("#mid-main");
   const psuedoPlaceholdersCURD = document.querySelectorAll(
     ".psuedo-placeholder-curd"
   );
   const crudInput = document.querySelectorAll(".crud-input");
 
-  slideAnimation(
-    {
-      el: "#down-nav-bar",
-      direction: "bottom",
-      directionValue: "-100%",
-      duration: 0.5,
-      display: "flex",
-    },
-    true
-  );
-
-  if (todoPage && midMain) {
-    smoothInnOutTransition(
-      {
-        el: todoPage,
-        duration: 0.7,
-        ease: "power2.out",
-        opacity: 1,
-        blur: 20,
-        scale: 1.2,
-      },
-      false
-    );
-
-    showThis(todoPage, midMain);
-  }
+  showThis(todoPage);
 
   psuedoPlaceholdersCURD.forEach((placeholder, crudInputIndex) => {
     if (crudInput[crudInputIndex]?.value.length === 0) {
@@ -949,58 +979,6 @@ export function showToDoPage() {
       placeholder.style.display = "block";
     } else {
       placeholder.classList.add("!hidden");
-    }
-  });
-}
-
-/**
- * Resets the to-do page UI, toggling input states and headers.
- */
-export function resetTodoPageUI(shouldReset) {
-  const elTwPropertiesPairArray = [
-    [["textarea", ".borderd-div", "#priority-input"], shouldReset, "border"],
-    [
-      ["#description-input", "#priority-section", "#priority-input"],
-      !shouldReset,
-      "text-center",
-    ],
-    [
-      ["#quick-fill", ".count-limit", ".psuedo-placeholder-curd", "#tip-box"],
-      !shouldReset,
-      "!hidden",
-    ],
-    [["#priority-pTag"], !shouldReset, "!block"],
-  ];
-
-  elTwPropertiesPairArray.forEach(([selectorArray, shouldAdd, ...classes]) => {
-    selectorArray.forEach((selector) => {
-      document.querySelectorAll(selector).forEach((el) => {
-        shouldAdd
-          ? el.classList.add(...classes)
-          : el.classList.remove(...classes);
-      });
-    });
-  });
-
-  const changeHeader = document.querySelectorAll(".must-section");
-  if (!shouldReset) {
-    changeHeader.forEach((header) => {
-      const arr = header.innerHTML.trim().split(/\s+/);
-      const heading = arr.slice(0, -1);
-      header.innerHTML = heading.join(" ");
-    });
-  } else {
-    changeHeader.forEach((header) => {
-      header.innerHTML =
-        header.getAttribute("data-heading") || header.innerHTML;
-    });
-  }
-
-  document.querySelectorAll("textarea, input, select").forEach((el) => {
-    if (!shouldReset) {
-      el.setAttribute("readonly", true);
-    } else {
-      el.removeAttribute("readonly");
     }
   });
 }
@@ -1127,7 +1105,7 @@ export function dragAndDropTodos(getLocalTodoVarNameObject) {
  * Initialize drag and drop behaviour on todo card.
  */
 export function initializeDragBehaviour(getSettings) {
-  const articleWrappers =
+  const todoSectionContainer =
     getSettings.todoMainSide.querySelectorAll(".article-wrappers");
 
   // short cut for allowing all the crud operations - true.
@@ -1136,7 +1114,7 @@ export function initializeDragBehaviour(getSettings) {
       ? ["#update", "#read", "#delete"]
       : getSettings.allowCRUD;
 
-  articleWrappers.forEach((wrapper) => {
+  todoSectionContainer.forEach((wrapper) => {
     Sortable.create(wrapper, {
       group: {
         name: "shared",

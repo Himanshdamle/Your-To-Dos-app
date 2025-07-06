@@ -1,9 +1,8 @@
 import {
   showToDoPage,
-  resetTodoPageUI,
   showMessagePopup,
   showThis,
-  smoothInnOutTransition,
+  removeThis,
 } from "./core.js";
 
 export function backend(
@@ -39,12 +38,6 @@ export function update(todoData) {
     el.value = current;
     if (inputid === "priority-input") {
       el.innerText = priorityDropdown.preset[current];
-      el.classList.remove("justify-start");
-      el.classList.remove("cursor-pointer");
-
-      el.classList.add("cursor-text");
-      el.classList.add("justify-center");
-      el.classList.add("pointer-events-none");
     }
     window.currTodoDetails[todoKeys[index]] = current;
 
@@ -62,34 +55,14 @@ export function update(todoData) {
 
 export function deleteTodoFRONTEND(delTodoFunction) {
   const confimationBox = document.querySelector("#delete-confirmation-box");
-  const midMain = document.querySelector("#mid-main");
   if (!confimationBox) return;
 
-  const transitionOptions = {
-    el: confimationBox,
-    duration: 0.5,
-    ease: "power2.out",
-    blur: 20,
-    scale: 1.2,
-  };
-
-  showThis(confimationBox, midMain);
-  smoothInnOutTransition(
-    {
-      ...transitionOptions,
-      opacity: 1,
-    },
-    false
-  );
-
-  function closeConfirmationPage() {
-    smoothInnOutTransition({ ...transitionOptions }, true);
-  }
+  showThis(confimationBox, false);
 
   // When user DOES **NOT** confirmed to delete to-do
   const cancleDeleteBtn = document.querySelector("#cancle-delete");
   cancleDeleteBtn.addEventListener("click", () => {
-    closeConfirmationPage();
+    removeThis(confimationBox);
   });
 
   // When user confirmed to delete to-do
@@ -98,7 +71,7 @@ export function deleteTodoFRONTEND(delTodoFunction) {
   deleteToDoBtn.addEventListener("click", () => {
     const deletedTodoData = delTodoFunction();
 
-    closeConfirmationPage();
+    removeThis(confimationBox);
 
     // THEN SHOW MESSAGE.
     showMessagePopup({
@@ -123,10 +96,34 @@ export function deleteTodo(localTodoVarName, todoIndex, getHtmlID) {
 }
 
 export function readTodo(getTodoData) {
-  resetTodoPageUI(false);
-  update(getTodoData);
-  window.updated = false;
-  showToDoPage();
+  showThis(document.querySelector("#read-todo-page"), true);
+
+  const header = document.querySelector("#rtd-header");
+  const description = document.querySelector("#rtd-description");
+  const date = document.querySelector("#rtd-date");
+  const time = document.querySelector("#rtd-time");
+  const priority = document.querySelector("#rtd-priority");
+  const tagsWrapper = document.querySelector("#rtd-tags-wrapper");
+
+  header.textContent = getTodoData.heading;
+  description.textContent = getTodoData.description;
+  date.textContent = getTodoData.date;
+  time.textContent = getTodoData.time;
+  priority.textContent = priorityDropdown["preset"][getTodoData.priority];
+
+  if (!getTodoData.tags[0]) return;
+
+  const tags = getTodoData.tags
+    .map(
+      (tag) => `
+   <div class="flex justify-center items-center">
+        <b class="z-10" class="z-10">#</b>
+        <span>${tag}</span>
+   </div>`
+    )
+    .join("");
+
+  tagsWrapper.innerHTML = tags;
 }
 
 export function pickedTodoData(

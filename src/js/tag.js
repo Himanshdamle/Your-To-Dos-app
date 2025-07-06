@@ -3,7 +3,7 @@ import { resize } from "./core.js";
 /**
  * Toggles CSS classes for tag hover effects.
  */
-export function toggleClasses(methodName, bgEl, el) {
+export function toggleClasses(methodName, bgEl) {
   bgEl.classList[methodName]("scale-100", "bg-span-el-tags-hover-effect");
   bgEl.style.transformOrigin = `${window.hoverObject?.x || 0}px ${
     window.hoverObject?.y || 0
