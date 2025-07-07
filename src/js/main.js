@@ -7,6 +7,7 @@ import { resetTodoPageFunc, showToDoPage, removeThis } from "./core.js";
 import { getUserSearchResult } from "./search.js";
 
 import { startQuoteRotation } from "./quote.js";
+import { resize } from "./resize.js";
 
 // Global variables
 window.typingInputIds = [];
@@ -28,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   searchByRotation();
 
   getUserSearchResult();
+  resize();
 
   const closeTodoButtons = document.querySelector(".close-todo-page");
   const closeReadTodoButton = document.querySelector("#close-read-todo-page");

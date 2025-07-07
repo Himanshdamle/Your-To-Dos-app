@@ -62,121 +62,169 @@
         class="flex justify-between items-start relative h-full max-w-[1820px] mx-auto"
       >
         <!-- SHOW-PENDING-TO-DOS -->
-        <section class="flex-[1] flex flex-col h-full">
-          <header
-            class="text-4xl pt-5 pb-2 w-full text-center font-bold grid place-items-center"
-          >
-            YOUR TO-DOs
-          </header>
+        <section class="flex flex-row h-full">
+          <section class="flex-[1] flex flex-col h-full">
+            <header
+              id="pending-section-header"
+              class="text-4xl pt-5 pb-2 w-full text-center font-bold grid place-items-center"
+            >
+              YOUR TO-DOs
+            </header>
 
-          <main
-            id="left-main"
-            class="overflow-x-hidden h-full w-full max-w-[526px] mt-8 resize-x flex min-w-[100%] flex-col gap-10 overflow-y-scroll items-center relative"
-          >
-            <!-- SEARCH BAR -->
-            <section id="search-bar">
-              <article
-                class="text-center text-xl italic p-2.5 border h-min max-w-[400px] rounded-lg border-white/30 bg-[#1A1A1A] flex flex-col gap-2"
+            <main
+              id="left-main"
+              class="h-full max-w-[526px] w-full mt-8 thin-scrollbar overflow-y-scroll overflow-x-hidden hide-scrollbar"
+            >
+              <!-- Expand -->
+              <section
+                class="h-full flex flex-col items-center gap-10 relative"
+                id="expand-pending-todo-wrapper"
               >
-                <!-- SEARCH -->
-                <div
-                  class="flex bg-[#0F0F0F] px-3 border rounded-lg border-white/30 relative"
-                >
-                  <button class="cursor-pointer border-r pr-3">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="24px"
-                      viewBox="0 -960 960 960"
-                      width="24px"
-                      fill="#FFFFFF"
-                    >
-                      <path
-                        d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"
-                      />
-                    </svg>
-                  </button>
-                  <div class="relative">
-                    <input
-                      type="text"
-                      name="search"
-                      id="search-input"
-                      class="p-1.5 font-bold w-full outline-none text-xl italic h-min input"
-                    />
-                    <p
-                      class="absolute bottom-[50%] text-nowrap translate-y-[50%] left-1.5 opacity-50 pointer-events-none psuedo-placeholder flex flex-row gap-1.5"
-                    >
-                      <b class="font-light">Search by - </b>
-                      <i id="search-by">TAG NAME</i>
-                    </p>
-                  </div>
-                </div>
-
-                <!-- FILTER -->
-                <div
-                  class="flex justify-around items-center bg-[#0F0F0F] pl-3 border rounded-lg border-white/30"
-                >
-                  <!-- FILTER SVG -->
-                  <div class="pr-3 border-r py-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="24px"
-                      viewBox="0 -960 960 960"
-                      width="24px"
-                      fill="#FFFFFF"
-                    >
-                      <path
-                        d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z"
-                      />
-                    </svg>
-                  </div>
-
-                  <ul
-                    class="w-full flex flex-row justify-center overflow-hidden rounded-lg"
+                <!-- SEARCH BAR -->
+                <section id="search-bar">
+                  <article
+                    class="text-center text-xl italic p-2.5 border h-min max-w-[400px] rounded-lg border-white/30 bg-[#1A1A1A] flex flex-col gap-2"
                   >
-                    <!-- PRIORITY Search -->
-                    <li
-                      class="border-r px-3 hover:bg-[#008950] w-full transition-colors duration-200 priorities-search-btn"
-                      id="priority-priority-btn"
-                      data-priority-name="priority"
+                    <!-- SEARCH -->
+                    <div
+                      class="flex bg-[#0F0F0F] px-3 border rounded-lg border-white/30 relative"
                     >
-                      <button>
-                        <span>Priority</span>
+                      <button class="cursor-pointer border-r pr-3">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="24px"
+                          viewBox="0 -960 960 960"
+                          width="24px"
+                          fill="#FFFFFF"
+                        >
+                          <path
+                            d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"
+                          />
+                        </svg>
                       </button>
-                    </li>
+                      <div class="relative">
+                        <input
+                          type="text"
+                          name="search"
+                          id="search-input"
+                          class="p-1.5 font-bold w-full outline-none text-xl italic h-min input"
+                        />
+                        <p
+                          class="absolute bottom-[50%] text-nowrap translate-y-[50%] left-1.5 opacity-50 pointer-events-none psuedo-placeholder flex flex-row gap-1.5"
+                        >
+                          <b class="font-light">Search by - </b>
+                          <i id="search-by">TAG NAME</i>
+                        </p>
+                      </div>
+                    </div>
 
-                    <!-- HEADING Search -->
-                    <li
-                      class="border-r px-3 hover:bg-[#008950] w-full transition-colors duration-200 priorities-search-btn"
-                      id="heading-priority-btn"
-                      data-priority-name="heading"
+                    <!-- FILTER -->
+                    <div
+                      class="flex justify-around items-center bg-[#0F0F0F] pl-3 border rounded-lg border-white/30"
                     >
-                      <button>
-                        <span>Heading</span>
-                      </button>
-                    </li>
+                      <!-- FILTER SVG -->
+                      <div class="pr-3 border-r py-1">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="24px"
+                          viewBox="0 -960 960 960"
+                          width="24px"
+                          fill="#FFFFFF"
+                        >
+                          <path
+                            d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z"
+                          />
+                        </svg>
+                      </div>
 
-                    <!-- TAGS Search -->
-                    <li
-                      class="hover:bg-[#008950] px-3 w-full transition-colors duration-200 priorities-search-btn"
-                      id="tags-priority-btn"
-                      data-priority-name="tags"
+                      <ul
+                        class="w-full flex flex-row justify-center overflow-hidden rounded-lg"
+                      >
+                        <!-- PRIORITY Search -->
+                        <li
+                          class="border-r px-3 hover:bg-[#008950] w-full transition-colors duration-200 priorities-search-btn"
+                          id="priority-priority-btn"
+                          data-priority-name="priority"
+                        >
+                          <button>
+                            <span>Priority</span>
+                          </button>
+                        </li>
+
+                        <!-- HEADING Search -->
+                        <li
+                          class="border-r px-3 hover:bg-[#008950] w-full transition-colors duration-200 priorities-search-btn"
+                          id="heading-priority-btn"
+                          data-priority-name="heading"
+                        >
+                          <button>
+                            <span>Heading</span>
+                          </button>
+                        </li>
+
+                        <!-- TAGS Search -->
+                        <li
+                          class="hover:bg-[#008950] px-3 w-full transition-colors duration-200 priorities-search-btn"
+                          id="tags-priority-btn"
+                          data-priority-name="tags"
+                        >
+                          <button>
+                            <span>Tags</span>
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </article>
+                </section>
+
+                <!-- PENDING TODO SECTION -->
+                <section
+                  id="pending-todo"
+                  class="flex flex-col gap-10 w-full"
+                  data-preWord="Due"
+                ></section>
+              </section>
+
+              <!-- Collapse -->
+              <section
+                class="h-full flex flex-col items-center gap-5"
+                id="collapse-pending-todo-wrapper"
+              >
+                <!-- TOP CONTROLS -->
+                <section>
+                  <span>
+                    <button
+                      class="hover:bg-[#1A1A1A] hover:opacity-100 hover:border-white/30 border border-transparent transition-colors transition-opacity duration-300 rounded-full cursor-pointer p-1.5 opacity-50 rotate-90"
                     >
-                      <button>
-                        <span>Tags</span>
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </article>
-            </section>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="50px"
+                        viewBox="0 -960 960 960"
+                        width="50px"
+                        fill="#FFFFFF"
+                      >
+                        <path
+                          d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-338q18-11 38.5-16.5T280-480h400q21 0 41.5 5.5T760-458v-302H200v302Zm0 258h560v-120q0-33-23.5-56.5T680-400H280q-33 0-56.5 23.5T200-320v120Zm0 0h560-560Z"
+                        />
+                      </svg>
+                    </button>
+                  </span>
+                </section>
 
-            <!-- PENDING TODO SECTION -->
-            <section
-              id="pending-todo"
-              class="flex flex-col gap-10 w-full"
-              data-preWord="Due"
-            ></section>
-          </main>
+                <!-- PENDING TODOS -->
+                <section
+                  class="w-full px-3 text-xl flex flex-col gap-10 collapse-todo-container"
+                ></section>
+              </section>
+            </main>
+          </section>
+
+          <section
+            class="h-full cursor-grab hover:bg-[#008950] transition-colors duration-200 rounded-xl"
+            id="slider-grabber"
+          >
+            <div class="bg-transparent h-full w-[4px]"></div>
+          </section>
         </section>
 
         <!-- TO-DO CARD MENU -->
@@ -351,6 +399,24 @@
               </section>
             </div>
           </article>
+        </section>
+
+        <section class="fixed z-500 hidden">
+          <div
+            class="border border-white/50 text-xl bg-[#1A1A1A]/65 backdrop-blur-2xl rounded-xl p-2 px-4 flex flex-col gap-2"
+          >
+            <header
+              class="font-semibold max-w-[260px] text-wrap inline-block leading-tight"
+            >
+              -
+            </header>
+
+            <div class="flex text-xl gap-2 w-full font-light">
+              <span title="#JEE" class="font-light text-nowrap truncate">
+                <b>#</b>general
+              </span>
+            </div>
+          </div>
         </section>
 
         <!-- SHOW CRUD OPRATIONS -->
@@ -1148,7 +1214,7 @@
 
           <main
             id="right-main"
-            class="h-full w-full mt-8 flex flex-col items-center gap-10 overflow-y-scroll overflow-x-hidden"
+            class="h-full w-full mt-8 flex flex-col items-center gap-10 thin-scrollbar overflow-y-scroll overflow-x-hidden hide-scrollbar"
             data-preWord="Completed"
           ></main>
         </section>

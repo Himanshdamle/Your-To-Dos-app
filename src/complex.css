@@ -2,28 +2,35 @@
   display: none;
 }
 
-/* Target the container with scroll (replace with your actual classes/IDs if needed) */
-#right-main,
-#left-main {
+.thin-scrollbar {
   scrollbar-width: thin; /* Firefox */
   scrollbar-color: #666 transparent; /* Firefox */
 }
 
-#right-main::-webkit-scrollbar,
-#left-main::-webkit-scrollbar {
+:-webkit-scrollbar,
+.thin-scrollbar::-webkit-scrollbar {
   width: 4px; /* super thin */
   height: 4px; /* for horizontal scroll */
 }
 
-#right-main::-webkit-scrollbar-thumb,
-#left-main::-webkit-scrollbar-thumb {
+:-webkit-scrollbar-thumb,
+.thin-scrollbar::-webkit-scrollbar-thumb {
   background: #666; /* or any color you want */
   border-radius: 10px;
 }
 
-#right-main::-webkit-scrollbar-track,
-#left-main::-webkit-scrollbar-track {
+:-webkit-scrollbar-track,
+.thin-scrollbar::-webkit-scrollbar-track {
   background: transparent;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 select {

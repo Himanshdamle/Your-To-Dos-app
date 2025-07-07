@@ -9,6 +9,7 @@ import {
 } from "./todo.js";
 
 import { toggleClasses } from "./tag.js";
+import { addTodoInCollapse } from "./resize.js";
 
 /**
  * Control all the ***CRUD and Drag and Drop operation.***
@@ -532,7 +533,7 @@ export function getDateRange(date, preWord) {
 
   if (diffDays < 0) {
     if (preWord.toLowerCase() == "completed") diffDays = Math.abs(diffDays);
-    else return { 0: "Expired todos" };
+    else return { 0: "Expired" };
   }
 
   if (diffDays === 0) return { 1: `${preWord} today` };
@@ -549,7 +550,7 @@ export function getDateRange(date, preWord) {
 
   if (diffDays <= 365) {
     const months = Math.floor(diffDays / 30);
-    return { [months * 5]: `${preWord} over ${months} months` };
+    return { [months * 5]: `${preWord} over ${months} month` };
   }
 
   return { 100: `over a year` };
@@ -672,9 +673,9 @@ export function addInYoursTodo(
   let tagsHTMLPresentation = userLatestTodo.tags
     .map(
       (tag) => `
-             <p title="#${tag}" class="font-light text-nowrap truncate max-w-[80px]">
-               <b class="font-bold">#</b>${tag}
-             </p>
+             <span title="#${tag}" class="font-light text-nowrap truncate max-w-[80px]">
+               <b>#</b>${tag}
+             </span>
      `
     )
     .join("");
@@ -790,24 +791,6 @@ export function addInYoursTodo(
 /**
  * Adds all to-do items from localStorage to the DOM, grouped by date range.
  */
-function countTask(JSONData, expiredTodoCount) {
-  const pendingTodoCountPtag = document.querySelector("#pending-todo-count");
-  const expiredTodoCountPtag = document.querySelector("#expired-todo-count");
-
-  const pendingTodoCount = JSONData.length - expiredTodoCount;
-
-  function updateTodoCount(element, count) {
-    if (!element) return;
-
-    element.innerText = count;
-    element.style.color = statusColors(count);
-  }
-
-  // Update the UI
-  updateTodoCount(pendingTodoCountPtag, pendingTodoCount);
-  updateTodoCount(expiredTodoCountPtag, expiredTodoCount);
-}
-
 export function addInHTML(
   getData = { localTodoVarName: "", data: [] },
   main,
@@ -834,6 +817,8 @@ export function addInHTML(
   const groupedData = groupTodosWithDate(JSONData, preWord);
 
   let expiredTodoCount = 0;
+
+  addTodoInCollapse(`#collapse-${main.id}-wrapper`, groupedData);
 
   Object.keys(groupedData).forEach((todoDate) => {
     const noSpaceID = todoDate.replace(/\s/g, "");
@@ -875,11 +860,9 @@ export function addInHTML(
     );
     main.querySelector(`#${noSpaceID}`).append(articleWrapper);
 
-    const isExpired = todoDate === "Expired todos";
+    const isExpired = todoDate === "Expired";
 
     groupedData[todoDate].forEach((json) => {
-      if (isExpired) expiredTodoCount++;
-
       addInYoursTodo(
         {
           isExpired,
@@ -892,7 +875,6 @@ export function addInHTML(
     });
   });
 
-  countTask(JSONData, expiredTodoCount);
   initializeDragBehaviour(initializeDragBehaviourParams);
 
   return {

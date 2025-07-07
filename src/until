@@ -1,0 +1,18 @@
+<div>
+  <!-- Header part -->
+  <header class="flex flex-row gap-1 justify-center items-center">
+    <span class="font-bold text-2xl">Today</span>
+    <div class="w-full h-[1px] bg-white/30"></div>
+  </header>
+
+  <!-- Todo list -->
+  <main>
+    <ul class="flex flex-col gap-5">
+      <li
+        class="bg-[#FF3D3D] rounded-xl w-full h-[100px] grid place-items-center"
+      >
+        <span class="font-extrabold">07-07</span>
+      </li>
+    </ul>
+  </main>
+</div>
