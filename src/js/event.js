@@ -8,12 +8,14 @@ import {
   slideAnimation,
   operations,
 } from "./core.js";
-
 import { backend, pickedTodoData } from "./todo.js";
-
 import { showLongText } from "./ui.js";
+import { getCollapse, getExpand } from "./resize.js";
 
 export function setupEventListeners() {
+  setupSideBarResize("#ytd-wrapper");
+  setupSideBarResize("#dtd-wrapper");
+
   window.typingInputIds = [
     "heading-input",
     "description-input",
@@ -299,6 +301,23 @@ export function setupEventListeners() {
       todoCard.classList.remove("border-[#2CB67D]");
       selectedTick.classList.add("hidden");
     });
+  });
+}
+
+function setupSideBarResize(wrapperId) {
+  const wrapper = document.querySelector(wrapperId);
+
+  if (!wrapper) return;
+  const clickToCollaspeButton = wrapper.querySelector(
+    ".clickto-collapse-button"
+  );
+  const clickToExpandButton = wrapper.querySelector(".clickto-expand-button");
+
+  clickToCollaspeButton.addEventListener("click", () => {
+    getCollapse(wrapper);
+  });
+  clickToExpandButton.addEventListener("click", () => {
+    getExpand(wrapper);
   });
 }
 

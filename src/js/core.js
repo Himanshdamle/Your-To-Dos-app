@@ -816,8 +816,6 @@ export function addInHTML(
   const preWord = main.getAttribute("data-preWord");
   const groupedData = groupTodosWithDate(JSONData, preWord);
 
-  let expiredTodoCount = 0;
-
   addTodoInCollapse(`#collapse-${main.id}-wrapper`, groupedData);
 
   Object.keys(groupedData).forEach((todoDate) => {
@@ -901,6 +899,17 @@ export function showThis(page, slideDownPanel = true) {
       },
       true
     );
+
+    slideAnimation(
+      {
+        el: "#crud-operation-wrapper",
+        direction: "top",
+        directionValue: "-100%",
+        duration: 1,
+        display: "flex",
+      },
+      true
+    );
   }
 
   smoothInnOutTransition(
@@ -935,6 +944,17 @@ export function removeThis(page) {
       directionValue: "0%",
       display: "flex",
       duration: 0.5,
+    },
+    false
+  );
+
+  slideAnimation(
+    {
+      el: "#crud-operation-wrapper",
+      direction: "top",
+      directionValue: "0%",
+      duration: 1,
+      display: "flex",
     },
     false
   );

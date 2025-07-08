@@ -1,8 +1,9 @@
-import { getLocaleDateString, getPriorityColor } from "./core.js";
+import { getPriorityColor } from "./core.js";
 
-export function resize() {
-  const pendingSection = document.querySelector("#left-main");
-  const sliderGrabber = document.querySelector("#slider-grabber");
+export function resize(wrapperId, sliderDirection) {
+  const wrapper = document.querySelector(wrapperId);
+  const todoWrapper = wrapper.querySelector(".todo-wrapper");
+  const sliderGrabber = wrapper.querySelector(".slider-grabber");
 
   let isGrabbed = false;
   const body = document.body;
@@ -23,60 +24,64 @@ export function resize() {
   sliderGrabber.addEventListener("mouseup", mouseUpFunc);
   body.addEventListener("mouseup", mouseUpFunc);
 
+  const rect = todoWrapper.getBoundingClientRect();
+
   body.addEventListener("mousemove", (e) => {
     if (!isGrabbed) return;
 
-    // move center 100px towards right
-    const center = pendingSection.getBoundingClientRect().width / 2 + 100;
-    // 50px gap to prevent instant change
-    const centerLeft = center - 50;
-    const centerRight = center + 50;
+    const center = rect.x + rect.width / 2;
+    // 20 gap to prevent instant change
+    const centerLeft = center - 20;
+    const centerRight = center + 20;
+
     const direction = e.clientX;
 
-    if (direction > centerRight) {
-      getExpand();
-    } else if (direction < centerLeft) {
-      getCollapse();
+    switch (sliderDirection) {
+      case "right":
+        if (direction < centerRight) getExpand(wrapper);
+        else if (direction > centerLeft) getCollapse(wrapper);
+        break;
+
+      case "left":
+        if (direction > centerRight) getExpand(wrapper);
+        else if (direction < centerLeft) getCollapse(wrapper);
+        break;
     }
   });
 }
 
-function getCollapse() {
-  const pendingSection = document.querySelector("#left-main");
-  const header = document.querySelector("#pending-section-header");
+export function getCollapse(wrapperDOM) {
+  const todoWrapper = wrapperDOM.querySelector(".todo-wrapper");
+  const header = wrapperDOM.querySelector(".wrapper-header");
 
-  const expandTodoWrapper = document.querySelector(
-    "#expand-pending-todo-wrapper"
-  );
-  const collapseTodoWrapper = document.querySelector(
-    "#collapse-pending-todo-wrapper"
+  const expandTodoWrapper = wrapperDOM.querySelector(".expand-todo-wrapper");
+  const collapseTodoWrapper = wrapperDOM.querySelector(
+    ".collapse-todo-wrapper"
   );
 
-  gsap.to(pendingSection, {
+  gsap.to(todoWrapper, {
     width: 140,
     duration: 0.3,
   });
-  header.textContent = "YTD";
+  header.textContent = header.getAttribute("data-collapse-header");
   expandTodoWrapper.classList.add("hidden");
   collapseTodoWrapper.classList.remove("hidden");
 }
 
-function getExpand() {
-  const pendingSection = document.querySelector("#left-main");
-  const header = document.querySelector("#pending-section-header");
+export function getExpand(wrapperDOM) {
+  const todoWrapper = wrapperDOM.querySelector(".todo-wrapper");
+  const header = wrapperDOM.querySelector(".wrapper-header");
 
-  const expandTodoWrapper = document.querySelector(
-    "#expand-pending-todo-wrapper"
-  );
-  const collapseTodoWrapper = document.querySelector(
-    "#collapse-pending-todo-wrapper"
+  const expandTodoWrapper = wrapperDOM.querySelector(".expand-todo-wrapper");
+  const collapseTodoWrapper = wrapperDOM.querySelector(
+    ".collapse-todo-wrapper"
   );
 
-  gsap.to(pendingSection, {
-    width: 330,
+  gsap.to(todoWrapper, {
+    width: 307,
     duration: 0.3,
   });
-  header.textContent = "YOUR TO-DOs";
+  header.textContent = header.getAttribute("data-expand-header");
   expandTodoWrapper.classList.remove("hidden");
   collapseTodoWrapper.classList.add("hidden");
 }
@@ -92,9 +97,10 @@ export function addTodoInCollapse(todoSideID, todoObject) {
 
   for (const groupName in todoObject) {
     const splitGrpName = groupName.split(" ");
+
     let header = splitGrpName[splitGrpName.length - 1].toUpperCase();
 
-    if (header === "MONTH" || header === "WEEK") {
+    if (header === "MONTH") {
       header = `${splitGrpName[2]} ${header}`;
     }
 

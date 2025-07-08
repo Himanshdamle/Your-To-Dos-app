@@ -52,149 +52,168 @@
     class="bg-[#0F0F0F] text-white font-medium overflow-hidden h-screen"
   >
     <div class="h-full">
-      <!-- LINES -->
-      <img
-        src="assets/Line 1.svg"
-        alt="Line"
-        class="absolute w-[200%] top-[80px]"
-      />
       <main
         class="flex justify-between items-start relative h-full max-w-[1820px] mx-auto"
       >
         <!-- SHOW-PENDING-TO-DOS -->
-        <section class="flex flex-row h-full">
-          <section class="flex-[1] flex flex-col h-full">
+        <section class="flex flex-row h-full" id="ytd-wrapper">
+          <main class="w-full flex flex-col gap-2 h-full">
             <header
               id="pending-section-header"
-              class="text-4xl pt-5 pb-2 w-full text-center font-bold grid place-items-center"
+              class="text-4xl py-5 border-b w-full text-center font-bold grid place-items-center wrapper-header"
+              data-collapse-header="YTD"
+              data-expand-header="YOUR TO-DOs"
             >
               YOUR TO-DOs
             </header>
 
             <main
               id="left-main"
-              class="h-full max-w-[526px] w-full mt-8 thin-scrollbar overflow-y-scroll overflow-x-hidden hide-scrollbar"
+              class="h-full thin-scrollbar overflow-y-scroll overflow-x-hidden hide-scrollbar todo-wrapper will-change w-[307px]"
             >
               <!-- Expand -->
               <section
-                class="h-full flex flex-col items-center gap-10 relative"
-                id="expand-pending-todo-wrapper"
+                class="h-full flex flex-col items-center gap-10 relative expand-todo-wrapper"
               >
-                <!-- SEARCH BAR -->
-                <section id="search-bar">
-                  <article
-                    class="text-center text-xl italic p-2.5 border h-min max-w-[400px] rounded-lg border-white/30 bg-[#1A1A1A] flex flex-col gap-2"
-                  >
-                    <!-- SEARCH -->
-                    <div
-                      class="flex bg-[#0F0F0F] px-3 border rounded-lg border-white/30 relative"
-                    >
-                      <button class="cursor-pointer border-r pr-3">
+                <section class="flex flex-col gap-1">
+                  <!-- CONTROLS -->
+                  <section>
+                    <span>
+                      <button
+                        class="hover:bg-[#1A1A1A] hover:opacity-100 hover:border-white/30 border border-transparent transition-colors transition-opacity duration-300 rounded-full cursor-pointer p-1.5 opacity-50 rotate-90 ml-6 clickto-collapse-button"
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          height="24px"
+                          height="35px"
                           viewBox="0 -960 960 960"
-                          width="24px"
+                          width="35px"
                           fill="#FFFFFF"
                         >
                           <path
-                            d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"
+                            d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-338q18-11 38.5-16.5T280-480h400q21 0 41.5 5.5T760-458v-302H200v302Zm0 258h560v-120q0-33-23.5-56.5T680-400H280q-33 0-56.5 23.5T200-320v120Zm0 0h560-560Z"
                           />
                         </svg>
                       </button>
-                      <div class="relative">
-                        <input
-                          type="text"
-                          name="search"
-                          id="search-input"
-                          class="p-1.5 font-bold w-full outline-none text-xl italic h-min input"
-                        />
-                        <p
-                          class="absolute bottom-[50%] text-nowrap translate-y-[50%] left-1.5 opacity-50 pointer-events-none psuedo-placeholder flex flex-row gap-1.5"
-                        >
-                          <b class="font-light">Search by - </b>
-                          <i id="search-by">TAG NAME</i>
-                        </p>
-                      </div>
-                    </div>
+                    </span>
+                  </section>
 
-                    <!-- FILTER -->
-                    <div
-                      class="flex justify-around items-center bg-[#0F0F0F] pl-3 border rounded-lg border-white/30"
+                  <!-- SEARCH BAR -->
+                  <section id="search-bar">
+                    <section
+                      class="text-center text-lg italic p-2.5 border h-min max-w-[400px] rounded-lg border-white/30 bg-[#1A1A1A] flex flex-col gap-2"
                     >
-                      <!-- FILTER SVG -->
-                      <div class="pr-3 border-r py-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="24px"
-                          viewBox="0 -960 960 960"
-                          width="24px"
-                          fill="#FFFFFF"
-                        >
-                          <path
-                            d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z"
+                      <!-- SEARCH -->
+                      <div
+                        class="flex bg-[#0F0F0F] px-3 border rounded-lg border-white/30 relative"
+                      >
+                        <button class="cursor-pointer border-r pr-3">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="24px"
+                            viewBox="0 -960 960 960"
+                            width="24px"
+                            fill="#FFFFFF"
+                          >
+                            <path
+                              d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"
+                            />
+                          </svg>
+                        </button>
+                        <div class="relative">
+                          <input
+                            type="text"
+                            name="search"
+                            id="search-input"
+                            class="p-1.5 font-bold w-full outline-none text-xl italic h-min input"
                           />
-                        </svg>
+                          <p
+                            class="absolute bottom-[50%] text-nowrap translate-y-[50%] left-1.5 opacity-50 pointer-events-none psuedo-placeholder flex flex-row gap-1.5"
+                          >
+                            <b class="font-light">Search by - </b>
+                            <i id="search-by">TAG NAME</i>
+                          </p>
+                        </div>
                       </div>
 
-                      <ul
-                        class="w-full flex flex-row justify-center overflow-hidden rounded-lg"
+                      <!-- FILTER -->
+                      <div
+                        class="flex justify-around items-center bg-[#0F0F0F] pl-3 border rounded-lg border-white/30"
                       >
-                        <!-- PRIORITY Search -->
-                        <li
-                          class="border-r px-3 hover:bg-[#008950] w-full transition-colors duration-200 priorities-search-btn"
-                          id="priority-priority-btn"
-                          data-priority-name="priority"
-                        >
-                          <button>
-                            <span>Priority</span>
-                          </button>
-                        </li>
+                        <!-- FILTER SVG -->
+                        <div class="pr-3 border-r py-1">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="24px"
+                            viewBox="0 -960 960 960"
+                            width="24px"
+                            fill="#FFFFFF"
+                          >
+                            <path
+                              d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z"
+                            />
+                          </svg>
+                        </div>
 
-                        <!-- HEADING Search -->
-                        <li
-                          class="border-r px-3 hover:bg-[#008950] w-full transition-colors duration-200 priorities-search-btn"
-                          id="heading-priority-btn"
-                          data-priority-name="heading"
+                        <ul
+                          class="w-full flex flex-row justify-center overflow-hidden rounded-lg"
                         >
-                          <button>
-                            <span>Heading</span>
-                          </button>
-                        </li>
+                          <!-- PRIORITY Search -->
+                          <li
+                            class="border-r px-3 hover:bg-[#008950] w-full transition-colors duration-200 priorities-search-btn"
+                            id="priority-priority-btn"
+                            data-priority-name="priority"
+                          >
+                            <button>
+                              <span>Priority</span>
+                            </button>
+                          </li>
 
-                        <!-- TAGS Search -->
-                        <li
-                          class="hover:bg-[#008950] px-3 w-full transition-colors duration-200 priorities-search-btn"
-                          id="tags-priority-btn"
-                          data-priority-name="tags"
-                        >
-                          <button>
-                            <span>Tags</span>
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-                  </article>
+                          <!-- HEADING Search -->
+                          <li
+                            class="border-r px-3 hover:bg-[#008950] w-full transition-colors duration-200 priorities-search-btn"
+                            id="heading-priority-btn"
+                            data-priority-name="heading"
+                          >
+                            <button>
+                              <span>Heading</span>
+                            </button>
+                          </li>
+
+                          <!-- TAGS Search -->
+                          <li
+                            class="hover:bg-[#008950] px-3 w-full transition-colors duration-200 priorities-search-btn"
+                            id="tags-priority-btn"
+                            data-priority-name="tags"
+                          >
+                            <button>
+                              <span>Tags</span>
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    </section>
+                  </section>
                 </section>
 
                 <!-- PENDING TODO SECTION -->
                 <section
                   id="pending-todo"
-                  class="flex flex-col gap-10 w-full"
+                  class="flex flex-col gap-10 w-full h-full"
                   data-preWord="Due"
                 ></section>
               </section>
 
               <!-- Collapse -->
               <section
-                class="h-full flex flex-col items-center gap-5"
+                class="h-full flex flex-col items-center gap-5 collapse-todo-wrapper"
                 id="collapse-pending-todo-wrapper"
               >
                 <!-- TOP CONTROLS -->
                 <section>
                   <span>
                     <button
-                      class="hover:bg-[#1A1A1A] hover:opacity-100 hover:border-white/30 border border-transparent transition-colors transition-opacity duration-300 rounded-full cursor-pointer p-1.5 opacity-50 rotate-90"
+                      class="hover:bg-[#1A1A1A] hover:opacity-100 hover:border-white/30 border border-transparent transition-colors transition-opacity duration-300 rounded-full cursor-pointer p-1.5 opacity-50 rotate-90 clickto-expand-button"
+                      id="collapse-expand-btn"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -211,17 +230,17 @@
                   </span>
                 </section>
 
-                <!-- PENDING TODOS -->
+                <!--COLLAPSED PENDING TODOS -->
                 <section
                   class="w-full px-3 text-xl flex flex-col gap-10 collapse-todo-container"
                 ></section>
               </section>
             </main>
-          </section>
+          </main>
 
+          <!-- Slide Grabber -->
           <section
-            class="h-full cursor-grab hover:bg-[#008950] transition-colors duration-200 rounded-xl"
-            id="slider-grabber"
+            class="h-full cursor-grab hover:bg-[#008950] transition-colors duration-200 rounded-xl slider-grabber"
           >
             <div class="bg-transparent h-full w-[4px]"></div>
           </section>
@@ -401,6 +420,7 @@
           </article>
         </section>
 
+        <!-- TOOL TIP FOR COLLAPSE TODO LIST -->
         <section class="fixed z-500 hidden">
           <div
             class="border border-white/50 text-xl bg-[#1A1A1A]/65 backdrop-blur-2xl rounded-xl p-2 px-4 flex flex-col gap-2"
@@ -424,15 +444,13 @@
           class="flex-[3] flex flex-col h-full after:content-[''] after:absolute relative after:w-[1px] after:h-[110%] after:right-0 after:top-[-10%] after:bg-white before:absolute before:w-[1px] before:h-[110%] before:left-0 before:top-[-10%] before:bg-white"
         >
           <!-- CURD OPTIONS -->
-          <header class="min-h-[80px]">
-            <section
-              id="task-path"
-              class="hidden w-full h-full mx-1.5 justify-start items-center"
-            ></section>
-
+          <header
+            class="min-h-[80px] relative border-b"
+            id="crud-operation-wrapper"
+          >
             <section
               id="crud-operation-btns"
-              class="flex flex-row gap-6 justify-between items-center px-7 pb-2"
+              class="flex flex-row gap-6 justify-between items-center px-7 pb-2 w-full"
             >
               <!-- CREATE -->
               <button
@@ -610,7 +628,7 @@
 
             <!-- CREATE TODO PAGE -->
             <div
-              class="bg-[#1A1A1A] hidden relative border rounded-2xl p-4 w-[80%] max-w-[960px]"
+              class="bg-[#1A1A1A] hidden relative border rounded-2xl p-4 w-[80%] max-w-[960px] transition-discrete"
               id="todo-page"
             >
               <div class="absolute top-2 left-2.5 z-10 flex gap-3.5">
@@ -1205,18 +1223,95 @@
         </section>
 
         <!-- SHOW-COMPLETED-TO-DOS -->
-        <section class="flex-shrink-0 flex flex-col flex-[1] h-full">
-          <header
-            class="text-[1.9rem] w-full pt-5 pb-2 grid place-items-center text-center font-bold"
+        <section class="flex flex-row h-full" id="dtd-wrapper">
+          <!-- Slide Grabber -->
+          <section
+            class="h-full cursor-grab hover:bg-[#008950] transition-colors duration-200 rounded-xl slider-grabber"
           >
-            DONE TO-DOs
-          </header>
+            <div class="bg-transparent h-full w-[4px]"></div>
+          </section>
 
-          <main
-            id="right-main"
-            class="h-full w-full mt-8 flex flex-col items-center gap-10 thin-scrollbar overflow-y-scroll overflow-x-hidden hide-scrollbar"
-            data-preWord="Completed"
-          ></main>
+          <main class="flex-shrink-0 flex flex-col w-full h-full">
+            <header
+              class="text-[1.9rem] w-full py-4 grid place-items-center font-bold border-b wrapper-header"
+              data-collapse-header="DTD"
+              data-expand-header="DONE TO-DOs"
+            >
+              DONE TO-DOs
+            </header>
+
+            <main
+              id="right-main"
+              class="h-full thin-scrollbar overflow-y-scroll overflow-x-hidden hide-scrollbar todo-wrapper w-[307px] will-change"
+            >
+              <!-- Expand -->
+              <section
+                class="h-full flex flex-col items-end mr-8 relative expand-todo-wrapper"
+              >
+                <section>
+                  <!-- CONTROLS -->
+                  <section>
+                    <span>
+                      <button
+                        class="hover:bg-[#1A1A1A] hover:opacity-100 hover:border-white/30 border border-transparent transition-colors transition-opacity duration-300 rounded-full cursor-pointer p-1.5 opacity-50 -rotate-90 clickto-collapse-button"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="35px"
+                          viewBox="0 -960 960 960"
+                          width="35px"
+                          fill="#FFFFFF"
+                        >
+                          <path
+                            d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-338q18-11 38.5-16.5T280-480h400q21 0 41.5 5.5T760-458v-302H200v302Zm0 258h560v-120q0-33-23.5-56.5T680-400H280q-33 0-56.5 23.5T200-320v120Zm0 0h560-560Z"
+                          />
+                        </svg>
+                      </button>
+                    </span>
+                  </section>
+                </section>
+
+                <!-- PENDING TODO SECTION -->
+                <section
+                  id="completed-todo"
+                  class="flex flex-col gap-10 w-full"
+                  data-preWord="Completed"
+                ></section>
+              </section>
+
+              <!-- Collapse -->
+              <section
+                class="h-full flex flex-col items-center gap-5 collapse-todo-wrapper"
+                id="collapse-completed-todo-wrapper"
+              >
+                <!-- TOP CONTROLS -->
+                <section>
+                  <span>
+                    <button
+                      class="hover:bg-[#1A1A1A] hover:opacity-100 hover:border-white/30 border border-transparent transition-colors transition-opacity duration-300 rounded-full cursor-pointer p-1.5 opacity-50 rotate-90 clickto-expand-button"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="50px"
+                        viewBox="0 -960 960 960"
+                        width="50px"
+                        fill="#FFFFFF"
+                      >
+                        <path
+                          d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-338q18-11 38.5-16.5T280-480h400q21 0 41.5 5.5T760-458v-302H200v302Zm0 258h560v-120q0-33-23.5-56.5T680-400H280q-33 0-56.5 23.5T200-320v120Zm0 0h560-560Z"
+                        />
+                      </svg>
+                    </button>
+                  </span>
+                </section>
+
+                <!--COLLAPSED COMPLETED TODOS -->
+                <section
+                  class="w-full h-full px-3 text-xl flex flex-col gap-10 collapse-todo-container"
+                ></section>
+              </section>
+            </main>
+          </main>
         </section>
       </main>
     </div>

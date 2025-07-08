@@ -65,3 +65,7 @@ select {
 .active {
   color: #0f0f0f;
 }
+
+.will-change {
+  will-change: transform;
+}

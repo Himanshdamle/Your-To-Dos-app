@@ -29,7 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
   searchByRotation();
 
   getUserSearchResult();
-  resize();
+
+  resize("#ytd-wrapper", "left");
+  resize("#dtd-wrapper", "right");
 
   const closeTodoButtons = document.querySelector(".close-todo-page");
   const closeReadTodoButton = document.querySelector("#close-read-todo-page");
@@ -94,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   //DRAG AND DROP TODO...
-  const completedTodosSection = document.querySelector("#right-main");
+  const completedTodosSection = document.querySelector("#completed-todo");
   Sortable.create(completedTodosSection, {
     group: {
       name: "shared",
@@ -124,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   });
 
-  const pendingTodosSection = document.querySelector("#left-main");
+  const pendingTodosSection = document.querySelector("#pending-todo");
   Sortable.create(pendingTodosSection, {
     group: {
       name: "shared",

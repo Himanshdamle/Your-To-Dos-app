@@ -13,7 +13,7 @@ import { hotKeysFunction, downloadTodos, copyTaskName } from "./event.js";
  */
 export function initializeUI() {
   const pendingTodosSection = document.querySelector("#pending-todo");
-  const completedTodosSection = document.querySelector("#right-main");
+  const completedTodosSection = document.querySelector("#completed-todo");
 
   const renderTaskProcess = {
     pendingTask: 0,
@@ -273,7 +273,7 @@ menuOptionBox.forEach((box) => {
 
       if (target !== box && target.classList.contains("menu-buttons")) {
         const operationName = target.getAttribute("data-function");
-        const completedTodosSection = document.querySelector("#right-main");
+        const completedTodosSection = document.querySelector("#completed-todo");
         const clickedTodoHTML = window.clickedTodoHTML;
 
         switch (operationName) {
