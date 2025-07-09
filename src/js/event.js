@@ -1,12 +1,11 @@
 import {
-  transitionBetweenPages,
-  addInYoursTodo,
+  renderTodoCard,
   addInHTML,
   resetTodoPageFunc,
   showMessagePopup,
   closeOpenSmoothAnimation,
-  slideAnimation,
   operations,
+  removeThis,
 } from "./core.js";
 import { backend, pickedTodoData } from "./todo.js";
 import { showLongText } from "./ui.js";
@@ -101,14 +100,10 @@ export function setupEventListeners() {
 
     if (currTodoDetails.heading === "" || currTodoDetails.date === "") return;
 
-    transitionBetweenPages({
-      pageCloseEl: "#todo-page",
-      pageOpenEl: "#quote-box",
-    });
-
     let messageInfo;
 
     if (window.updated) {
+      console.log(window.getTodoData);
       if (!window.getTodoData) return;
 
       backend(
@@ -120,7 +115,7 @@ export function setupEventListeners() {
 
       const JSONData = JSON.parse(localStorage.getItem("todos"));
 
-      addInYoursTodo(
+      renderTodoCard(
         false,
         JSONData[window.getTodoData.localStorageIndex],
         document.querySelector("#left-main"),
@@ -143,19 +138,7 @@ export function setupEventListeners() {
       };
     }
 
-    slideAnimation(
-      {
-        el: "#down-nav-bar",
-        direction: "bottom",
-        directionValue: "0%",
-        display: "flex",
-        duration: 0.5,
-        onAnimationComplete() {
-          showMessagePopup(messageInfo);
-        },
-      },
-      false
-    );
+    removeThis(document.querySelector("#todo-page"));
   });
 
   // reset input fields

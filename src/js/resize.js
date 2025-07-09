@@ -86,7 +86,7 @@ export function getExpand(wrapperDOM) {
   collapseTodoWrapper.classList.add("hidden");
 }
 
-export function addTodoInCollapse(todoSideID, todoObject) {
+export function addTodoInCollapse(todoSideID, todoObject, shouldHide) {
   const collapseTodoWrapper = document.querySelector(todoSideID);
   if (!collapseTodoWrapper) return;
 
@@ -140,5 +140,5 @@ export function addTodoInCollapse(todoSideID, todoObject) {
     }
   }
 
-  collapseTodoWrapper.classList.add("hidden");
+  if (shouldHide === true) collapseTodoWrapper.classList.add("hidden");
 }

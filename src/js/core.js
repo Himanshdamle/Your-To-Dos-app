@@ -8,7 +8,7 @@ import {
   fillData,
 } from "./todo.js";
 
-import { toggleClasses } from "./tag.js";
+import { cleanTagUI } from "./tag.js";
 import { addTodoInCollapse } from "./resize.js";
 
 /**
@@ -659,7 +659,7 @@ export function getPercentageOf(currValue, maxValue) {
 /**
  * Adds a to-do item's HTML representation to the DOM.
  */
-export function addInYoursTodo(
+export function renderTodoCard(
   looksSettings,
   userLatestTodo,
   mainDirection,
@@ -792,7 +792,7 @@ export function addInYoursTodo(
  * Adds all to-do items from localStorage to the DOM, grouped by date range.
  */
 export function addInHTML(
-  getData = { localTodoVarName: "", data: [] },
+  getData = { localTodoVarName: "", data: [], hideCollapseTodo: false },
   main,
   initializeDragBehaviourParams,
   addNewTodo = false
@@ -816,9 +816,13 @@ export function addInHTML(
   const preWord = main.getAttribute("data-preWord");
   const groupedData = groupTodosWithDate(JSONData, preWord);
 
-  addTodoInCollapse(`#collapse-${main.id}-wrapper`, groupedData);
+  addTodoInCollapse(
+    `#collapse-${main.id}-wrapper`,
+    groupedData,
+    getData.hideCollapseTodo
+  );
 
-  Object.keys(groupedData).forEach((todoDate) => {
+  for (const todoDate in groupedData) {
     const noSpaceID = todoDate.replace(/\s/g, "");
     const isDueDateSectionPresent = main.querySelector(`#${noSpaceID}`);
 
@@ -861,7 +865,7 @@ export function addInHTML(
     const isExpired = todoDate === "Expired";
 
     groupedData[todoDate].forEach((json) => {
-      addInYoursTodo(
+      renderTodoCard(
         {
           isExpired,
         },
@@ -871,7 +875,7 @@ export function addInHTML(
         initializeDragBehaviourParams.localTodoVarName
       );
     });
-  });
+  }
 
   initializeDragBehaviour(initializeDragBehaviourParams);
 
@@ -1026,29 +1030,7 @@ export function resetTodoPageFunc(transitionPlaceholders = true) {
     );
   });
 
-  const tagNameInputs = document.querySelectorAll(".tag-name");
-  const bgSpanTagsHoverEffects = document.querySelectorAll(
-    ".bg-span-el-tags-hover-effect"
-  );
-
-  const tagsCounter = document.querySelector("#current-len-tags-input");
-  if (tagsCounter) {
-    tagsCounter.innerText = "0";
-  }
-
-  bgSpanTagsHoverEffects.forEach((span) => {
-    toggleClasses("remove", span);
-  });
-
-  tagNameInputs.forEach((tag) => {
-    tag.value = tag.getAttribute("value") || "";
-    resize(tag);
-  });
-
-  window.tagStates.forEach((state) => {
-    state.isClicked = false;
-    state.isDblClick = false;
-  });
+  cleanTagUI();
 }
 
 /**
@@ -1073,9 +1055,10 @@ export function dragAndDropTodos(getLocalTodoVarNameObject) {
   const movedTodo = JSONData.splice(getTodoData.localStorageIndex, 1);
 
   const currentDate = new Date();
-  movedTodo[0].date = `${currentDate.getFullYear()}-0${
-    currentDate.getMonth() + 1
-  }-${currentDate.getDate()}`;
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, 0);
+  const day = String(currentDate.getDate()).padStart(2, 0);
+  movedTodo[0].date = `${year}-${month}-${day}`;
 
   localStorage.setItem(fromDragVarName, JSON.stringify(JSONData));
   backend(movedTodo[0], toDropVarName);

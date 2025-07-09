@@ -4,6 +4,7 @@ import {
   showThis,
   removeThis,
 } from "./core.js";
+import { setTagValues } from "./tag.js";
 
 export function backend(
   todoObject,
@@ -44,10 +45,10 @@ export function fillData(idMap = {}, todoData, isForm = false) {
 
 export function update(todoData) {
   window.updated = true;
-  window.currTodoDetails.id = todoData.id;
-
+  window.currTodoDetails = todoData;
   const dataArray = Object.values(todoData);
 
+  setTagValues(window.currTodoDetails.tags);
   fillData(
     {
       heading: "#heading-input",
@@ -66,7 +67,6 @@ export function update(todoData) {
 
     if (!el) return;
 
-    // Update character length indicator if exists
     const lengthTag = document.getElementById(`current-len-${inputId}`);
     if (lengthTag) {
       const maxDigits = lengthTag.getAttribute("maxDigit");

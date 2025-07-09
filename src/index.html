@@ -201,6 +201,12 @@
                   class="flex flex-col gap-10 w-full h-full"
                   data-preWord="Due"
                 ></section>
+
+                <section
+                  id="search-todo"
+                  class="flex flex-col gap-10 w-full h-full"
+                  data-preWord="Due"
+                ></section>
               </section>
 
               <!-- Collapse -->
@@ -847,12 +853,11 @@
                     class="tag z-50 cursor-pointer relative flex justify-center items-center rounded-full py-4 pl-1"
                   >
                     <span
-                      class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0"
-                      id="bg-color-tag"
+                      class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0 bg-color-tag"
                     ></span>
                     <b class="z-10" class="z-10">#</b>
                     <input
-                      class="tag-name bg-transparent text-white min-w-[4ch] z-10 border-none cursor-pointer rounded-sm focus:border pointer-events-none"
+                      class="tag-name !font-light bg-transparent text-white min-w-[4ch] z-10 border-none cursor-pointer rounded-sm focus:border pointer-events-none"
                       type="text"
                       data-active="false"
                       id="tag-input-1"
@@ -866,12 +871,11 @@
                     class="tag cursor-pointer z-50 relative flex justify-center items-center rounded-full py-4 pl-1"
                   >
                     <span
-                      class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0"
-                      id="bg-color-tag"
+                      class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0 bg-color-tag"
                     ></span>
                     <b class="z-10">#</b>
                     <input
-                      class="tag-name bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
+                      class="tag-name !font-light bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
                       type="text"
                       id="tag-input-2"
                       name="tag"
@@ -885,12 +889,11 @@
                     class="tag cursor-pointer z-50 relative flex justify-center items-center rounded-full py-4 pl-1"
                   >
                     <span
-                      class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0"
-                      id="bg-color-tag"
+                      class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0 bg-color-tag"
                     ></span>
                     <b class="z-10">#</b>
                     <input
-                      class="tag-name bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
+                      class="tag-name !font-light bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
                       type="text"
                       id="tag-input-3"
                       name="tag"
@@ -904,12 +907,11 @@
                     class="tag cursor-pointer z-50 relative flex justify-center items-center rounded-full py-4 pl-1"
                   >
                     <span
-                      class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0"
-                      id="bg-color-tag"
+                      class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0 bg-color-tag"
                     ></span>
                     <b class="z-10">#</b>
                     <input
-                      class="tag-name bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
+                      class="tag-name !font-light bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
                       type="text"
                       id="tag-input-4"
                       name="tag"
@@ -923,12 +925,11 @@
                     class="tag cursor-pointer z-50 relative flex justify-center items-center rounded-full py-4 pl-1"
                   >
                     <span
-                      class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0"
-                      id="bg-color-tag"
+                      class="absolute inset-0 py-4 pl-1 rounded-full bg-[#2CB67D] transition-all duration-200 ease-out transform origin-center z-0 scale-0 bg-color-tag"
                     ></span>
                     <b class="z-10">#</b>
                     <input
-                      class="tag-name bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
+                      class="tag-name !font-light bg-transparent text-white min-w-[4ch] z-10 border-none rounded-sm focus:border pointer-events-none cursor-pointer"
                       type="text"
                       id="tag-input-5"
                       name="tag"
@@ -1241,7 +1242,6 @@
             </header>
 
             <main
-              id="right-main"
               class="h-full thin-scrollbar overflow-y-scroll overflow-x-hidden hide-scrollbar todo-wrapper w-[307px] will-change"
             >
               <!-- Expand -->
@@ -1271,10 +1271,10 @@
                   </section>
                 </section>
 
-                <!-- PENDING TODO SECTION -->
+                <!-- COMPLETED TODOS SECTION -->
                 <section
                   id="completed-todo"
-                  class="flex flex-col gap-10 w-full"
+                  class="flex flex-col gap-10 w-full h-full"
                   data-preWord="Completed"
                 ></section>
               </section>

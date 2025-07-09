@@ -33,22 +33,22 @@ document.addEventListener("DOMContentLoaded", () => {
   resize("#ytd-wrapper", "left");
   resize("#dtd-wrapper", "right");
 
-  const closeTodoButtons = document.querySelector(".close-todo-page");
   const closeReadTodoButton = document.querySelector("#close-read-todo-page");
-
   closeReadTodoButton.addEventListener("click", () => {
     const todoPage = document.querySelector("#read-todo-page");
     removeThis(todoPage);
   });
+
+  const closeTodoButtons = document.querySelector(".close-todo-page");
   closeTodoButtons.addEventListener("click", () => {
     const todoPage = document.querySelector("#todo-page");
     window.updated = false;
     removeThis(todoPage);
-    resetTodoPageFunc(false);
+    resetTodoPageFunc(false, true);
   });
 
   function openCreateToDoPage() {
-    resetTodoPageFunc(true);
+    resetTodoPageFunc(true, true);
     showToDoPage();
   }
 
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const tags = document.querySelectorAll(".tag");
   tags.forEach((tag) => {
-    const bg = tag.querySelector("#bg-color-tag");
+    const bg = tag.querySelector(".bg-color-tag");
     const state = { isClicked: false, isDblClick: false };
 
     hoverEffect(tag, bg, state);

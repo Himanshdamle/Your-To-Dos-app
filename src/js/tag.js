@@ -10,6 +10,18 @@ export function toggleClasses(methodName, bgEl) {
   }px`;
 }
 
+function toggleClassesAndAttribute(
+  methodNameClasses,
+  methodNameAttribute,
+  boolean
+) {
+  enterTagName.classList[methodNameClasses](
+    "pointer-events-none",
+    "cursor-pointer"
+  );
+  enterTagName[methodNameAttribute]("disabled", boolean);
+}
+
 function removeThisTag(tagName) {
   window.currTodoDetails.tags = window.currTodoDetails.tags.filter(
     (tag) => tag !== tagName
@@ -77,18 +89,6 @@ export function clickingLogic(el, bgEl, state) {
     )
       return;
 
-    function toggleClassesAndAttribute(
-      methodNameClasses,
-      methodNameAttribute,
-      boolean
-    ) {
-      enterTagName.classList[methodNameClasses](
-        "pointer-events-none",
-        "cursor-pointer"
-      );
-      enterTagName[methodNameAttribute]("disabled", boolean);
-    }
-
     toggleClassesAndAttribute("remove", "removeAttribute");
 
     // if user selected and again want to edit the tag then remove the selected tag
@@ -139,5 +139,54 @@ export function initializeTagInputs() {
   inputs.forEach((input) => {
     resize(input);
     input.addEventListener("input", () => resize(input));
+  });
+}
+
+function cleanTagStates(tagStates) {
+  tagStates.forEach((state) => {
+    state.isClicked = false;
+    state.isDblClick = false;
+  });
+}
+
+export function cleanTagUI() {
+  const tagNameInputs = document.querySelectorAll(".tag-name");
+  const bgSpanTagsHoverEffects = document.querySelectorAll(
+    ".bg-span-el-tags-hover-effect"
+  );
+
+  const tagsCounter = document.querySelector("#current-len-tags-input");
+  if (tagsCounter) {
+    tagsCounter.innerText = "0";
+  }
+
+  bgSpanTagsHoverEffects.forEach((span) => {
+    toggleClasses("remove", span);
+  });
+
+  tagNameInputs.forEach((tag) => {
+    tag.value = tag.getAttribute("value") || "";
+    tag.setAttribute("data-active", "false");
+
+    resize(tag);
+  });
+  cleanTagStates(window.tagStates);
+}
+
+export function setTagValues(todoTagsArray) {
+  const hoverBalloon = document.querySelectorAll(".bg-color-tag");
+
+  todoTagsArray.forEach((tag, tagNumber) => {
+    const tagInput = document.querySelector(`#tag-input-${tagNumber + 1}`);
+
+    if (!tagInput) return;
+
+    window.countTags += tagNumber;
+
+    tagInput.value = tag;
+    tagInput.setAttribute("data-active", "true");
+    window.tagStates[tagNumber].isClicked = true;
+
+    toggleClasses("add", hoverBalloon[tagNumber]);
   });
 }

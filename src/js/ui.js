@@ -26,7 +26,7 @@ export function initializeUI() {
   };
 
   const addPendingTask = addInHTML(
-    { localTodoVarName: "todos" },
+    { localTodoVarName: "todos", hideCollapseTodo: true },
     pendingTodosSection,
     {
       allowCRUD: true,
@@ -43,7 +43,7 @@ export function initializeUI() {
   renderTotalTask.pendingTask = getPendingTaskNumInfo.totalTask || 0;
 
   const addCompletedTask = addInHTML(
-    { localTodoVarName: "completedTodos" },
+    { localTodoVarName: "completedTodos", hideCollapseTodo: true },
     completedTodosSection,
     {
       allowCRUD: ["#delete", "#read"],
