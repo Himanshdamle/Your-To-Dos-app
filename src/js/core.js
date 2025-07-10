@@ -816,11 +816,10 @@ export function addInHTML(
   const preWord = main.getAttribute("data-preWord");
   const groupedData = groupTodosWithDate(JSONData, preWord);
 
-  addTodoInCollapse(
-    `#collapse-${main.id}-wrapper`,
-    groupedData,
-    getData.hideCollapseTodo
-  );
+  addTodoInCollapse(`#collapse-${main.id}-wrapper`, groupedData, {
+    shouldHide: getData.hideCollapseTodo,
+    localTodoVarName: getData.localTodoVarName,
+  });
 
   for (const todoDate in groupedData) {
     const noSpaceID = todoDate.replace(/\s/g, "");

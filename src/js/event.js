@@ -7,7 +7,7 @@ import {
   operations,
   removeThis,
 } from "./core.js";
-import { backend, pickedTodoData } from "./todo.js";
+import { backend, pickedTodoData, toolTipForTodo } from "./todo.js";
 import { showLongText } from "./ui.js";
 import { getCollapse, getExpand } from "./resize.js";
 
@@ -388,11 +388,75 @@ export function hotKeysFunction(allowCRUDArray, todoMainSide) {
       const keyPressed = e.key.toLowerCase();
 
       const isAllowed = allowCRUDArray.includes(keyPressed);
-      if (keyPressed === "r" && isAllowed) operations({ todoCard }, "read");
-      else if (keyPressed === "u" && isAllowed)
-        operations({ todoCard }, "update");
-      else if (keyPressed === "d" && isAllowed)
-        operations({ todoCard }, "delete");
+
+      switch (true) {
+        case keyPressed === "r" && isAllowed:
+          operations({ todoCard }, "read");
+          break;
+
+        case keyPressed === "u" && isAllowed:
+          operations({ todoCard }, "update");
+          break;
+
+        case keyPressed === "d" && isAllowed:
+          operations({ todoCard }, "delete");
+          break;
+      }
     });
   });
+}
+
+export function hoverEventCollapseTodo(todoWrapperDOM) {
+  todoWrapperDOM.addEventListener(
+    "mouseenter",
+    (e) => {
+      const target = e.target;
+      if (target.getAttribute("data-mouseevent-target") === "true") {
+        const todoDetails = pickedTodoData(
+          target.getAttribute("data-storage-varible-name"),
+          target.getAttribute("data-todo-id")
+        );
+
+        toolTipForTodo(todoDetails.matchedId);
+
+        const wrapper = document.querySelector("#tool-tip-wrapper");
+
+        const wrapperWidth = wrapper.getBoundingClientRect().width;
+        const boundingRect = target.getBoundingClientRect();
+
+        let xAxis = 0;
+        if (boundingRect.x + wrapperWidth > window.innerWidth) {
+          xAxis = boundingRect.x - wrapperWidth;
+        }
+
+        gsap.fromTo(
+          wrapper,
+          { y: -10, opacity: 0 },
+          { y: 0, duration: 0.3, opacity: 1 }
+        );
+        gsap.set(wrapper, {
+          top: boundingRect.top,
+          x: xAxis ? xAxis : boundingRect.x,
+        });
+      }
+    },
+    true
+  );
+
+  todoWrapperDOM.addEventListener(
+    "mouseleave",
+    (e) => {
+      const target = e.target;
+      if (target.getAttribute("data-mouseevent-target") === "true") {
+        const wrapper = document.querySelector("#tool-tip-wrapper");
+
+        gsap.fromTo(
+          wrapper,
+          { y: 0, opacity: 1 },
+          { y: 10, duration: 0.3, opacity: 0 }
+        );
+      }
+    },
+    true
+  );
 }

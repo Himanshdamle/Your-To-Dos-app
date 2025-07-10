@@ -1,4 +1,5 @@
 import { getPriorityColor } from "./core.js";
+import { hoverEventCollapseTodo } from "./event.js";
 
 export function resize(wrapperId, sliderDirection) {
   const wrapper = document.querySelector(wrapperId);
@@ -86,7 +87,11 @@ export function getExpand(wrapperDOM) {
   collapseTodoWrapper.classList.add("hidden");
 }
 
-export function addTodoInCollapse(todoSideID, todoObject, shouldHide) {
+export function addTodoInCollapse(
+  todoSideID,
+  todoObject,
+  info = { shouldHide, localTodoVarName }
+) {
   const collapseTodoWrapper = document.querySelector(todoSideID);
   if (!collapseTodoWrapper) return;
 
@@ -133,12 +138,17 @@ export function addTodoInCollapse(todoSideID, todoObject, shouldHide) {
       todoList.innerHTML += `
       <li
         class="bg-[${bgColor}] ${ifExpiredClasses} rounded-xl w-full h-[100px] grid place-items-center"
+        data-todo-id="${todoDetails.id}"
+        data-mouseevent-target="true"
+        data-storage-varible-name="${info.localTodoVarName}"
       >
         <span class="font-extrabold text-[#1A1A1A]">${dateTillMonth}</span>
       </li>
       `;
     }
+
+    hoverEventCollapseTodo(todoWrapper.querySelector("ol"));
   }
 
-  if (shouldHide === true) collapseTodoWrapper.classList.add("hidden");
+  if (info.shouldHide === true) collapseTodoWrapper.classList.add("hidden");
 }

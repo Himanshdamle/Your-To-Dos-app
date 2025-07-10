@@ -63,6 +63,7 @@
               class="text-4xl py-5 border-b w-full text-center font-bold grid place-items-center wrapper-header"
               data-collapse-header="YTD"
               data-expand-header="YOUR TO-DOs"
+              title="YOUR TO-DOs"
             >
               YOUR TO-DOs
             </header>
@@ -427,21 +428,24 @@
         </section>
 
         <!-- TOOL TIP FOR COLLAPSE TODO LIST -->
-        <section class="fixed z-500 hidden">
+        <section
+          class="fixed z-500 opacity-0 pointer-events-none"
+          id="tool-tip-wrapper"
+        >
           <div
-            class="border border-white/50 text-xl bg-[#1A1A1A]/65 backdrop-blur-2xl rounded-xl p-2 px-4 flex flex-col gap-2"
+            class="border border-white/50 text-xl rounded-xl p-2 px-4 flex flex-col gap-2 relative bg-[#1A1A1A]/65 backdrop-blur-2xl"
           >
             <header
               class="font-semibold max-w-[260px] text-wrap inline-block leading-tight"
+              id="tooltip-header"
             >
               -
             </header>
 
-            <div class="flex text-xl gap-2 w-full font-light">
-              <span title="#JEE" class="font-light text-nowrap truncate">
-                <b>#</b>general
-              </span>
-            </div>
+            <div
+              class="flex text-xl gap-2 w-full font-light"
+              id="tool-tip-tags-wrapper"
+            ></div>
           </div>
         </section>
 
@@ -1237,6 +1241,7 @@
               class="text-[1.9rem] w-full py-4 grid place-items-center font-bold border-b wrapper-header"
               data-collapse-header="DTD"
               data-expand-header="DONE TO-DOs"
+              title="DONE TO-DOs"
             >
               DONE TO-DOs
             </header>

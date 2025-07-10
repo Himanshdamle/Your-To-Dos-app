@@ -3,6 +3,7 @@ import {
   showMessagePopup,
   showThis,
   removeThis,
+  smoothInnOutTransition,
 } from "./core.js";
 import { setTagValues } from "./tag.js";
 
@@ -150,16 +151,12 @@ export function readTodo(getTodoData) {
   tagsWrapper.innerHTML = tags;
 }
 
-export function pickedTodoData(
-  localTodoVarName,
-  pickedItemHTML,
-  pickedItemHTMLID
-) {
+export function pickedTodoData(localTodoVarName, pickedItemHTML) {
   const JSONData = JSON.parse(localStorage.getItem(localTodoVarName)) || null;
 
   if (JSONData === null) return undefined;
 
-  const actualID = pickedItemHTMLID || pickedItemHTML.id;
+  const actualID = pickedItemHTML.id || pickedItemHTML;
 
   const matchedId = JSONData.find((arr) => arr.id === actualID);
 
@@ -168,4 +165,31 @@ export function pickedTodoData(
     localStorageIndex: JSONData.indexOf(matchedId),
     actualID,
   };
+}
+
+export function toolTipForTodo(todoDetails) {
+  const wrapper = document.querySelector("#tool-tip-wrapper");
+
+  const header = wrapper.querySelector("#tooltip-header");
+  const tagsWrapper = wrapper.querySelector("#tool-tip-tags-wrapper");
+
+  header.textContent = todoDetails.heading;
+
+  if (todoDetails.tags[0] !== undefined) {
+    tagsWrapper.innerHTML = "";
+
+    for (const tag of todoDetails.tags) {
+      tagsWrapper.innerHTML += `
+      <span title="#${tag}" class="font-light text-nowrap truncate">
+        <b>#</b>${tag}
+      </span>
+      `;
+    }
+  } else {
+    tagsWrapper.innerHTML = `
+      <span title="#general" class="font-light text-nowrap truncate">
+        <b>#</b>general
+      </span>
+      `;
+  }
 }
