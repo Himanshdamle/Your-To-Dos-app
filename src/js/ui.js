@@ -6,7 +6,9 @@ import {
   operations,
 } from "./core.js";
 
-import { hotKeysFunction, downloadTodos, copyTaskName } from "./event.js";
+import { hotKeysFunction } from "./event.js";
+
+import { copyTaskName, downloadTodos } from "./todo.js";
 
 /**
  * Initializes the UI, including todo rendering and placeholder effects.
@@ -335,3 +337,25 @@ document.addEventListener("click", (e) => {
     );
   }
 });
+
+document.addEventListener(
+  "click",
+  (e) => {
+    const target = e.target.closest("[data-click-selectable]");
+
+    if (target === null) {
+      const selectedTodoCards = document.querySelectorAll("[data-selected");
+
+      selectedTodoCards.forEach((todoCard) => {
+        todoCard.classList.remove("border-[#2CB67D]");
+        todoCard.removeAttribute("data-selected");
+
+        const selectedTick = todoCard.querySelector(".selected-tick-visual");
+        selectedTick.classList.add("hidden");
+      });
+    } else {
+      target.setAttribute("data-selected", "");
+    }
+  },
+  true
+);

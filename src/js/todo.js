@@ -3,7 +3,6 @@ import {
   showMessagePopup,
   showThis,
   removeThis,
-  smoothInnOutTransition,
 } from "./core.js";
 import { setTagValues } from "./tag.js";
 
@@ -79,7 +78,8 @@ export function update(todoData) {
   showToDoPage();
 }
 
-export function deleteTodoFRONTEND(delTodoFunction) {
+const deleteToDoBtn = document.querySelector("#delete-to-do");
+export function deleteTodoFrontend(delTodoFunction) {
   const confimationBox = document.querySelector("#delete-confirmation-box");
   if (!confimationBox) return;
 
@@ -92,24 +92,28 @@ export function deleteTodoFRONTEND(delTodoFunction) {
   });
 
   // When user confirmed to delete to-do
-  const deleteToDoBtn = document.querySelector("#delete-to-do");
+  deleteToDoBtn.addEventListener(
+    "click",
+    () => {
+      console.log("2 bar tu to nahi chal rha hai na ? 99");
+      const deletedTodoData = delTodoFunction();
 
-  deleteToDoBtn.addEventListener("click", () => {
-    const deletedTodoData = delTodoFunction();
+      removeThis(confimationBox);
 
-    removeThis(confimationBox);
-
-    // THEN SHOW MESSAGE.
-    showMessagePopup({
-      invertedBoldTxt: deletedTodoData.heading,
-      boldTxt: "Task deleted!",
-      emoji: "🗑️",
-    });
-  });
+      // THEN SHOW MESSAGE.
+      showMessagePopup({
+        invertedBoldTxt: deletedTodoData.heading,
+        boldTxt: "Task deleted!",
+        emoji: "🗑️",
+      });
+    },
+    { once: true }
+  );
 }
 
-export function deleteTodo(localTodoVarName, todoIndex, getHtmlID) {
-  document.getElementById(getHtmlID).remove();
+export function deleteTodo(localTodoVarName, todoIndex, todoHTML) {
+  if (!todoHTML) return;
+  todoHTML.remove();
 
   const JSONData = JSON.parse(localStorage.getItem(localTodoVarName)) || [];
 
@@ -117,6 +121,8 @@ export function deleteTodo(localTodoVarName, todoIndex, getHtmlID) {
 
   JSONData.splice(todoIndex, 1);
   localStorage.setItem(localTodoVarName, JSON.stringify(JSONData));
+
+  console.log(JSONData);
 
   return deleteTodoData;
 }
@@ -154,7 +160,7 @@ export function readTodo(getTodoData) {
 export function pickedTodoData(localTodoVarName, pickedItemHTML) {
   const JSONData = JSON.parse(localStorage.getItem(localTodoVarName)) || null;
 
-  if (JSONData === null) return undefined;
+  if (JSONData === null || !pickedItemHTML) return undefined;
 
   const actualID = pickedItemHTML.id || pickedItemHTML;
 
@@ -192,4 +198,76 @@ export function toolTipForTodo(todoDetails) {
       </span>
       `;
   }
+}
+
+// download todo as notepad.
+export function downloadTodos(todoHTML) {
+  const storageKey = todoHTML.getAttribute("data-localtodovarname");
+  const todoID = todoHTML.id;
+
+  if (!storageKey || !todoID) return;
+
+  const todoDetails = pickedTodoData(storageKey, null, todoID).matchedId;
+
+  const formatted = [todoDetails]
+    .map((todo) => {
+      return `
+==================== 📌 TODO ====================
+        
+📝 Title     : ${todo.heading}
+🗓️  Due Date  : ${todo.date}
+⏰ Time      : ${todo.time}
+🎯 Priority  : ${todo.priority.toUpperCase()}
+🏷️  Tags      : ${todo.tags.length ? "#" + todo.tags.join(", #") : "None"}
+📝 Description:\n
+       ${todo.description}
+
+======================================================
+        
+          `;
+    })
+    .join("\n\n");
+
+  const blob = new Blob([formatted], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  const safeTitle = todoDetails.heading
+    .replace(/[^a-z0-9]/gi, "_")
+    .toLowerCase();
+
+  // Then use it as the file name
+  a.download = `todo_${safeTitle}.txt`;
+
+  // Simulate click
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+
+  // Cleanup
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+
+  showMessagePopup({
+    invertedBoldTxt: todoDetails.heading,
+    boldTxt: "Task downloaded!",
+    emoji: "✅📥",
+  });
+}
+
+export function copyTaskName(todoHTML) {
+  const storageKey = todoHTML.getAttribute("data-localtodovarname");
+  const todoID = todoHTML.id;
+
+  if (!storageKey || !todoID) return;
+
+  const todoDetails = pickedTodoData(storageKey, null, todoID).matchedId;
+
+  const taskName = todoDetails.heading;
+  navigator.clipboard.writeText(taskName).then(() => {
+    showMessagePopup({
+      boldTxt: taskName,
+      boldTxt: "Copied",
+      emoji: "📄✨",
+    });
+  });
 }

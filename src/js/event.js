@@ -271,19 +271,6 @@ export function setupEventListeners() {
       },
       true
     );
-
-    // **BLUR**
-    box.addEventListener("blur", (e) => {
-      // unSelect todo card
-      const todoCard = e.target.querySelector(".todo-card");
-
-      if (todoCard === null) return;
-
-      const selectedTick = todoCard.querySelector(".selected-tick-visual");
-
-      todoCard.classList.remove("border-[#2CB67D]");
-      selectedTick.classList.add("hidden");
-    });
   });
 }
 
@@ -301,77 +288,6 @@ function setupSideBarResize(wrapperId) {
   });
   clickToExpandButton.addEventListener("click", () => {
     getExpand(wrapper);
-  });
-}
-
-// download todo as notepad.
-export function downloadTodos(todoHTML) {
-  const storageKey = todoHTML.getAttribute("data-localtodovarname");
-  const todoID = todoHTML.id;
-
-  if (!storageKey || !todoID) return;
-
-  const todoDetails = pickedTodoData(storageKey, null, todoID).matchedId;
-
-  const formatted = [todoDetails]
-    .map((todo) => {
-      return `
-==================== 📌 TODO ====================
-        
-📝 Title     : ${todo.heading}
-🗓️  Due Date  : ${todo.date}
-⏰ Time      : ${todo.time}
-🎯 Priority  : ${todo.priority.toUpperCase()}
-🏷️  Tags      : ${todo.tags.length ? "#" + todo.tags.join(", #") : "None"}
-📝 Description:\n
-       ${todo.description}
-
-======================================================
-        
-          `;
-    })
-    .join("\n\n");
-
-  const blob = new Blob([formatted], { type: "text/plain" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  const safeTitle = todoDetails.heading
-    .replace(/[^a-z0-9]/gi, "_")
-    .toLowerCase();
-
-  // Then use it as the file name
-  a.download = `todo_${safeTitle}.txt`;
-
-  // Simulate click
-  a.style.display = "none";
-  document.body.appendChild(a);
-  a.click();
-
-  // Cleanup
-  document.body.removeChild(a);
-  URL.revokeObjectURL(a.href);
-
-  showMessagePopup({
-    invertedBoldTxt: todoDetails.heading,
-    boldTxt: "Task downloaded!",
-    emoji: "✅📥",
-  });
-}
-export function copyTaskName(todoHTML) {
-  const storageKey = todoHTML.getAttribute("data-localtodovarname");
-  const todoID = todoHTML.id;
-
-  if (!storageKey || !todoID) return;
-
-  const todoDetails = pickedTodoData(storageKey, null, todoID).matchedId;
-
-  const taskName = todoDetails.heading;
-  navigator.clipboard.writeText(taskName).then(() => {
-    showMessagePopup({
-      boldTxt: taskName,
-      boldTxt: "Copied",
-      emoji: "📄✨",
-    });
   });
 }
 

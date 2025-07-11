@@ -10,18 +10,6 @@ export function toggleClasses(methodName, bgEl) {
   }px`;
 }
 
-function toggleClassesAndAttribute(
-  methodNameClasses,
-  methodNameAttribute,
-  boolean
-) {
-  enterTagName.classList[methodNameClasses](
-    "pointer-events-none",
-    "cursor-pointer"
-  );
-  enterTagName[methodNameAttribute]("disabled", boolean);
-}
-
 function removeThisTag(tagName) {
   window.currTodoDetails.tags = window.currTodoDetails.tags.filter(
     (tag) => tag !== tagName
@@ -51,6 +39,18 @@ export function hoverEffect(el, bgEl) {
 export function clickingLogic(el, bgEl, state) {
   const tagsCounter = document.querySelector("#current-len-tags-input");
   const enterTagName = el.querySelector("input");
+
+  function toggleClassesAndAttribute(
+    methodNameClasses,
+    methodNameAttribute,
+    boolean
+  ) {
+    enterTagName.classList[methodNameClasses](
+      "pointer-events-none",
+      "cursor-pointer"
+    );
+    enterTagName[methodNameAttribute]("disabled", boolean);
+  }
 
   el.addEventListener("click", () => {
     setTimeout(() => {

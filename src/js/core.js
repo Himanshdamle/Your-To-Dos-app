@@ -4,7 +4,7 @@ import {
   update,
   readTodo,
   deleteTodo,
-  deleteTodoFRONTEND,
+  deleteTodoFrontend,
   fillData,
 } from "./todo.js";
 
@@ -78,11 +78,11 @@ export function operations(
       break;
 
     case "delete":
-      deleteTodoFRONTEND(() =>
+      deleteTodoFrontend(() =>
         deleteTodo(
           todoCardHTML.getAttribute("data-localtodovarname"),
           getTodoData.localStorageIndex,
-          getTodoData.actualID
+          todoCardHTML
         )
       );
       break;
@@ -779,6 +779,7 @@ export function renderTodoCard(
             id="${userLatestTodo.id}"
             data-localTodoVarName="${localTodoVarName}"
             class="todo-card max-w-[270px] bg-[#1A1A1A] relative border max-h-max rounded-2xl p-2 flex-1 w-full cursor-grab ${addCrossMarker}"
+            data-click-selectable
           >
             ${todoHTML}
           </section>
