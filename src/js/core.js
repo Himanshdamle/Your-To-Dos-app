@@ -780,6 +780,7 @@ export function renderTodoCard(
             data-localTodoVarName="${localTodoVarName}"
             class="todo-card max-w-[270px] bg-[#1A1A1A] relative border max-h-max rounded-2xl p-2 flex-1 w-full cursor-grab ${addCrossMarker}"
             data-click-selectable
+            tabindex="0"
           >
             ${todoHTML}
           </section>

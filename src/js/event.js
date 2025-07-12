@@ -295,30 +295,34 @@ export function hotKeysFunction(allowCRUDArray, todoMainSide) {
   const todoCardBox = todoMainSide.querySelectorAll(".todo-card-box");
 
   todoCardBox.forEach((box) => {
-    box.addEventListener("keydown", (e) => {
-      if (e.ctrlKey || e.metaKey || e.altKey) return;
+    box.addEventListener(
+      "keydown",
+      (e) => {
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
 
-      const todoCard = e.target.querySelector(".todo-card");
-      if (todoCard === null) return;
+        const todoCard = e.target.closest(".todo-card");
 
-      const keyPressed = e.key.toLowerCase();
+        if (todoCard === null) return;
 
-      const isAllowed = allowCRUDArray.includes(keyPressed);
+        const keyPressed = e.key.toLowerCase();
+        const isAllowed = allowCRUDArray.includes(keyPressed);
 
-      switch (true) {
-        case keyPressed === "r" && isAllowed:
-          operations({ todoCard }, "read");
-          break;
+        switch (true) {
+          case keyPressed === "r" && isAllowed:
+            operations({ todoCard }, "read");
+            break;
 
-        case keyPressed === "u" && isAllowed:
-          operations({ todoCard }, "update");
-          break;
+          case keyPressed === "u" && isAllowed:
+            operations({ todoCard }, "update");
+            break;
 
-        case keyPressed === "d" && isAllowed:
-          operations({ todoCard }, "delete");
-          break;
-      }
-    });
+          case keyPressed === "d" && isAllowed:
+            operations({ todoCard }, "delete");
+            break;
+        }
+      },
+      true
+    );
   });
 }
 

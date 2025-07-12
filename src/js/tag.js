@@ -170,6 +170,8 @@ export function cleanTagUI() {
 
     resize(tag);
   });
+
+  window.countTags = 0;
   cleanTagStates(window.tagStates);
 }
 
@@ -181,7 +183,7 @@ export function setTagValues(todoTagsArray) {
 
     if (!tagInput) return;
 
-    window.countTags += tagNumber;
+    window.countTags++;
 
     tagInput.value = tag;
     tagInput.setAttribute("data-active", "true");
@@ -189,4 +191,6 @@ export function setTagValues(todoTagsArray) {
 
     toggleClasses("add", hoverBalloon[tagNumber]);
   });
+
+  console.log(window.countTags);
 }
