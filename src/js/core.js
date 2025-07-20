@@ -769,51 +769,104 @@ export function renderTodoCard(
     const addCrossMarker = looksSettings.isExpired ? crossMarkerClassTw : "";
     const reduceOpacity = looksSettings.isExpired ? "opacity-50" : "";
 
-    mainDirection.innerHTML += `
+    const todoCard = `
       <article class="grid todo-item gap-3 relative z-50 w-full ${reduceOpacity}" title="${userLatestTodo.heading}">
-        <div class="grid place-items-start">
-          <header class="relative z-10 w-full text-sm font-light pl-4 flex flex-row gap-1.5">
-           <span>On, <span class="font-medium ">${localeDateString}</span></span>
-          </header>
-          <section
-            id="${userLatestTodo.id}"
-            data-localTodoVarName="${localTodoVarName}"
-            class="todo-card max-w-[270px] bg-[#1A1A1A] relative border max-h-max rounded-2xl p-2 flex-1 w-full cursor-grab ${addCrossMarker}"
-            data-click-selectable
-            tabindex="0"
-          >
-            ${todoHTML}
-          </section>
-        </div>
+      <div class="grid place-items-start">
+        <header class="relative z-10 w-full text-sm font-light pl-4 flex flex-row gap-1.5">
+         <span>On, <span class="font-medium ">${localeDateString}</span></span>
+        </header>
+        <section
+          id="${userLatestTodo.id}"
+          data-localTodoVarName="${localTodoVarName}"
+          class="todo-card max-w-[270px] bg-[#1A1A1A] relative border max-h-max rounded-2xl p-2 flex-1 w-full cursor-grab ${addCrossMarker}"
+          data-click-selectable
+          tabindex="0"
+        >
+          ${todoHTML}
+        </section>
+      </div>
       </article>
     `;
+
+    const template = document.createElement("template");
+    template.innerHTML = todoCard;
+    const todoNode = template.content.firstElementChild;
+
+    mainDirection.appendChild(todoNode);
   }
+}
+
+/**
+ * Creates Due Date Range section and todo Container
+ */
+function createDueDateRangeSection(dueDateRange, todoSectionDOM) {
+  const noSpaceID = dueDateRange.replace(/\s/g, "");
+  const wordArray = dueDateRange.toUpperCase().split(" ");
+  const first = wordArray[0];
+  const last = wordArray.slice(1).join(" ");
+
+  todoSectionDOM.innerHTML += `
+        <div id="${noSpaceID}" class="grid cards-wrapper place-items-start gap-2 w-full pl-2">
+          <section class="relative w-full flex flex-row justify-start items-center">
+            <div class="z-10 text-xl pr-1 tracking-wide flex gap-2">
+
+              <span class="font-light">${first}</span>
+              <span class="italic font-bold tracking-wider text-nowrap">${last}</span>
+
+            </div>
+            <div class="w-full h-[1px] bg-white/30"></div>
+          </section>
+        </div>
+  `;
+
+  const articleWrapper = document.createElement("div");
+  articleWrapper.classList.add(
+    "todo-card-box",
+    "article-wrappers",
+    "grid",
+    "grid-cols-[repeat(auto-fit,minmax(238px,1fr))]",
+    "w-full",
+    "pl-3.5",
+    "place-items-start",
+    "gap-3.5",
+    "selectable-item"
+  );
+  todoSectionDOM.querySelector(`#${noSpaceID}`).append(articleWrapper);
+
+  return articleWrapper;
 }
 
 /**
  * Adds all to-do items from localStorage to the DOM, grouped by date range.
  */
-export function addInHTML(
+export function renderGroupedTodosToDOM(
   getData = { localTodoVarName: "", data: [], hideCollapseTodo: false },
   main,
-  initializeDragBehaviourParams,
-  addNewTodo = false
+  initializeDragBehaviourParams
 ) {
   if (!getData.data) getData.data = [];
 
-  const data = getData.data[0]
+  // Retrieve data either from passed array or localStorage
+  const data = getData.data.length
     ? getData.data
     : localStorage.getItem(getData.localTodoVarName);
 
-  if (!data && !addNewTodo) return;
+  if (!data) return;
 
   let JSONData = [];
 
-  if (addNewTodo) JSONData = getData.localTodoVarName;
-  else if (typeof data === "string") JSONData = JSON.parse(data);
-  else JSONData = getData.data;
+  if (typeof data === "string") {
+    try {
+      JSONData = JSON.parse(data);
+    } catch (e) {
+      console.error("Invalid JSON in localStorage:", e);
+      return;
+    }
+  } else {
+    JSONData = data;
+  }
 
-  if (!JSONData.length && !addNewTodo) return;
+  if (!JSONData.length) return;
 
   const preWord = main.getAttribute("data-preWord");
   const groupedData = groupTodosWithDate(JSONData, preWord);
@@ -824,54 +877,14 @@ export function addInHTML(
   });
 
   for (const todoDate in groupedData) {
-    const noSpaceID = todoDate.replace(/\s/g, "");
-    const isDueDateSectionPresent = main.querySelector(`#${noSpaceID}`);
-
-    if (!isDueDateSectionPresent) {
-      const wordArray = todoDate.toUpperCase().split(" ");
-
-      const first = wordArray[0];
-      const last = wordArray.slice(1, todoDate.length - 1).join(" ");
-
-      main.innerHTML += `
-      <div id="${noSpaceID}" class="grid cards-wrapper place-items-start gap-2 w-full pl-2">
-       <div class="relative w-full flex flex-row justify-start items-center">
-         <span
-          class="z-10 text-xl pr-1 tracking-wide bg-non flex gap-2"
-        >
-          <p class="font-light">${first}</p>
-          <p class="italic font-bold tracking-wider text-nowrap">${last}</p>
-        </span>
-
-        <div class="w-full h-[1px] bg-white/30"></div>
-       </div>
-      </div>
-    `;
-    }
-
-    let articleWrapper = document.createElement("div");
-    articleWrapper.classList.add(
-      "todo-card-box",
-      "article-wrappers",
-      "grid",
-      "grid-cols-[repeat(auto-fit,minmax(238px,1fr))]",
-      "w-full",
-      "pl-3.5",
-      "place-items-start",
-      "gap-3.5",
-      "selectable-item"
-    );
-    main.querySelector(`#${noSpaceID}`).append(articleWrapper);
-
+    const todoContainer = createDueDateRangeSection(todoDate, main);
     const isExpired = todoDate === "Expired";
 
     groupedData[todoDate].forEach((json) => {
       renderTodoCard(
-        {
-          isExpired,
-        },
+        { isExpired },
         json,
-        articleWrapper,
+        todoContainer,
         null,
         initializeDragBehaviourParams.localTodoVarName
       );
@@ -885,6 +898,31 @@ export function addInHTML(
     userAllToDos: groupedData,
     localTodoVarName: getData.localTodoVarName,
   };
+}
+
+/**
+ * Inserts a single new todo into the correct due-date group section in the UI.
+ * If the group section doesn't exist, it creates one.
+ */
+export function addNewTodoToUI(todoObject) {
+  const range = getDateRange(todoObject.date, "Due");
+  const pendingTodosSection = document.querySelector("#pending-todo");
+
+  for (const priority in range) {
+    const dueDateRange = range[priority].split(" ");
+    const noSpaceGroupName = dueDateRange.join(""); // e.g, dueToday
+    const sectionDOM = pendingTodosSection.querySelector(
+      `#${noSpaceGroupName}`
+    );
+
+    const isExpired = dueDateRange[0] === "Expired";
+
+    const todoContainer = sectionDOM
+      ? sectionDOM.querySelector(".article-wrappers")
+      : createDueDateRangeSection(range[priority], pendingTodosSection);
+
+    renderTodoCard({ isExpired }, todoObject, todoContainer, null, "todos");
+  }
 }
 
 /**

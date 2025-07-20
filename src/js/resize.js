@@ -102,7 +102,6 @@ export function addTodoInCollapse(
 
   for (const groupName in todoObject) {
     const splitGrpName = groupName.split(" ");
-
     let header = splitGrpName[splitGrpName.length - 1].toUpperCase();
 
     if (header === "MONTH") {
@@ -128,12 +127,18 @@ export function addTodoInCollapse(
     todoWrapper.appendChild(main.appendChild(todoList));
 
     for (const todoDetails of todoObject[groupName]) {
+      const time = todoDetails.time;
       const splitDate = todoDetails.date.split("-");
-      const dateTillMonth = `${splitDate[2]}-${splitDate[1]}`;
+      const dateTillMonth = `${splitDate[2]} - ${splitDate[1]}`;
 
       const bgColor = getPriorityColor(todoDetails.priority);
 
       const ifExpiredClasses = header === "EXPIRED" ? `opacity-50` : "";
+
+      let preWordTime = splitGrpName.slice(0, 1)[0];
+      if (preWordTime === "Expired" || preWordTime === "Completed")
+        preWordTime = "On";
+      else preWordTime = "Till";
 
       todoList.innerHTML += `
       <li
@@ -142,7 +147,16 @@ export function addTodoInCollapse(
         data-mouseevent-target="true"
         data-storage-varible-name="${info.localTodoVarName}"
       >
-        <span class="font-extrabold text-[#1A1A1A]">${dateTillMonth}</span>
+        <div class="flex flex-col justify-center items-center text-[#1A1A1A]">
+          <span class="font-extrabold">${dateTillMonth}</span>
+
+          <div class="text-sm">
+            <span class="font-light">${preWordTime},</span>
+            <time class="font-semibold">
+              ${time}
+            </time>
+          </div>
+        </div>
       </li>
       `;
     }

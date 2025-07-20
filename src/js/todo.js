@@ -79,8 +79,10 @@ export function update(todoData) {
 }
 
 const deleteToDoBtn = document.querySelector("#delete-to-do");
+
 export function deleteTodoFrontend(delTodoFunction) {
   const confimationBox = document.querySelector("#delete-confirmation-box");
+
   if (!confimationBox) return;
 
   showThis(confimationBox, false);
@@ -95,7 +97,6 @@ export function deleteTodoFrontend(delTodoFunction) {
   deleteToDoBtn.addEventListener(
     "click",
     () => {
-      console.log("2 bar tu to nahi chal rha hai na ? 99");
       const deletedTodoData = delTodoFunction();
 
       removeThis(confimationBox);
@@ -121,8 +122,6 @@ export function deleteTodo(localTodoVarName, todoIndex, todoHTML) {
 
   JSONData.splice(todoIndex, 1);
   localStorage.setItem(localTodoVarName, JSON.stringify(JSONData));
-
-  console.log(JSONData);
 
   return deleteTodoData;
 }

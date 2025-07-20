@@ -1,4 +1,4 @@
-import { addInHTML } from "./core.js";
+import { renderGroupedTodosToDOM } from "./core.js";
 
 const preMadeOptions = {
   keys: ["priority", "heading", "tags"],
@@ -71,7 +71,7 @@ export function getUserSearchResult() {
     searchTodosSection.classList.remove("hidden");
 
     searchResult.forEach((todoData) => {
-      addInHTML({ data: [todoData.item] }, searchTodosSection, {
+      renderGroupedTodosToDOM({ data: [todoData.item] }, searchTodosSection, {
         allowCRUD: true,
         localTodoVarName: "todos",
         todoMainSide: pendingTodosSection,

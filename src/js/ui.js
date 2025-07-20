@@ -1,5 +1,5 @@
 import {
-  addInHTML,
+  renderGroupedTodosToDOM,
   smoothInnOutTransition,
   getTaskNumber,
   getPercentageOf,
@@ -27,7 +27,7 @@ export function initializeUI() {
     completedTask: 0,
   };
 
-  const addPendingTask = addInHTML(
+  const addPendingTask = renderGroupedTodosToDOM(
     { localTodoVarName: "todos", hideCollapseTodo: true },
     pendingTodosSection,
     {
@@ -44,7 +44,7 @@ export function initializeUI() {
   renderTaskProcess.pendingTask = getPendingTaskNumInfo.taskNumber || 0;
   renderTotalTask.pendingTask = getPendingTaskNumInfo.totalTask || 0;
 
-  const addCompletedTask = addInHTML(
+  const addCompletedTask = renderGroupedTodosToDOM(
     { localTodoVarName: "completedTodos", hideCollapseTodo: true },
     completedTodosSection,
     {

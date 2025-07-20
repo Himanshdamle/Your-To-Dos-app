@@ -1,8 +1,7 @@
 import {
   renderTodoCard,
-  addInHTML,
+  addNewTodoToUI,
   resetTodoPageFunc,
-  showMessagePopup,
   closeOpenSmoothAnimation,
   operations,
   removeThis,
@@ -38,16 +37,8 @@ export function setupEventListeners() {
       id: crypto.randomUUID(),
     };
     backend(newTodo, "todos");
-    addInHTML(
-      { localTodoVarName: [newTodo] },
-      document.querySelector("#pending-todo"),
-      {
-        allowCRUD: true,
-        localTodoVarName: "todos",
-        todoMainSide: document.querySelector("#pending-todo"),
-      },
-      true // add only new todo to the 'pendingTodosSection'.
-    );
+
+    addNewTodoToUI(newTodo);
   }
 
   //  match current typed character lenght of input fields
@@ -103,7 +94,6 @@ export function setupEventListeners() {
     let messageInfo;
 
     if (window.updated) {
-      console.log(window.getTodoData);
       if (!window.getTodoData) return;
 
       backend(
