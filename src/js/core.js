@@ -938,7 +938,6 @@ export function showThis(page, slideDownPanel = true) {
         direction: "bottom",
         directionValue: "-100%",
         duration: 0.5,
-        display: "flex",
       },
       true
     );
@@ -985,7 +984,6 @@ export function removeThis(page) {
       el: "#down-nav-bar",
       direction: "bottom",
       directionValue: "0%",
-      display: "flex",
       duration: 0.5,
     },
     false
@@ -1005,6 +1003,21 @@ export function removeThis(page) {
   if (page && quoteBox) {
     transitionBetweenPages({ pageCloseEl: page, pageOpenEl: quoteBox });
   }
+}
+
+/**
+ * Adds event listiner to the buttons for closing page.
+ */
+export function addPageCloseEvtListener(infoObject) {
+  const closeButton = document.querySelector(`${infoObject.closeButtonID}`);
+  const page = document.querySelector(`${infoObject.pageID}`);
+  const clickedFunc = infoObject.clickedFunc;
+
+  closeButton.addEventListener("click", () => {
+    removeThis(page);
+
+    if (clickedFunc) clickedFunc();
+  });
 }
 
 /**

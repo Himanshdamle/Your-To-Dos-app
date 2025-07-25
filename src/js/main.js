@@ -2,12 +2,18 @@ import { initializeUI, searchByRotation } from "./ui.js";
 import { setupEventListeners } from "./event.js";
 import { hoverEffect, clickingLogic, initializeTagInputs } from "./tag.js";
 import { middle } from "./downNavbar.js";
-import { operations } from "./core.js";
-import { resetTodoPageFunc, showToDoPage, removeThis } from "./core.js";
+import {
+  resetTodoPageFunc,
+  showToDoPage,
+  operations,
+  addPageCloseEvtListener,
+  showThis,
+} from "./core.js";
 import { getUserSearchResult } from "./search.js";
 
 import { startQuoteRotation } from "./quote.js";
 import { resize } from "./resize.js";
+import { initializeSettings } from "./settings.js";
 
 // Global variables
 window.typingInputIds = [];
@@ -27,24 +33,30 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeTagInputs();
   middle();
   searchByRotation();
+  initializeSettings();
 
   getUserSearchResult();
 
   resize("#ytd-wrapper", "left");
   resize("#dtd-wrapper", "right");
 
-  const closeReadTodoButton = document.querySelector("#close-read-todo-page");
-  closeReadTodoButton.addEventListener("click", () => {
-    const todoPage = document.querySelector("#read-todo-page");
-    removeThis(todoPage);
+  addPageCloseEvtListener({
+    closeButtonID: "#close-read-todo-page",
+    pageID: "#read-todo-page",
   });
 
-  const closeTodoButtons = document.querySelector(".close-todo-page");
-  closeTodoButtons.addEventListener("click", () => {
-    const todoPage = document.querySelector("#todo-page");
-    window.updated = false;
-    removeThis(todoPage);
-    resetTodoPageFunc(false, true);
+  addPageCloseEvtListener({
+    closeButtonID: "#close-setting-page",
+    pageID: "#settings-page",
+  });
+
+  addPageCloseEvtListener({
+    closeButtonID: ".close-todo-page",
+    pageID: "#todo-page",
+    clickedFunc: () => {
+      window.updated = false;
+      resetTodoPageFunc(false, true);
+    },
   });
 
   function openCreateToDoPage() {
@@ -53,8 +65,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const createTodoButton = document.querySelector("#create-new-todo-page");
-  createTodoButton.addEventListener("click", () => {
-    openCreateToDoPage();
+  createTodoButton.addEventListener("click", openCreateToDoPage);
+
+  const openSettingsBtn = document.querySelector("#open-settings-button");
+  openSettingsBtn.addEventListener("click", () => {
+    showThis(document.querySelector("#settings-page"), true);
   });
 
   document.body.addEventListener("keydown", (e) => {

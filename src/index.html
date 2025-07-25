@@ -42,18 +42,18 @@
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
 
     <!-- JAVASCRIPT - LOCAL FILES -->
-    <!-- <script src="dist/bundle.js" defer></script> -->
     <script src="dropdown.js" defer></script>
     <script type="module" src="js/main.js" defer></script>
-    <!-- <script src="dragRectangle.js" defer></script> -->
   </head>
   <body
     style="font-family: 'Karla', sans-serif"
     class="bg-[#0F0F0F] text-white font-medium overflow-hidden h-screen"
   >
     <div class="h-full">
+      <!-- DESKTOP >= 1285 pixels -->
       <main
         class="flex justify-between items-start relative h-full max-w-[1820px] mx-auto"
+        id="main-web-container"
       >
         <!-- SHOW-PENDING-TO-DOS -->
         <section class="flex flex-row h-full" id="ytd-wrapper">
@@ -540,7 +540,7 @@
 
           <!-- SPACE FOR CRUD OPERRATIONS -->
           <main id="mid-main" class="h-full flex items-center justify-center">
-            <!-- READ TODO -->
+            <!-- READ TODO PAGE -->
             <div
               class="bg-[#1A1A1A] hidden relative border rounded-2xl p-4 w-[80%] max-w-[960px]"
               id="read-todo-page"
@@ -964,7 +964,118 @@
               </div>
             </div>
 
-            <!-- SHOW DELETE CONFIRMATION POPUP FOR TO-DO-->
+            <!-- SETTINGS PAGE -->
+            <section
+              class="bg-[#1A1A1A] border rounded-2xl w-[80%] h-[80%] max-w-[960px] text-xl"
+              id="settings-page"
+              aria-roledescription="settings"
+            >
+              <div class="relative flex flex-col h-full">
+                <section class="flex flex-row">
+                  <!-- Close page button -->
+                  <div class="w-[30%] border-r py-2.5 pl-2.5 border-b">
+                    <button
+                      class="cursor-pointer rounded-full h-[20px] w-[20px] bg-[#FF3D3D]"
+                      id="close-setting-page"
+                      title="Close this page?"
+                    ></button>
+                  </div>
+
+                  <!-- Heading -->
+                  <header class="text-3xl w-full border-b py-2.5 pl-2.5">
+                    <h1 class="font-semibold">Settings</h1>
+                  </header>
+                </section>
+
+                <section class="flex flex-row relative h-full">
+                  <!-- Setting Options -->
+                  <nav
+                    class="w-[30%] border-r pl-2.5 relative select-none h-full flex justify-center items-center"
+                  >
+                    <!-- Options -->
+                    <ul class="flex flex-col" id="option-wrapper">
+                      <!-- Account -->
+                      <li>
+                        <button
+                          class="w-fit cursor-pointer hover:scale-105 transition-transform duration-150 settings-options"
+                          data-setting-name="Account"
+                          data-index="0"
+                        >
+                          Account
+                        </button>
+                      </li>
+
+                      <!-- Quote -->
+                      <li>
+                        <button
+                          class="w-fit cursor-pointer hover:scale-105 transition-transform duration-150 settings-options"
+                          data-setting-name="Quote"
+                          data-index="1"
+                        >
+                          Quote
+                        </button>
+                      </li>
+
+                      <!-- Github -->
+                      <li>
+                        <button
+                          class="w-fit cursor-pointer hover:scale-105 transition-transform duration-150 settings-options"
+                          data-setting-name="Github"
+                          data-index="2"
+                        >
+                          Github
+                        </button>
+                      </li>
+
+                      <!-- Guide -->
+                      <li>
+                        <button
+                          class="w-fit cursor-pointer hover:scale-105 transition-transform duration-150 settings-options"
+                          data-setting-name="Guide"
+                          data-index="3"
+                        >
+                          Guide
+                        </button>
+                      </li>
+                    </ul>
+
+                    <!-- Selected -->
+                    <div
+                      class="absolute bg-[#1A1A1A] left-6 top-[50%] -translate-y-[100%] flex flex-row items-center justify-center text-2xl"
+                      id="selected-option-wrapper"
+                      data-current-index="1"
+                    >
+                      <img
+                        src="assets/chevron_right.svg"
+                        alt="chevron right svg"
+                        class="w-8 h-8"
+                      />
+
+                      <div class="overflow-hidden h-7 relative -ml-1">
+                        <span
+                          class="font-semibold inline-block text-nowrap"
+                          id="center-selected"
+                        >
+                          Quote
+                        </span>
+                        <span
+                          class="font-semibold inline-block text-nowrap absolute left-0"
+                          style="transform: translate(0px, -100%)"
+                          id="bottom-selected"
+                        >
+                          Quote
+                        </span>
+                      </div>
+                    </div>
+                  </nav>
+
+                  <!-- Setting -->
+                  <main class="w-full h-full relative pl-2.5"></main>
+                </section>
+              </div>
+            </section>
+
+            <!-- SHOW DELETE TO-DO CONFIRMATION POPUP-->
             <section
               class="rounded-xl overflow-hidden text-2xl border border-[#FF3D3D] bg-[#2c1f1fa4] backdrop-blur-xl py-2 hidden"
               id="delete-confirmation-box"
@@ -1024,11 +1135,8 @@
             </section>
           </main>
 
-          <!-- DOWN NAV BAR CHILD -->
-          <footer
-            id="down-nav-bar"
-            class="flex flex-row border-t-[1px] relative"
-          >
+          <!-- DOWN NAV BAR -->
+          <section id="down-nav-bar" class="border-t-[1px] relative">
             <!-- MESSAGE POPUP -->
             <section
               class="text-3xl rounded-xl border border-[#1EA86F] bg-[#30a57438] px-4 py-2 flex flex-row gap-4 items-center absolute z-[200] left-[50%] translate-x-[-50%] w-max backdrop-blur-2xl"
@@ -1087,144 +1195,151 @@
               </article>
             </section>
 
-            <!-- PROGRESS SECTION -->
-            <section class="border-r-[1px] px-1 flex-[1]">
-              <h1
-                class="border-b-[1px] text-center tracking-wide font-light italic text-xl"
-              >
-                PROGRESS
-              </h1>
-              <div class="flex flex-row py-1.5 text-lg">
-                <div
-                  class="flex flex-col justify-center py-.5 px-1 border-r-[1px] w-full"
+            <div class="flex flex-row">
+              <!-- PROGRESS SECTION -->
+              <section class="border-r-[1px] px-1 flex-[1]">
+                <h1
+                  class="border-b-[1px] text-center tracking-wide font-light italic text-xl"
                 >
-                  <section class="flex gap-1.5 justify-center">
-                    <p class="text-center font-light text-nowrap">
-                      Today's task
-                    </p>
-                  </section>
-
-                  <!-- PROGRESS BAR -->
-                  <section
-                    class="w-full h-[17px] bg-[#1A1A1A] relative left-0 border rounded-2xl border-white/30"
+                  PROGRESS
+                </h1>
+                <div class="flex flex-row py-1.5 text-lg">
+                  <div
+                    class="flex flex-col justify-center py-.5 px-1 border-r-[1px] w-full"
                   >
-                    <div
-                      class="bg-gradient-to-r from-pink-500 to-red-500 h-full w-[0%] rounded-2xl hover-animation"
-                      id="progress"
-                    ></div>
-                    <span
-                      class="absolute top-0.5 right-2 leading-3 text-sm text-white"
-                      id="todays-task"
-                      >0 / 0</span
+                    <section class="flex gap-1.5 justify-center">
+                      <p class="text-center font-light text-nowrap">
+                        Today's task
+                      </p>
+                    </section>
+
+                    <!-- PROGRESS BAR -->
+                    <section
+                      class="w-full h-[17px] bg-[#1A1A1A] relative left-0 border rounded-2xl border-white/30"
                     >
-                  </section>
-                </div>
-                <!--  -->
+                      <div
+                        class="bg-gradient-to-r from-pink-500 to-red-500 h-full w-[0%] rounded-2xl hover-animation"
+                        id="progress"
+                      ></div>
+                      <span
+                        class="absolute top-0.5 right-2 leading-3 text-sm text-white"
+                        id="todays-task"
+                        >0 / 0</span
+                      >
+                    </section>
+                  </div>
+                  <!--  -->
 
-                <div class="flex flex-col justify-center px-1 w-full">
-                  <section class="flex gap-1.5 justify-center">
-                    <p class="text-center font-light text-nowrap">
-                      All time tasks
-                    </p>
-                  </section>
+                  <div class="flex flex-col justify-center px-1 w-full">
+                    <section class="flex gap-1.5 justify-center">
+                      <p class="text-center font-light text-nowrap">
+                        All time tasks
+                      </p>
+                    </section>
 
-                  <!-- PROGRESS BAR -->
-                  <section
-                    class="w-full flex relative h-[17px] bg-[#1A1A1A] border rounded-2xl border-white/30"
-                  >
-                    <div
-                      class="bg-gradient-to-r from-emerald-700 to-green-500 h-full w-[0%] rounded-2xl"
-                      id="all-time-progress"
-                    ></div>
-                    <span
-                      class="absolute top-0.5 right-2 leading-3 text-sm text-white"
-                      id="all-time-task"
-                      >0 / 0</span
+                    <!-- PROGRESS BAR -->
+                    <section
+                      class="w-full flex relative h-[17px] bg-[#1A1A1A] border rounded-2xl border-white/30"
                     >
-                  </section>
+                      <div
+                        class="bg-gradient-to-r from-emerald-700 to-green-500 h-full w-[0%] rounded-2xl"
+                        id="all-time-progress"
+                      ></div>
+                      <span
+                        class="absolute top-0.5 right-2 leading-3 text-sm text-white"
+                        id="all-time-task"
+                        >0 / 0</span
+                      >
+                    </section>
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
 
-            <!-- SYNC SECTION -->
-            <section
-              class="w-max border-r-[1px] px-3 flex flex-col items-center justify-center gap-2"
-            >
-              <span class="flex text-nowrap text-xl font-light italic"
-                >Last synced at: &nbsp;
-                <p id="last-synced-time" class="font-medium">
-                  No Sync History
-                </p></span
+              <!-- SYNC SECTION -->
+              <section
+                class="w-max border-r-[1px] px-3 flex flex-col items-center justify-center gap-2"
               >
-              <button
-                class="cursor-pointer text-lg hover:scale-105 transition-transform duration-300 ease-in-out font-light bg-[#1A1A1A] rounded-2xl border border-white/30 px-3"
-                id="snyc-now"
-                title="Will sync current changes."
-              >
-                Sync now
-              </button>
-            </section>
-
-            <!-- USER ACCOUNT SHOW -->
-            <section
-              class="flex items-center px-1 gap-1 justify-center w-full flex-[1]"
-            >
-              <div>
-                <input
-                  type="file"
-                  id="fileInput"
-                  accept="image/*"
-                  style="display: none"
-                />
-                <button
-                  id="select-user-photo"
-                  class="h-full items-center cursor-pointer"
-                >
-                  <img
-                    class="w-14 h-14 border border-white/30 object-cover rounded-full scale-120 hover:scale-130 transition-transform duration-300 ease-in-out"
-                    src=""
-                    alt="user_profile_picture"
-                  />
-                </button>
-              </div>
-
-              <!-- Name -->
-              <div class="flex text-2xl max-w-[15ch] text-center flex-col">
-                <p
-                  id="greeting"
-                  class="font-extralight leading-5.5 gap-4 tracking-wide"
-                >
-                  Good Morning
+                <p class="flex text-nowrap text-xl font-light italic">
+                  Last synced at: &nbsp;
+                  <span id="last-synced-time" class="font-medium">
+                    No Sync History
+                  </span>
                 </p>
-                <div class="relative w-[175px]">
-                  <span
-                    id="full-stop"
-                    class="absolute left-[50%] justify-end bottom-0 mb-[5.5px] text-2xl font-bold select-none pointer-events-none"
-                    style="display: none"
-                    >.</span
-                  >
-                  <span
-                    class="absolute invisible whitespace-pre"
-                    id="measure-span"
-                  ></span>
-                  <input
-                    type="text"
-                    name="user_name"
-                    id="user-name"
-                    class="font-medium input outline-none focus:border focus:border-white/30 rounded-lg text-center text-2xl leading-5.5 tracking-wide w-full"
-                    maxlength="12"
-                    autocomplete="off"
-                  />
-                  <p
-                    class="absolute bottom-[50%] left-[50%] translate-x-[-50%] text-nowrap translate-y-[50%] opacity-50 pointer-events-none psuedo-placeholder"
-                    id="psuedo-placeholder-user-name"
-                  >
-                    <i class="font-medium">Drop your name.</i>
-                  </p>
+                <button
+                  class="cursor-pointer text-lg hover:scale-105 transition-transform duration-300 ease-in-out font-light bg-[#1A1A1A] rounded-2xl border border-white/30 px-3"
+                  id="snyc-now"
+                  title="Will sync current changes."
+                >
+                  Sync now
+                </button>
+              </section>
+
+              <!-- USER ACCOUNT SHOW -->
+              <section
+                class="flex flex-row items-center px-1 justify-around w-full flex-[1]"
+              >
+                <div class="flex items-center gap-[1vw]">
+                  <!-- Profile Picture -->
+                  <div>
+                    <input
+                      type="file"
+                      id="fileInput"
+                      accept="image/*"
+                      style="display: none"
+                    />
+                    <button
+                      id="select-user-photo"
+                      class="h-full items-center cursor-pointer"
+                    >
+                      <img
+                        class="w-14 h-14 border border-white/30 object-cover rounded-full scale-120 hover:scale-130 transition-transform duration-300 ease-in-out"
+                        src=""
+                        alt="user_profile_picture"
+                      />
+                    </button>
+                  </div>
+
+                  <!-- Name -->
+                  <div class="flex text-2xl max-w-[15ch] text-center flex-col">
+                    <p
+                      id="greeting"
+                      class="font-extralight leading-5.5 gap-4 tracking-wide"
+                    >
+                      Good Morning
+                    </p>
+
+                    <!-- input name -->
+                    <div class="relative w-[175px]">
+                      <input
+                        type="text"
+                        name="user_name"
+                        id="user-name"
+                        class="font-medium input outline-none focus:border focus:border-white/30 rounded-lg text-center text-2xl leading-5.5 tracking-wide w-full"
+                        maxlength="12"
+                        autocomplete="off"
+                      />
+                      <p
+                        class="absolute bottom-[50%] left-[50%] translate-x-[-50%] text-nowrap translate-y-[50%] opacity-50 pointer-events-none psuedo-placeholder"
+                        id="psuedo-placeholder-user-name"
+                      >
+                        <i class="font-medium">Drop your name.</i>
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </section>
-          </footer>
+
+                <div>
+                  <button
+                    class="cursor-pointer scale-115 hover:scale-120 transition-transform duration-300 ease-in-out"
+                    id="open-settings-button"
+                    aria-roledescription="settings button"
+                  >
+                    <img src="assets/settings.svg" alt="settings svg" />
+                  </button>
+                </div>
+              </section>
+            </div>
+          </section>
         </section>
 
         <!-- SHOW-COMPLETED-TO-DOS -->
@@ -1318,6 +1433,24 @@
             </main>
           </main>
         </section>
+      </main>
+
+      <!-- Restrict <= 1285 pixels users -->
+      <main
+        class="w-full h-full grid place-items-center hidden"
+        id="message-smaller-screens"
+      >
+        <div>
+          <p style="text-align: center; font-size: 1.2rem; padding: 1.5rem">
+            👋 Hey there! This app is best experienced on larger screens (width
+            ≥ 1250px).
+            <br /><br />
+            For the smoothest drag-and-drop experience and full features, please
+            switch to a desktop or tablet, or try zooming out.
+            <br /><br />
+            Thanks for understanding 🙏
+          </p>
+        </div>
       </main>
     </div>
   </body>
