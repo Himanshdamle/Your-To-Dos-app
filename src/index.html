@@ -950,7 +950,8 @@
             <!-- SHOW AFFIRMATIONS AND QUOTES -->
             <div
               id="quote-box"
-              class="w-fit flex flex-col max-w-[70%] gap-3 text-3xl"
+              class="w-fit hidden flex-col max-w-[70%] gap-3 text-3xl"
+              data-keep-it="hidden"
             >
               <h1 id="quotes" class="font-semibold italic">
                 The way to get started is to quit talking and begin doing.
@@ -982,95 +983,155 @@
                   </div>
 
                   <!-- Heading -->
-                  <header class="text-3xl w-full border-b py-2.5 pl-2.5">
-                    <h1 class="font-semibold">Settings</h1>
+                  <header class="text-2xl w-full border-b py-2.5 pl-2.5">
+                    <div class="flex flex-row">
+                      <h1 class="font-semibold text-3xl">Settings&nbsp;></h1>
+                      &nbsp;
+                      <h3 class="mt-0.5" id="setting-name">Quote</h3>
+                    </div>
                   </header>
                 </section>
 
+                <!-- Main -->
                 <section class="flex flex-row relative h-full">
                   <!-- Setting Options -->
                   <nav
-                    class="w-[30%] border-r pl-2.5 relative select-none h-full flex justify-center items-center"
+                    class="w-[30%] border-r pl-2.5 select-none h-full flex justify-center items-center"
                   >
-                    <!-- Options -->
-                    <ul class="flex flex-col" id="option-wrapper">
-                      <!-- Account -->
-                      <li>
-                        <button
-                          class="w-fit cursor-pointer hover:scale-105 transition-transform duration-150 settings-options"
-                          data-setting-name="Account"
-                          data-index="0"
-                        >
-                          Account
-                        </button>
-                      </li>
+                    <div class="relative">
+                      <!-- Options -->
+                      <ul class="flex flex-col" id="option-wrapper">
+                        <!-- Account -->
+                        <li>
+                          <button
+                            class="w-fit cursor-pointer hover:scale-105 transition-transform duration-150 settings-options"
+                            data-setting-name="Account"
+                            data-index="0"
+                          >
+                            Account
+                          </button>
+                        </li>
 
-                      <!-- Quote -->
-                      <li>
-                        <button
-                          class="w-fit cursor-pointer hover:scale-105 transition-transform duration-150 settings-options"
-                          data-setting-name="Quote"
-                          data-index="1"
-                        >
-                          Quote
-                        </button>
-                      </li>
+                        <!-- Quote -->
+                        <li>
+                          <button
+                            class="w-fit cursor-pointer hover:scale-105 transition-transform duration-150 settings-options"
+                            data-setting-name="Quote"
+                            data-index="1"
+                          >
+                            Quote
+                          </button>
+                        </li>
 
-                      <!-- Github -->
-                      <li>
-                        <button
-                          class="w-fit cursor-pointer hover:scale-105 transition-transform duration-150 settings-options"
-                          data-setting-name="Github"
-                          data-index="2"
-                        >
-                          Github
-                        </button>
-                      </li>
+                        <!-- Github -->
+                        <li>
+                          <button
+                            class="w-fit cursor-pointer hover:scale-105 transition-transform duration-150 settings-options"
+                            data-setting-name="Github"
+                            data-index="2"
+                          >
+                            Github
+                          </button>
+                        </li>
 
-                      <!-- Guide -->
-                      <li>
-                        <button
-                          class="w-fit cursor-pointer hover:scale-105 transition-transform duration-150 settings-options"
-                          data-setting-name="Guide"
-                          data-index="3"
-                        >
-                          Guide
-                        </button>
-                      </li>
-                    </ul>
+                        <!-- Guide -->
+                        <li>
+                          <button
+                            class="w-fit cursor-pointer hover:scale-105 transition-transform duration-150 settings-options"
+                            data-setting-name="Guide"
+                            data-index="3"
+                          >
+                            Guide
+                          </button>
+                        </li>
+                      </ul>
 
-                    <!-- Selected -->
-                    <div
-                      class="absolute bg-[#1A1A1A] left-6 top-[50%] -translate-y-[100%] flex flex-row items-center justify-center text-2xl"
-                      id="selected-option-wrapper"
-                      data-current-index="1"
-                    >
-                      <img
-                        src="assets/chevron_right.svg"
-                        alt="chevron right svg"
-                        class="w-8 h-8"
-                      />
+                      <!-- Selected -->
+                      <div
+                        class="absolute -left-6 top-[50%] -translate-y-[100%] flex flex-row items-center justify-center text-2xl"
+                        id="selected-option-wrapper"
+                        data-current-index="1"
+                      >
+                        <div class="bg-[#1A1A1A]">
+                          <img
+                            src="assets/chevron_right.svg"
+                            alt="chevron right svg"
+                            class="w-8 h-8"
+                          />
+                        </div>
 
-                      <div class="overflow-hidden h-7 relative -ml-1">
-                        <span
-                          class="font-semibold inline-block text-nowrap"
-                          id="center-selected"
-                        >
-                          Quote
-                        </span>
-                        <span
-                          class="font-semibold inline-block text-nowrap absolute left-0"
-                          style="transform: translate(0px, -100%)"
-                          id="bottom-selected"
-                        >
-                          Quote
-                        </span>
+                        <div class="overflow-hidden h-7 w-64 relative -ml-1">
+                          <span class="bg-[#1A1A1A]">
+                            <span
+                              class="font-semibold inline-block text-nowrap"
+                              id="center-selected"
+                            >
+                              Quote
+                            </span>
+                            <span
+                              class="font-semibold inline-block text-nowrap absolute left-0 top-0"
+                              style="transform: translate(0px, -100%)"
+                              id="bottom-selected"
+                            >
+                              Quote
+                            </span>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </nav>
 
                   <!-- Setting -->
-                  <main class="w-full h-full relative pl-2.5"></main>
+                  <main
+                    class="w-full h-full relative px-2.5 text-xl py-2 font-normal"
+                  >
+                    <!-- Quote -->
+                    <ul class="flex flex-row justify-start">
+                      <li class="w-full">
+                        <div class="px-2">
+                          Turn off &nbsp;
+
+                          <!-- Quotes -->
+                          <button
+                            class="cursor-pointer opacity-50 font-semibold turnoff-positive-message"
+                            title="Turned off Quote rotation"
+                            data-turn-off="quotes"
+                          >
+                            Quotes
+                          </button>
+                          &nbsp;
+
+                          <!--  -->
+                          or &nbsp;
+
+                          <!-- Affirmations -->
+                          <button
+                            class="cursor-pointer opacity-50 font-semibold turnoff-positive-message"
+                            title="Turned off Affirmations rotation"
+                            data-turn-off="affirmations"
+                          >
+                            Affirmations
+                          </button>
+                          &nbsp;
+
+                          <!--  -->
+                          or &nbsp;
+
+                          <!-- Both -->
+                          <button
+                            class="cursor-pointer opacity-50 font-semibold turnoff-positive-message"
+                            title="Turned off Quote and Affirmations rotation"
+                            data-turn-off="both-quo-aff"
+                          >
+                            Both
+                          </button>
+                        </div>
+                        <!--  -->
+                        <hr class="my-2" />
+                        <!--  -->
+                      </li>
+                    </ul>
+                  </main>
                 </section>
               </div>
             </section>

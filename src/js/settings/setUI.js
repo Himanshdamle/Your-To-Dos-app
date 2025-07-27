@@ -1,3 +1,13 @@
+import { smoothInnOutTransition } from "../core.js";
+import { getSettingsInput } from "./setEvents.js";
+import { initializeStorage } from "./iniStorage.js";
+
+export function initializeSettings() {
+  initializeStorage();
+  selectOption();
+  getSettingsInput();
+}
+
 const selectedWrapper = document.querySelector("#selected-option-wrapper");
 const selectedWrapperRect = selectedWrapper.getBoundingClientRect();
 
@@ -5,6 +15,32 @@ let pastDirection = 0;
 let centerTxt = document.querySelector("#center-selected");
 let bottomText = document.querySelector("#bottom-selected");
 const optionsWrapper = document.querySelector("#option-wrapper");
+
+const settingNameDOM = document.querySelector("#setting-name");
+
+function updateSettingNameInDOM(settingName) {
+  // Heading
+  smoothInnOutTransition(
+    {
+      el: settingNameDOM,
+      opacity: 1,
+      duration: 0.25,
+      onCompleteTransition() {
+        settingNameDOM.textContent = settingName;
+
+        smoothInnOutTransition(
+          { el: settingNameDOM, opacity: 1, duration: 0.25 },
+          false
+        );
+      },
+    },
+    true
+  );
+
+  // selected
+  bottomText.textContent = settingName;
+  centerTxt.textContent = settingName;
+}
 
 function selectOption() {
   const wrappers = document.querySelectorAll(".settings-options");
@@ -36,8 +72,7 @@ function coreLogic(optionRect, settingName, nextStep) {
   const coverYDistance = selectedWrapperRect.y - optionRect.y;
 
   const isUpDirection = coverYDistance > pastDirection; // Y +ive
-  bottomText.textContent = settingName;
-  centerTxt.textContent = settingName;
+  updateSettingNameInDOM(settingName);
 
   for (let i = 1; i <= step; i++) {
     scrollSelectedOption(isUpDirection, {
@@ -50,7 +85,7 @@ function coreLogic(optionRect, settingName, nextStep) {
   pastDirection = coverYDistance;
 
   gsap.to(optionsWrapper, {
-    y: coverYDistance,
+    y: coverYDistance + 3,
     duration: 0.5,
   });
 }
@@ -86,8 +121,4 @@ function scrollSelectedOption(upDirection, info = {}) {
       });
       break;
   }
-}
-
-export function initializeSettings() {
-  selectOption();
 }

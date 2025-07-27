@@ -13,7 +13,7 @@ import { getUserSearchResult } from "./search.js";
 
 import { startQuoteRotation } from "./quote.js";
 import { resize } from "./resize.js";
-import { initializeSettings } from "./settings.js";
+import { initializeSettings } from "./settings/setUI.js";
 
 // Global variables
 window.typingInputIds = [];
@@ -27,13 +27,14 @@ window.clickedTodoHTML;
 document.addEventListener("DOMContentLoaded", () => {
   console.time("Performance");
 
+  initializeSettings();
+
   initializeUI();
   setupEventListeners();
   startQuoteRotation();
   initializeTagInputs();
   middle();
   searchByRotation();
-  initializeSettings();
 
   getUserSearchResult();
 

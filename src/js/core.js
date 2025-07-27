@@ -978,6 +978,7 @@ export function showThis(page, slideDownPanel = true) {
  */
 export function removeThis(page) {
   const quoteBox = document.querySelector("#quote-box");
+  const isKeepItHidden = quoteBox.getAttribute("data-keep-it") === "hidden";
 
   slideAnimation(
     {
@@ -1000,8 +1001,10 @@ export function removeThis(page) {
     false
   );
 
-  if (page && quoteBox) {
+  if (page && !isKeepItHidden) {
     transitionBetweenPages({ pageCloseEl: page, pageOpenEl: quoteBox });
+  } else {
+    smoothInnOutTransition({ el: page, duration: 0.2 }, true);
   }
 }
 
