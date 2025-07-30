@@ -79,23 +79,21 @@
                 <section class="flex flex-col gap-1">
                   <!-- CONTROLS -->
                   <section>
-                    <span>
-                      <button
-                        class="hover:bg-[#1A1A1A] hover:opacity-100 hover:border-white/30 border border-transparent transition-colors transition-opacity duration-300 rounded-full cursor-pointer p-1.5 opacity-50 rotate-90 ml-6 clickto-collapse-button"
+                    <button
+                      class="hover:bg-[#1A1A1A] hover:opacity-100 hover:border-white/30 border border-transparent transition-colors transition-opacity duration-300 rounded-full cursor-pointer p-1.5 opacity-50 rotate-90 ml-6 clickto-collapse-button"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="35px"
+                        viewBox="0 -960 960 960"
+                        width="35px"
+                        fill="#FFFFFF"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="35px"
-                          viewBox="0 -960 960 960"
-                          width="35px"
-                          fill="#FFFFFF"
-                        >
-                          <path
-                            d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-338q18-11 38.5-16.5T280-480h400q21 0 41.5 5.5T760-458v-302H200v302Zm0 258h560v-120q0-33-23.5-56.5T680-400H280q-33 0-56.5 23.5T200-320v120Zm0 0h560-560Z"
-                          />
-                        </svg>
-                      </button>
-                    </span>
+                        <path
+                          d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-338q18-11 38.5-16.5T280-480h400q21 0 41.5 5.5T760-458v-302H200v302Zm0 258h560v-120q0-33-23.5-56.5T680-400H280q-33 0-56.5 23.5T200-320v120Zm0 0h560-560Z"
+                        />
+                      </svg>
+                    </button>
                   </section>
 
                   <!-- SEARCH BAR -->
@@ -127,12 +125,12 @@
                             id="search-input"
                             class="p-1.5 font-bold w-full outline-none text-xl italic h-min input"
                           />
-                          <p
-                            class="absolute bottom-[50%] text-nowrap translate-y-[50%] left-1.5 opacity-50 pointer-events-none psuedo-placeholder flex flex-row gap-1.5"
+                          <div
+                            class="absolute bottom-[50%] text-nowra> translate-y-[50%] left-1.5 opacity-50 pointer-events-none psuedo-placeholder flex flex-row gap-1.5"
                           >
                             <b class="font-light">Search by - </b>
                             <i id="search-by">TAG NAME</i>
-                          </p>
+                          </div>
                         </div>
                       </div>
 
@@ -451,7 +449,7 @@
 
         <!-- SHOW CRUD OPRATIONS -->
         <section
-          class="flex-[3] flex flex-col h-full after:content-[''] after:absolute relative after:w-[1px] after:h-[110%] after:right-0 after:top-[-10%] after:bg-white before:absolute before:w-[1px] before:h-[110%] before:left-0 before:top-[-10%] before:bg-white"
+          class="flex-[3] flex flex-col h-full relative after:content-[''] after:absolute after:w-[1px] after:h-[110%] after:right-0 after:top-[-10%] after:bg-white before:absolute before:w-[1px] before:h-[110%] before:left-0 before:top-[-10%] before:bg-white"
         >
           <!-- CURD OPTIONS -->
           <header
@@ -685,8 +683,7 @@
                   </p>
                 </div>
 
-                <span
-                  class="count-limit absolute top-0 right-0 flex text-white/50"
+                <span class="absolute top-0 right-0 flex text-white/50"
                   >Characters:&nbsp;
                   <p maxDigit="2" id="current-len-heading-input">00</p>
                   /50</span
@@ -698,8 +695,7 @@
                 class="flex flex-col relative py-4 justify-center items-center border-b"
               >
                 <p class="font-light text-lg">Description</p>
-                <span
-                  class="count-limit absolute top-2 right-0 flex text-white/50"
+                <span class="absolute top-2 right-0 flex text-white/50"
                   >Characters:&nbsp;
                   <p maxDigit="3" id="current-len-description-input">000</p>
                   /300</span
@@ -843,8 +839,7 @@
                 </span>
                 <!--  -->
 
-                <span
-                  class="count-limit absolute top-0 right-0 flex text-white/50"
+                <span class="absolute top-0 right-0 flex text-white/50"
                   >Tags selected:&nbsp;
                   <p maxDigit="1" id="current-len-tags-input">0</p>
                   /3</span
@@ -1085,9 +1080,10 @@
                   <main
                     class="w-full h-full relative px-2.5 text-xl py-2 font-normal"
                   >
-                    <!-- Quote -->
                     <ul class="flex flex-row justify-start">
+                      <!-- Quotes -->
                       <li class="w-full">
+                        <!-- Turn off positive message options -->
                         <div class="px-2">
                           Turn off &nbsp;
 
@@ -1126,9 +1122,128 @@
                             Both
                           </button>
                         </div>
+
                         <!--  -->
                         <hr class="my-2" />
                         <!--  -->
+
+                        <!-- Add custom quotes -->
+                        <div class="px-2 flex flex-col gap-2">
+                          <h1>
+                            Add custom &nbsp;
+
+                            <!-- Quotes -->
+                            <button
+                              class="font-semibold cursor-pointer opacity-100 button-custom-pos-msg"
+                              data-custom-selected="quotes"
+                            >
+                              Quotes &nbsp;
+                            </button>
+
+                            <!--  -->
+                            or &nbsp;
+                            <!--  -->
+
+                            <!-- Affirmations -->
+                            <button
+                              class="font-semibold cursor-pointer opacity-50 button-custom-pos-msg"
+                              data-custom-selected="affirmatives"
+                            >
+                              Affirmations
+                            </button>
+                          </h1>
+
+                          <form
+                            class="border border-white/30 rounded-xl flex flex-col justify-start py-2 px-2"
+                            id="positive-message-form"
+                          >
+                            <!-- Save or Reset -->
+                            <div class="flex flex-row gap-1">
+                              <!-- Save -->
+                              <button
+                                class="w-4 h-4 cursor-pointer rounded-full bg-[#2CB67D]"
+                                id="save-quote"
+                                title="Save this quote"
+                                type="submit"
+                              ></button>
+
+                              <!-- Reset form -->
+                              <button
+                                class="w-4 h-4 cursor-pointer rounded-full bg-[#99A1AF]"
+                                id="reset-form"
+                                title="Reset form"
+                              ></button>
+                            </div>
+
+                            <!-- Inputs -->
+                            <div class="px-2 flex flex-col gap-3 text-xl">
+                              <!-- Positive message input -->
+                              <div class="relative flex flex-col items-end">
+                                <!-- Track typed char -->
+                                <span class="flex text-white/50 text-lg"
+                                  >Characters:&nbsp;
+                                  <p
+                                    maxDigit="3"
+                                    id="current-len-postive-message"
+                                  >
+                                    000
+                                  </p>
+                                  /200</span
+                                >
+
+                                <!-- input -->
+                                <div class="relative w-full">
+                                  <textarea
+                                    name="Positive message input area"
+                                    id="positive-message-input"
+                                    class="border rounded-lg p-1.5 resize-none w-full h-[120px] input"
+                                    required
+                                    minlength="5"
+                                    maxlength="200"
+                                  ></textarea>
+
+                                  <b
+                                    class="psuedo-placeholder opacity-50 select-none absolute left-1.5 top-2 -z-1"
+                                    >No one can make you feel inferior without
+                                    your consent.</b
+                                  >
+                                </div>
+                              </div>
+
+                              <!-- Author name **Only for Quotes** -->
+                              <div
+                                class="flex flex-row justify-between items-center gap-3"
+                                id="author-name-wrapper"
+                              >
+                                <div class="bg-white w-[10%] h-[1px]"></div>
+
+                                <!-- input -->
+                                <div class="relative w-[70%]">
+                                  <textarea
+                                    name="Autor name input"
+                                    id="author-name-input"
+                                    class="border rounded-lg p-1.5 resize-none w-full h-[50px] input"
+                                    required
+                                    maxlength="30"
+                                  ></textarea>
+
+                                  <i
+                                    class="psuedo-placeholder opacity-50 font-light select-none absolute left-1.5 top-[10%] -z-1"
+                                    >Eleanor Roosevelt</i
+                                  >
+                                </div>
+
+                                <!-- Track typed char -->
+                                <span class="flex text-white/50 text-lg">
+                                  <p maxDigit="2" id="current-len-author-name">
+                                    00
+                                  </p>
+                                  /30</span
+                                >
+                              </div>
+                            </div>
+                          </form>
+                        </div>
                       </li>
                     </ul>
                   </main>
@@ -1196,66 +1311,67 @@
             </section>
           </main>
 
-          <!-- DOWN NAV BAR -->
-          <section id="down-nav-bar" class="border-t-[1px] relative">
-            <!-- MESSAGE POPUP -->
-            <section
-              class="text-3xl rounded-xl border border-[#1EA86F] bg-[#30a57438] px-4 py-2 flex flex-row gap-4 items-center absolute z-[200] left-[50%] translate-x-[-50%] w-max backdrop-blur-2xl"
-              style="display: none"
-              id="message-popup"
-            >
-              <article
-                class="max-w-[500px] items-stretch flex flex-row gap-2.5"
+          <!-- MESSAGE POPUP -->
+          <section
+            class="text-3xl rounded-xl border border-[#1EA86F] bg-[#30a57438] px-4 py-2 flex flex-row gap-4 items-center absolute z-[200] left-[50%] translate-x-[-50%] w-max backdrop-blur-2xl"
+            style="display: none"
+            id="message-popup"
+          >
+            <div class="max-w-[500px] items-stretch flex flex-row gap-2.5">
+              <!-- Emoji -->
+              <div
+                class="text-4xl w-min flex flex-row justify-center items-center"
+                id="emoji"
+              ></div>
+
+              <!-- Message -->
+              <div class="wrap-normal flex flex-col justify-end">
+                <div class="flex flex-row flex-wrap gap-1">
+                  "
+                  <p
+                    class="font-bold max-w-72 truncate"
+                    id="message-bold-inverted"
+                  ></p>
+                  "
+                  <p class="font-bold" id="message-bold"></p>
+                </div>
+                <p class="font-light" id="message-light">Sucessfully</p>
+              </div>
+            </div>
+
+            <div>
+              <button
+                class="rounded-full w-[50px] h-[50px] flex justify-center items-center cursor-pointer border border-[#00FF96]"
+                id="timer-message-popup-end"
+                style="
+                  background: conic-gradient(
+                    transparent 0deg 0deg,
+                    #008950 0deg 360deg
+                  );
+                "
+                title="close"
               >
                 <div
-                  class="text-4xl w-min flex flex-row justify-center items-center"
-                  id="emoji"
-                ></div>
-                <div class="wrap-normal flex flex-col justify-end">
-                  <div class="flex flex-row flex-wrap gap-1">
-                    "
-                    <p
-                      class="font-bold max-w-72 truncate"
-                      id="message-bold-inverted"
-                    ></p>
-                    "
-                    <p class="font-bold" id="message-bold"></p>
-                  </div>
-                  <p class="font-light" id="message-light">SUCESSFULLY</p>
-                </div>
-              </article>
-
-              <article>
-                <button
-                  class="rounded-full w-[50px] h-[50px] flex justify-center items-center cursor-pointer border border-[#00FF96]"
-                  id="timer-message-popup-end"
-                  style="
-                    background: conic-gradient(
-                      transparent 0deg 0deg,
-                      #008950 0deg 360deg
-                    );
-                  "
-                  title="close"
+                  class="bg-[#00FF96] w-[80%] h-[80%] rounded-full text-center flex justify-center items-center"
                 >
-                  <div
-                    class="bg-[#00FF96] w-[80%] h-[80%] rounded-full text-center flex justify-center items-center"
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="45px"
+                    viewBox="0 -960 960 960"
+                    width="45px"
+                    fill="#222"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="45px"
-                      viewBox="0 -960 960 960"
-                      width="45px"
-                      fill="#222"
-                    >
-                      <path
-                        d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"
-                      />
-                    </svg>
-                  </div>
-                </button>
-              </article>
-            </section>
+                    <path
+                      d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"
+                    />
+                  </svg>
+                </div>
+              </button>
+            </div>
+          </section>
 
+          <!-- DOWN NAV BAR -->
+          <section id="down-nav-bar" class="border-t-[1px] relative">
             <div class="flex flex-row">
               <!-- PROGRESS SECTION -->
               <section class="border-r-[1px] px-1 flex-[1]">
@@ -1406,11 +1522,11 @@
         <!-- SHOW-COMPLETED-TO-DOS -->
         <section class="flex flex-row h-full" id="dtd-wrapper">
           <!-- Slide Grabber -->
-          <section
+          <div
             class="h-full cursor-grab hover:bg-[#008950] transition-colors duration-200 rounded-xl slider-grabber"
           >
             <div class="bg-transparent h-full w-[4px]"></div>
-          </section>
+          </div>
 
           <main class="flex-shrink-0 flex flex-col w-full h-full">
             <header
@@ -1422,42 +1538,38 @@
               DONE TO-DOs
             </header>
 
-            <main
+            <div
               class="h-full thin-scrollbar overflow-y-scroll overflow-x-hidden hide-scrollbar todo-wrapper w-[307px] will-change"
             >
               <!-- Expand -->
               <section
-                class="h-full flex flex-col items-end mr-8 relative expand-todo-wrapper"
+                class="h-full flex flex-col items-end pt-2 mr-8 relative expand-todo-wrapper"
               >
-                <section>
+                <div>
                   <!-- CONTROLS -->
-                  <section>
-                    <span>
-                      <button
-                        class="hover:bg-[#1A1A1A] hover:opacity-100 hover:border-white/30 border border-transparent transition-colors transition-opacity duration-300 rounded-full cursor-pointer p-1.5 opacity-50 -rotate-90 clickto-collapse-button"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="35px"
-                          viewBox="0 -960 960 960"
-                          width="35px"
-                          fill="#FFFFFF"
-                        >
-                          <path
-                            d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-338q18-11 38.5-16.5T280-480h400q21 0 41.5 5.5T760-458v-302H200v302Zm0 258h560v-120q0-33-23.5-56.5T680-400H280q-33 0-56.5 23.5T200-320v120Zm0 0h560-560Z"
-                          />
-                        </svg>
-                      </button>
-                    </span>
-                  </section>
-                </section>
+                  <button
+                    class="hover:bg-[#1A1A1A] hover:opacity-100 hover:border-white/30 border border-transparent transition-colors transition-opacity duration-300 rounded-full cursor-pointer p-1.5 opacity-50 -rotate-90 clickto-collapse-button"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="35px"
+                      viewBox="0 -960 960 960"
+                      width="35px"
+                      fill="#FFFFFF"
+                    >
+                      <path
+                        d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-338q18-11 38.5-16.5T280-480h400q21 0 41.5 5.5T760-458v-302H200v302Zm0 258h560v-120q0-33-23.5-56.5T680-400H280q-33 0-56.5 23.5T200-320v120Zm0 0h560-560Z"
+                      />
+                    </svg>
+                  </button>
+                </div>
 
                 <!-- COMPLETED TODOS SECTION -->
-                <section
+                <div
                   id="completed-todo"
                   class="flex flex-col gap-10 w-full h-full"
                   data-preWord="Completed"
-                ></section>
+                ></div>
               </section>
 
               <!-- Collapse -->
@@ -1466,32 +1578,30 @@
                 id="collapse-completed-todo-wrapper"
               >
                 <!-- TOP CONTROLS -->
-                <section>
-                  <span>
-                    <button
-                      class="hover:bg-[#1A1A1A] hover:opacity-100 hover:border-white/30 border border-transparent transition-colors transition-opacity duration-300 rounded-full cursor-pointer p-1.5 opacity-50 rotate-90 clickto-expand-button"
+                <div>
+                  <button
+                    class="hover:bg-[#1A1A1A] hover:opacity-100 hover:border-white/30 border border-transparent transition-colors transition-opacity duration-300 rounded-full cursor-pointer p-1.5 opacity-50 rotate-90 clickto-expand-button"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="50px"
+                      viewBox="0 -960 960 960"
+                      width="50px"
+                      fill="#FFFFFF"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="50px"
-                        viewBox="0 -960 960 960"
-                        width="50px"
-                        fill="#FFFFFF"
-                      >
-                        <path
-                          d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-338q18-11 38.5-16.5T280-480h400q21 0 41.5 5.5T760-458v-302H200v302Zm0 258h560v-120q0-33-23.5-56.5T680-400H280q-33 0-56.5 23.5T200-320v120Zm0 0h560-560Z"
-                        />
-                      </svg>
-                    </button>
-                  </span>
-                </section>
+                      <path
+                        d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-338q18-11 38.5-16.5T280-480h400q21 0 41.5 5.5T760-458v-302H200v302Zm0 258h560v-120q0-33-23.5-56.5T680-400H280q-33 0-56.5 23.5T200-320v120Zm0 0h560-560Z"
+                      />
+                    </svg>
+                  </button>
+                </div>
 
                 <!--COLLAPSED COMPLETED TODOS -->
-                <section
+                <div
                   class="w-full h-full px-3 text-xl flex flex-col gap-10 collapse-todo-container"
-                ></section>
+                ></div>
               </section>
-            </main>
+            </div>
           </main>
         </section>
       </main>

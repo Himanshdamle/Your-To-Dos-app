@@ -24,6 +24,10 @@
   background: transparent;
 }
 
+textarea {
+  outline: none;
+}
+
 .hide-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;

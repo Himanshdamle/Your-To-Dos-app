@@ -2,6 +2,7 @@ import {
   renderTodoCard,
   addNewTodoToUI,
   resetTodoPageFunc,
+  smoothInnOutTransition,
   closeOpenSmoothAnimation,
   operations,
   removeThis,
@@ -133,7 +134,10 @@ export function setupEventListeners() {
 
   // reset input fields
   document.querySelector("#reset-todo").addEventListener("click", () => {
-    resetTodoPageFunc(true);
+    resetTodoPageFunc({
+      transitionPlaceholders: true,
+      pageDOM: document.querySelector("#todo-page"),
+    });
   });
 
   // MouseEnter && MouseLeave ---> todo card
@@ -369,4 +373,39 @@ export function hoverEventCollapseTodo(todoWrapperDOM) {
     },
     true
   );
+}
+
+export function resetPsuedoPlaceholder(
+  parentContainer,
+  transitionPlaceholders
+) {
+  if (!parentContainer) return;
+
+  const psuedoPlaceholdersCURD = parentContainer.querySelectorAll(
+    ".psuedo-placeholder"
+  );
+
+  psuedoPlaceholdersCURD.forEach((placeholder) => {
+    smoothInnOutTransition(
+      {
+        duration: 0.5,
+        ease: "power2.out",
+        el: placeholder,
+      },
+      !transitionPlaceholders
+    );
+  });
+}
+
+export function trackInputChar(input, DomId) {
+  let DOM;
+  if (typeof DomId === "string") DOM = document.querySelector(DomId);
+  else DOM = DomId;
+
+  const maxDigit = DOM.getAttribute("maxDigit");
+
+  input.addEventListener("input", () => {
+    const lenght = input.value.length.toString();
+    DOM.textContent = lenght.padStart(maxDigit, "0");
+  });
 }

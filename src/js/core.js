@@ -10,6 +10,7 @@ import {
 
 import { cleanTagUI } from "./tag.js";
 import { addTodoInCollapse } from "./resize.js";
+import { resetPsuedoPlaceholder } from "./event.js";
 
 /**
  * Control all the ***CRUD and Drag and Drop operation.***
@@ -249,7 +250,7 @@ export function showMessagePopup(messageObject) {
   emoji.textContent = messageObject.emoji;
   messageInvertedBold.textContent = `${messageObject.invertedBoldTxt || ""}`;
   messageBold.textContent = `${messageObject.boldTxt || ""}`;
-  messageLight.textContent = messageObject.lightTxt || "SUCESSFULLY";
+  messageLight.textContent = messageObject.lightTxt || "Sucessfully";
 
   const messageBox = document.querySelector("#message-popup");
 
@@ -257,7 +258,7 @@ export function showMessagePopup(messageObject) {
 
   //POPOUT GSAP SETTINGS.
   const popOut = {
-    top: `-170%`,
+    bottom: "10%",
     opacity: 0,
     filter: "blur(10px)",
     duration: 0.5,
@@ -288,6 +289,7 @@ export function showMessagePopup(messageObject) {
     });
   }
 
+  // if animations is already running
   if (isAnimationRunning || timerAnimation) {
     timerAnimation.kill();
 
@@ -321,23 +323,19 @@ export function showMessagePopup(messageObject) {
 
   // INITIAL SETUP
   timerAnimation.pause();
+  gsap.set(messageBox, { bottom: "-50%" });
   gsap.set(messageBox, {
     display: "flex",
     filter: "blur(10px)",
     opacity: 0.3,
     scale: 0.9,
-    top: "-30%",
   });
 
-  const popUpPosition = -(
-    (messageBox.getBoundingClientRect().width / 400) *
-    100
-  );
   // POPUP ANIMATION
   gsap.to(messageBox, {
     filter: "blur(0px)",
     opacity: 1,
-    top: popUpPosition,
+    bottom: 0,
     duration: 0.5,
     scale: 1,
     ease: "power4.out",
@@ -1048,7 +1046,7 @@ export function showToDoPage() {
 /**
  * Resets the to-do page form and state.
  */
-export function resetTodoPageFunc(transitionPlaceholders = true) {
+export function resetTodoPageFunc({ transitionPlaceholders = true, pageDOM }) {
   window.currTodoDetails = {
     heading: "",
     description: "",
@@ -1071,19 +1069,7 @@ export function resetTodoPageFunc(transitionPlaceholders = true) {
     true
   );
 
-  const psuedoPlaceholdersCURD = document.querySelectorAll(
-    ".psuedo-placeholder-curd"
-  );
-  psuedoPlaceholdersCURD.forEach((placeholder) => {
-    smoothInnOutTransition(
-      {
-        duration: 0.5,
-        ease: "power2.out",
-        el: placeholder,
-      },
-      !transitionPlaceholders
-    );
-  });
+  resetPsuedoPlaceholder(pageDOM, transitionPlaceholders);
 
   cleanTagUI();
 }

@@ -56,12 +56,15 @@ document.addEventListener("DOMContentLoaded", () => {
     pageID: "#todo-page",
     clickedFunc: () => {
       window.updated = false;
-      resetTodoPageFunc(false, true);
+      resetTodoPageFunc({ transitionPlaceholders: false });
     },
   });
 
   function openCreateToDoPage() {
-    resetTodoPageFunc(true, true);
+    resetTodoPageFunc({
+      transitionPlaceholders: true,
+      pageDOM: document.querySelector("#todo-page"),
+    });
     showToDoPage();
   }
 
@@ -109,6 +112,13 @@ document.addEventListener("DOMContentLoaded", () => {
     clickingLogic(tag, bg, state);
 
     window.tagStates.push(state);
+  });
+
+  const formElements = document.querySelectorAll("form");
+  formElements.forEach((form) => {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+    });
   });
 
   //DRAG AND DROP TODO...

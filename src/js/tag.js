@@ -191,6 +191,4 @@ export function setTagValues(todoTagsArray) {
 
     toggleClasses("add", hoverBalloon[tagNumber]);
   });
-
-  console.log(window.countTags);
 }

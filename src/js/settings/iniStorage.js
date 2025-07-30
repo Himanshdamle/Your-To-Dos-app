@@ -1,6 +1,9 @@
 export const setting = {
   quotes: {
     turnOff: null,
+    customPostiveMessage: "quotes",
+    customQuotes: [],
+    customAffirmations: [],
   },
 };
 
@@ -37,5 +40,26 @@ export function handleTurnOffQuotes(button) {
   const dataTurnOff = button.getAttribute("data-turn-off");
 
   setting["quotes"]["turnOff"] = dataTurnOff;
+  updateStorage();
+}
+
+export function handleCustomQuotes({
+  positiveMessage,
+  authorName,
+  isQuote = false,
+}) {
+  const path = setting["quotes"];
+
+  if (isQuote) {
+    const customQuotesObject = {
+      quote: positiveMessage,
+      author: authorName,
+    };
+
+    path["customQuotes"].push(customQuotesObject);
+  } else {
+    path["customAffirmations"].push(positiveMessage);
+  }
+
   updateStorage();
 }

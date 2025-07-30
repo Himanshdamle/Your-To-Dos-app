@@ -12,6 +12,48 @@ const selectPositiveMessage = {
   affirmations: true, // Do not select Affimations
 };
 
+const animationConfig = {
+  el: quoteBox,
+  scale: 1.15,
+  opacity: 1,
+  duration: 0.3,
+};
+
+function setvaluesOfQuotes(quoteData) {
+  if (!quoteData) return;
+
+  quote.innerText = `" ${quoteData.quote} "`;
+
+  author.style.display = "block";
+  author.innerText = quoteData.author;
+
+  dashAuthorBefore.style.display = "block";
+}
+
+function setvaluesOfAffirmatives(affirmation) {
+  if (!affirmation) return;
+
+  quote.innerHTML = `" ${affirmation} "`;
+  author.style.display = "none";
+  dashAuthorBefore.style.display = "none";
+}
+
+function rotation(selectMessageType) {
+  if (quoteBox.style.display === "none") return;
+
+  const scaleUp = {
+    ...animationConfig,
+    onCompleteTransition() {
+      const mode = selectMessageType ?? Math.random() > 0.5;
+
+      if (true) fetchPositiveMessage(mode);
+      else fetchUserCustomPositiveMessage(mode);
+    },
+  };
+
+  smoothInnOutTransition(scaleUp, true);
+}
+
 /**
  * Fetches and displays quotes or affirmations every 30 seconds.
  */
@@ -22,25 +64,17 @@ export function startQuoteRotation() {
   quoteBox.style.display = "flex";
   quoteBox.setAttribute("data-keep-it", "visible");
 
-  const select = selectPositiveMessage[turnOff] ?? Math.random() > 0.5;
+  const selectMessageType =
+    selectPositiveMessage[turnOff] ?? Math.random() > 0.5;
 
   // First Fetch it
-  fetchPositiveMessage(select);
+  rotation(selectMessageType);
 
   // then Start the rotation
-  setInterval(() => {
-    if (quoteBox.style.display === "none") return;
-
-    smoothInnOutTransition({
-      el: quoteBox,
-      opacity: 1,
-      duration: 0.5,
-      onCompleteTransition: fetchPositiveMessage(select ?? Math.random() > 0.5),
-    });
-  }, 30 * 1000); // refresh after 30 sec.
+  setInterval(() => rotation(selectMessageType), 20 * 1000); // refresh after 30 sec.
 }
 
-function fetchPositiveMessage(positiveMessage) {
+async function fetchPositiveMessage(positiveMessage) {
   const quoteAPI =
     "https://api.allorigins.win/raw?url=https://stoic.tekloon.net/stoic-quote";
   const affirmationsAPI =
@@ -50,34 +84,29 @@ function fetchPositiveMessage(positiveMessage) {
 
   const url = isQuote ? quoteAPI : affirmationsAPI;
 
-  fetch(url)
-    .then((res) => res.json())
-    .then((data) => {
-      if (isQuote) {
-        const quoteData = data.data;
+  try {
+    const fetchMessage = await fetch(url);
+    const getPositiveMessage = await fetchMessage.json();
 
-        if (!quoteData) return;
+    if (isQuote) setvaluesOfQuotes(getPositiveMessage.data);
+    else setvaluesOfAffirmatives(getPositiveMessage.affirmation);
 
-        quote.innerText = `" ${quoteData.quote} "`;
+    smoothInnOutTransition({ ...animationConfig }, false);
+  } catch (error) {
+    console.log(error);
 
-        author.style.display = "block";
-        author.innerText = quoteData.author;
+    fetchPositiveMessage(positiveMessage);
+  }
+}
 
-        dashAuthorBefore.style.display = "block";
+function fetchUserCustomPositiveMessage(positiveMessage) {
+  const affirmations = setting["quotes"]["customAffirmations"];
+  const quotes = setting["quotes"]["customQuotes"];
 
-        smoothInnOutTransition(
-          { el: quoteBox, opacity: 1, duration: 0.5 },
-          false
-        );
-      } else {
-        quote.innerHTML = `" ${data.affirmation} "`;
-        author.style.display = "none";
-        dashAuthorBefore.style.display = "none";
+  const isQuote = positiveMessage;
 
-        smoothInnOutTransition(
-          { el: quoteBox, opacity: 1, duration: 0.5 },
-          false
-        );
-      }
-    });
+  if (isQuote) setvaluesOfQuotes(quotes[0]);
+  else setvaluesOfAffirmatives(affirmations[0]);
+
+  smoothInnOutTransition({ ...animationConfig }, false);
 }
