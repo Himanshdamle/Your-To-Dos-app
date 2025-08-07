@@ -1,3 +1,5 @@
+import { initializeSettings } from "./settings/setUI.js";
+
 import { initializeUI, searchByRotation } from "./ui.js";
 import { setupEventListeners } from "./event.js";
 import { hoverEffect, clickingLogic, initializeTagInputs } from "./tag.js";
@@ -13,7 +15,6 @@ import { getUserSearchResult } from "./search.js";
 
 import { startQuoteRotation } from "./quote.js";
 import { resize } from "./resize.js";
-import { initializeSettings } from "./settings/setUI.js";
 
 // Global variables
 window.typingInputIds = [];
@@ -26,8 +27,6 @@ window.clickedTodoHTML;
 
 document.addEventListener("DOMContentLoaded", () => {
   console.time("Performance");
-
-  initializeSettings();
 
   initializeUI();
   setupEventListeners();

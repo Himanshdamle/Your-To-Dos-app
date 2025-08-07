@@ -1,13 +1,25 @@
-import { handleTurnOffQuotes, setting } from "./iniStorage.js";
-import { updateObject, handleCustomQuotes } from "./iniStorage.js";
+import { setting } from "./iniStorage.js";
+import {
+  updateObject,
+  handleCustomQuotes,
+  updateSettingFromButton,
+} from "./iniStorage.js";
 import { resetPsuedoPlaceholder, trackInputChar } from "../event.js";
 import { showMessagePopup, smoothInnOutTransition } from "../core.js";
+import { createAnimatedDropdown } from "../dropdown.js";
 
 export function getSettingsInput() {
   tkInputTurnOffQuotes();
+  tkInputSelectQuoteSource();
+  tkInputSelectAffirmationSource();
   tkInputCustomPositiveMessage();
+
+  toggleCustomMessageView();
 }
 
+/*  */
+/* toggleOptions b/w multiple options */
+/*  */
 function deSelectOption(button) {
   gsap.to(button, {
     opacity: 0.5,
@@ -91,17 +103,71 @@ export function toggleOptions({
   });
 }
 
+/* take input from turn off quotes or affirmations or turn of both at once */
 function tkInputTurnOffQuotes() {
   toggleOptions({
     buttonClass: ".turnoff-positive-message",
     selectedBtnAttribute: setting["quotes"]["turnOff"],
     buttonsAttributeName: "data-turn-off",
+    selfDeSelect: true,
 
-    nowSelcted: (button) => handleTurnOffQuotes(button),
+    nowSelcted: (button) =>
+      updateSettingFromButton({
+        button,
+        buttonAttribute: "data-turn-off",
+        path: "quotes.turnOff",
+      }),
     nowDeSelected: () => updateObject("quotes.turnOff", null),
   });
 }
 
+/* take input from time interval dropdown */
+createAnimatedDropdown({
+  buttonId: "open-time-interval-dropdown",
+  menuId: "time-interval-options",
+  svgId: "dropdown-time-interval-svg",
+
+  onSelect: (value) => {
+    setting["quotes"]["rotationTimeInterval"] = Number(value);
+  },
+});
+
+/* take input for the selection of quote source */
+function tkInputSelectQuoteSource() {
+  toggleOptions({
+    buttonClass: ".select-quote-source",
+    selectedBtnAttribute: setting["quotes"]["messageSource"]["useQuotesBy"],
+    buttonsAttributeName: "data-select-quote-source",
+    selfDeSelect: false,
+
+    nowSelcted: (button) =>
+      updateSettingFromButton({
+        button,
+        buttonAttribute: "data-select-quote-source",
+        path: "quotes.messageSource.useQuotesBy",
+      }),
+  });
+}
+function tkInputSelectAffirmationSource() {
+  toggleOptions({
+    buttonClass: ".select-affirmation-source",
+    selectedBtnAttribute:
+      setting["quotes"]["messageSource"]["useAffirmationsBy"],
+    buttonsAttributeName: "data-select-affirmation-source",
+    selfDeSelect: false,
+
+    nowSelcted: (button) =>
+      updateSettingFromButton({
+        button,
+        buttonAttribute: "data-select-affirmation-source",
+        path: "quotes.messageSource.useAffirmationsBy",
+      }),
+  });
+}
+
+/*  */
+/* custom quotes/affirmation input */
+/*  */
 const positiveMessageInput = document.querySelector("#positive-message-input");
 const authorInput = document.querySelector("#author-name-input");
 
@@ -120,11 +186,11 @@ function resetCustomQuoteForm() {
     true
   );
 }
-
 function chooseCustomPostiveMessage() {
   toggleOptions({
     buttonClass: ".button-custom-pos-msg",
-    selectedBtnAttribute: setting["quotes"]["customPostiveMessage"],
+    selectedBtnAttribute:
+      setting["quotes"]["customMessage"]["customPostiveMessage"],
     buttonsAttributeName: "data-custom-selected",
     selfDeSelect: false,
 
@@ -149,7 +215,6 @@ function chooseCustomPostiveMessage() {
     },
   });
 }
-
 function tkInputCustomPositiveMessage() {
   trackInputChar(positiveMessageInput, tractCharPM);
   trackInputChar(authorInput, tractCharAN);
@@ -182,4 +247,47 @@ function tkInputCustomPositiveMessage() {
   });
 
   resetInputFieldButton.addEventListener("click", resetCustomQuoteForm);
+}
+
+function toggleCustomMessageView() {
+  const quoteBtn = document.querySelector("#quote-view");
+  const affirmationBtn = document.querySelector("#affirmation-view");
+
+  const wrapper = document.querySelector("#custom-message-container");
+
+  quoteBtn.addEventListener("click", () => {
+    const isInView = quoteBtn.getAttribute("data-inview");
+
+    if (isInView == "true") return;
+
+    gsap.to(wrapper, {
+      x: 0,
+      duration: 0.85,
+      ease: "expo.out",
+    });
+
+    gsap.set(quoteBtn, { backgroundColor: "#242424" });
+    gsap.set(affirmationBtn, { backgroundColor: "#1A1A1A" });
+
+    quoteBtn.setAttribute("data-inview", "true");
+    affirmationBtn.setAttribute("data-inview", "false");
+  });
+
+  affirmationBtn.addEventListener("click", () => {
+    const isInView = affirmationBtn.getAttribute("data-inview");
+
+    if (isInView == "true") return;
+
+    gsap.to(wrapper, {
+      x: "-50%",
+      duration: 0.85,
+      ease: "expo.out",
+    });
+
+    gsap.set(affirmationBtn, { backgroundColor: "#242424" });
+    gsap.set(quoteBtn, { backgroundColor: "#1A1A1A" });
+
+    affirmationBtn.setAttribute("data-inview", "true");
+    quoteBtn.setAttribute("data-inview", "false");
+  });
 }

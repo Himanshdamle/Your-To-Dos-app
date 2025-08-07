@@ -42,7 +42,6 @@
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
 
     <!-- JAVASCRIPT - LOCAL FILES -->
-    <script src="dropdown.js" defer></script>
     <script type="module" src="js/main.js" defer></script>
   </head>
   <body
@@ -962,11 +961,11 @@
 
             <!-- SETTINGS PAGE -->
             <section
-              class="bg-[#1A1A1A] border rounded-2xl w-[80%] h-[80%] max-w-[960px] text-xl"
+              class="bg-[#1A1A1A] border rounded-2xl w-[80%] h-[90%] max-w-[960px] text-xl overflow-x-hidden"
               id="settings-page"
               aria-roledescription="settings"
             >
-              <div class="relative flex flex-col h-full">
+              <div class="flex flex-col h-full">
                 <section class="flex flex-row">
                   <!-- Close page button -->
                   <div class="w-[30%] border-r py-2.5 pl-2.5 border-b">
@@ -988,14 +987,16 @@
                 </section>
 
                 <!-- Main -->
-                <section class="flex flex-row relative h-full">
+                <section
+                  class="flex flex-row h-full overflow-x-hidden relative"
+                >
                   <!-- Setting Options -->
                   <nav
-                    class="w-[30%] border-r pl-2.5 select-none h-full flex justify-center items-center"
+                    class="w-[30%] px-3 border-r relative select-none h-full flex justify-center items-center"
                   >
                     <div class="relative">
                       <!-- Options -->
-                      <ul class="flex flex-col" id="option-wrapper">
+                      <ul class="flex flex-col opacity-50" id="option-wrapper">
                         <!-- Account -->
                         <li>
                           <button
@@ -1078,7 +1079,7 @@
 
                   <!-- Setting -->
                   <main
-                    class="w-full h-full relative px-2.5 text-xl py-2 font-normal"
+                    class="w-full h-full px-2.5 text-xl py-2 font-light overflow-x-hidden thin-scrollbar relative"
                   >
                     <ul class="flex flex-row justify-start">
                       <!-- Quotes -->
@@ -1124,7 +1125,156 @@
                         </div>
 
                         <!--  -->
-                        <hr class="my-2" />
+                        <hr class="my-4" />
+                        <!--  -->
+
+                        <!-- Rotaion quotes Time interval -->
+                        <div>
+                          <header>Rotation time interval</header>
+
+                          <div class="w-[30%] relative">
+                            <button
+                              id="open-time-interval-dropdown"
+                              class="bg-[#1a1a1a] cursor-pointer pl-4 text-white border rounded-lg border-white/30 appearance-none flex justify-start gap-2.5 items-center py-1 w-full"
+                            >
+                              <div>
+                                <span
+                                  class="font-bold"
+                                  id="heading-time-interval"
+                                  >30</span
+                                >s
+                              </div>
+
+                              <!--  -->
+                              <span
+                                id="dropdown-time-interval-svg"
+                                style="transform: rotateZ('-90deg')"
+                                ><svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  height="20px"
+                                  viewBox="0 -960 960 960"
+                                  width="20px"
+                                  fill="#FFFFFF"
+                                >
+                                  <path d="M480-384 288-576h384L480-384Z" />
+                                </svg>
+                              </span>
+                            </button>
+
+                            <!-- Options -->
+                            <ul
+                              id="time-interval-options"
+                              class="absolute w-full overflow-hidden right-0 z-[100] bg-[#1a1a1a] text-white border rounded-lg border-white/30 mt-1 hidden"
+                            >
+                              <!-- 10s -->
+                              <li
+                                class="cursor-pointer hover:bg-[#242424] transition-colors duration-200 px-2"
+                                data-value="10"
+                              >
+                                <span class="font-bold">10</span>s
+                              </li>
+
+                              <!-- 15s -->
+                              <li
+                                class="cursor-pointer hover:bg-[#242424] transition-colors duration-200 px-2"
+                                data-value="15"
+                              >
+                                <span class="font-bold">15</span>s
+                              </li>
+
+                              <!-- 20s -->
+                              <li
+                                class="cursor-pointer hover:bg-[#242424] transition-colors duration-200 px-2"
+                                data-value="20"
+                              >
+                                <span class="font-bold">20</span>s
+                              </li>
+
+                              <!-- 25s -->
+                              <li
+                                class="cursor-pointer hover:bg-[#242424] transition-colors duration-200 px-2"
+                                data-value="25"
+                              >
+                                <span class="font-bold">25</span>s
+                              </li>
+
+                              <!-- 30s -->
+                              <li
+                                class="cursor-pointer hover:bg-[#242424] transition-colors duration-200 px-2"
+                                data-value="30"
+                              >
+                                <span class="font-bold">30</span>s
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+
+                        <!--  -->
+                        <hr class="my-4" />
+                        <!--  -->
+
+                        <!-- Quotes/affirmation source -->
+                        <div class="px-2">
+                          <!-- Quotes -->
+                          <div class="flex flex-row gap-3">
+                            <h1>
+                              Select
+                              <span class="font-semibold">Quotes</span> source:
+                            </h1>
+
+                            <div>
+                              <button
+                                class="font-semibold cursor-pointer opacity-50 select-quote-source"
+                                data-select-quote-source="us"
+                              >
+                                Default&nbsp;
+                              </button>
+
+                              <!--  -->
+                              or&nbsp;
+                              <!--  -->
+
+                              <button
+                                class="font-semibold cursor-pointer opacity-50 select-quote-source"
+                                data-select-quote-source="user"
+                              >
+                                My quotes
+                              </button>
+                            </div>
+                          </div>
+
+                          <!-- Affimation -->
+                          <div class="flex flex-row gap-3">
+                            <h1>
+                              Select
+                              <span class="font-semibold">Affimation</span>
+                              source:
+                            </h1>
+
+                            <div>
+                              <button
+                                class="font-semibold cursor-pointer opacity-50 select-affirmation-source"
+                                data-select-affirmation-source="us"
+                              >
+                                Default&nbsp;
+                              </button>
+
+                              <!--  -->
+                              or&nbsp;
+                              <!--  -->
+
+                              <button
+                                class="font-semibold cursor-pointer opacity-50 select-affirmation-source"
+                                data-select-affirmation-source="user"
+                              >
+                                My Affimation
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!--  -->
+                        <hr class="my-4" />
                         <!--  -->
 
                         <!-- Add custom quotes -->
@@ -1196,7 +1346,7 @@
                                   <textarea
                                     name="Positive message input area"
                                     id="positive-message-input"
-                                    class="border rounded-lg p-1.5 resize-none w-full h-[120px] input"
+                                    class="border rounded-lg font-bold p-1.5 resize-none w-full h-[120px] input"
                                     required
                                     minlength="5"
                                     maxlength="200"
@@ -1244,8 +1394,100 @@
                             </div>
                           </form>
                         </div>
+
+                        <!--  -->
+                        <hr class="my-4" />
+                        <!--  -->
+
+                        <!-- View custom Quotes/Affirmations -->
+                        <div>
+                          <header>View custom Quotes/Affirmations</header>
+
+                          <section
+                            class="border border-white/30 rounded-lg overflow-hidden"
+                          >
+                            <div class="flex flex-row border-b">
+                              <!-- Quotes -->
+                              <button
+                                class="border-r px-2 w-[50%] cursor-pointer py-1 bg-[#242424] hover:bg-[#242424] transition-colors duration-200"
+                                id="quote-view"
+                                role="tab"
+                                data-inview="true"
+                              >
+                                Quotes
+                              </button>
+
+                              <!-- Affirmations -->
+                              <button
+                                class="px-2 w-[50%] cursor-pointer py-1 hover:bg-[#242424] transition-colors duration-200"
+                                id="affirmation-view"
+                                role="tab"
+                                data-inview="false"
+                              >
+                                Affirmations
+                              </button>
+                            </div>
+
+                            <div class="max-h-52 relative">
+                              <div
+                                class="flex flex-row w-[200%] max-h-52"
+                                id="custom-message-container"
+                              >
+                                <section
+                                  class="px-3 py-3 overflow-x-hidden thin-scrollbar flex-[1]"
+                                >
+                                  <div id="custom-quotes">
+                                    <div id="custom-quotes-placeholder">
+                                      <p class="font-bold">
+                                        You havent added any custom quotes yet !
+                                      </p>
+                                      <!--  -->
+                                      <p>
+                                        Make Sure to add a custom quotes from
+                                        top custom Quotes section.
+                                      </p>
+                                    </div>
+                                  </div>
+                                </section>
+
+                                <section
+                                  id="custom-affirmations"
+                                  class="px-3 py-3 overflow-x-hidden thin-scrollbar flex-[1]"
+                                >
+                                  <div id="custom-affirmations-placeholder">
+                                    <p class="font-bold">
+                                      You havent added any custom affirmations
+                                      yet !
+                                    </p>
+                                    <!--  -->
+                                    <p>
+                                      Make Sure to add a custom affirmations
+                                      from top custom Affirmations section.
+                                    </p>
+                                  </div>
+                                </section>
+                              </div>
+                            </div>
+                          </section>
+                        </div>
                       </li>
                     </ul>
+
+                    <!-- Top Gradient -->
+                    <div
+                      class="absolute left-0 top-0 h-5 w-full overflow-hidden"
+                    >
+                      <div
+                        class="fixed h-5 w-full bg-gradient-to-b from-[#1A1A1A] to-transparent pointer-events-none"
+                      ></div>
+                    </div>
+
+                    <!-- bottom Gradient -->
+                    <div class="absolute left-0 bottom-0 h-5 w-full">
+                      <div
+                        class="fixed h-5 w-full bg-gradient-to-t from-[#1A1A1A] to-transparent z-20 pointer-events-none"
+                      ></div>
+                    </div>
                   </main>
                 </section>
               </div>

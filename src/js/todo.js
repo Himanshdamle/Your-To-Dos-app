@@ -4,6 +4,7 @@ import {
   showThis,
   removeThis,
 } from "./core.js";
+import { priorityDropdown } from "./dropdown.js";
 import { setTagValues } from "./tag.js";
 
 export function backend(

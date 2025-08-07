@@ -1,4 +1,4 @@
-function createAnimatedDropdown({
+export function createAnimatedDropdown({
   buttonId,
   menuId,
   svgId = null,
@@ -70,7 +70,9 @@ function createAnimatedDropdown({
       </span>`
           : ""
       }`;
+
       closeDropdown();
+
       if (onSelect) onSelect(selectedValue);
     });
   });
@@ -86,11 +88,9 @@ function createAnimatedDropdown({
   };
 }
 
-const priorityDropdown = createAnimatedDropdown({
+export const priorityDropdown = createAnimatedDropdown({
   buttonId: "priority-input-btn",
   menuId: "priority-dropdown",
   svgId: "dropdown-svg",
-  onSelect: (value) => {
-    currTodoDetails.priority = value;
-  },
+  onSelect: (value) => (currTodoDetails.priority = value),
 });

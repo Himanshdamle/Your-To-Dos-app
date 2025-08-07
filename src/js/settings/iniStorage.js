@@ -1,9 +1,18 @@
+import { renderCustomQuotes } from "./setUI.js";
+
 export const setting = {
   quotes: {
     turnOff: null,
-    customPostiveMessage: "quotes",
-    customQuotes: [],
-    customAffirmations: [],
+    rotationTimeInterval: 30,
+    messageSource: {
+      useQuotesBy: "us",
+      useAffirmationsBy: "us",
+    },
+    customMessage: {
+      customPostiveMessage: "quotes",
+      customQuotes: [],
+      customAffirmations: [],
+    },
   },
 };
 
@@ -36,11 +45,9 @@ export function initializeStorage() {
   }
 }
 
-export function handleTurnOffQuotes(button) {
-  const dataTurnOff = button.getAttribute("data-turn-off");
-
-  setting["quotes"]["turnOff"] = dataTurnOff;
-  updateStorage();
+export function updateSettingFromButton({ button, buttonAttribute, path }) {
+  const data = button.getAttribute(buttonAttribute);
+  updateObject(path, data);
 }
 
 export function handleCustomQuotes({
@@ -56,9 +63,11 @@ export function handleCustomQuotes({
       author: authorName,
     };
 
-    path["customQuotes"].push(customQuotesObject);
+    path["customMessage"]["customQuotes"].push(customQuotesObject);
+
+    renderCustomQuotes([customQuotesObject]);
   } else {
-    path["customAffirmations"].push(positiveMessage);
+    path["customMessage"]["customAffirmations"].push(positiveMessage);
   }
 
   updateStorage();
